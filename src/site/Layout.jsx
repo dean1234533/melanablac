@@ -11,7 +11,7 @@ export default function Layout() {
   return (
     <>
       <header className="nav">
-        <Link to="/" className="logo"><span>Melana</span>Blac</Link>
+        <Link to="/" className="logo" aria-label="MelanaBlac home"><img src="/logo.png" alt="MelanaBlac" width="150" height="34" /></Link>
         <nav className={open ? 'open' : ''} aria-label="Main">
           {links.map(([to, l]) => <NavLink key={to} to={to} end={to === '/'}>{l}</NavLink>)}
           <Link to="/cart" className="cart-link" aria-label={`Basket, ${count} items`}>Basket{count > 0 && <b className="badge">{count}</b>}</Link>
@@ -20,7 +20,7 @@ export default function Layout() {
       </header>
       <main><Outlet /></main>
       <footer className="footer">
-        <div className="logo big"><span>Melana</span>Blac</div>
+        <img className="logo-foot" src="/logo.png" alt="MelanaBlac" width="260" height="59" />
         <p>{t('site.footer')}</p>
         <div className="foot-links">
           <Link to="/shop">Shop</Link><Link to="/about">The Artist</Link><Link to="/contact">Contact</Link>

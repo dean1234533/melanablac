@@ -15,7 +15,7 @@ export default function Slider({ slides }) {
       onTouchStart={(e) => (touch.current = e.touches[0].clientX)}
       onTouchEnd={(e) => { if (touch.current == null) return; const dx = e.changedTouches[0].clientX - touch.current; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); touch.current = null; }}>
       {slides.map((s, k) => (
-        <div key={s.id} className={'slide' + (k === i ? ' active' : '')} aria-hidden={k !== i}>
+        <div key={s.id} className={'slide' + (k === i ? ' active' : '')} aria-hidden={k !== i} style={{ '--bg': `url("${s.image}")` }}>
           <img src={s.image} alt={s.title || 'Artwork'} loading={k === 0 ? 'eager' : 'lazy'} />
           <div className="slide-caption">
             {s.title && <h2>{s.title}</h2>}

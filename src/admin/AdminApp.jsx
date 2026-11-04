@@ -25,7 +25,7 @@ export default function AdminApp() {
 }
 
 function AuthBox({ title, children }) {
-  return <div className="auth"><div className="auth-card"><div className="logo big"><span>Melana</span>Blac</div><h1>{title}</h1>{children}</div><InstallBanner /></div>;
+  return <div className="auth"><div className="auth-card"><img className="logo-auth" src="/logo.png" alt="MelanaBlac" width="240" height="54" /><h1>{title}</h1>{children}</div><InstallBanner /></div>;
 }
 
 function Login({ onLogin }) {
@@ -91,7 +91,7 @@ function Shell({ me, onLogout }) {
   return (
     <div className="shell">
       <aside className={'side' + (menu ? ' open' : '')}>
-        <div className="logo"><span>Melana</span>Blac <small>admin</small></div>
+        <div className="logo side-logo"><img src="/logo.png" alt="MelanaBlac" width="150" height="34" /> <small>admin</small></div>
         <nav onClick={() => setMenu(false)}>
           {links.map(([to, l]) => <NavLink key={to} to={`/admin/${to}`} end={to === ''}>{l}{l === 'Orders' && stats?.newOrders > 0 && <b className="badge">{stats.newOrders}</b>}{l === 'Messages' && stats?.unread > 0 && <b className="badge">{stats.unread}</b>}</NavLink>)}
           <a href="/" target="_blank" rel="noopener noreferrer">View site ↗</a>

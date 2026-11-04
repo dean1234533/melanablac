@@ -78,3 +78,12 @@ fieldset{border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.2rem
 .slide-edit{display:grid;grid-template-columns:160px 1fr;gap:1rem;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1rem;margin-bottom:1rem}.slide-edit img{width:100%;border-radius:8px;aspect-ratio:1;object-fit:cover}@media(max-width:600px){.slide-edit{grid-template-columns:1fr}}
 .note{background:rgba(240,184,74,.1);border:1px solid #f0b84a66;border-radius:var(--r);padding:.8rem 1rem;margin:1rem 0}
 .modal-back{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.75);display:grid;place-items:center;padding:1rem}.modal{background:var(--bg2);border:1px solid var(--gold);border-radius:var(--r);padding:1.6rem;max-width:460px;width:100%;display:grid;gap:1rem;max-height:90vh;overflow:auto}.modal h2{margin:0;color:var(--gold2)}.steps ol{padding-left:1.2rem;margin:.5rem 0}.steps li{margin:.4rem 0}
+
+.logo img{display:block;height:34px;width:auto}.logo-foot{margin:0 auto;width:min(260px,70%);height:auto}.logo-auth{margin:0 auto 1rem;width:min(240px,80%);height:auto}.side-logo{display:flex;align-items:flex-end;gap:.5rem}
+.slide::before{content:'';position:absolute;inset:-30px;background:var(--bg) center/cover;filter:blur(28px) brightness(.55)}
+.slide img{position:relative;object-fit:contain;z-index:1}.slide::after{z-index:2}
+.g-item,.card-img,.p-main{background:#fff}.card-img img{object-fit:contain}
+.slide-caption{z-index:4;background:rgba(11,11,13,.82);border:1px solid rgba(212,175,55,.45);border-radius:var(--r);padding:1rem 1.4rem;backdrop-filter:blur(6px);left:clamp(1rem,4vw,3rem);bottom:3.2rem;max-width:min(460px,calc(100% - 2rem))}
+.slide-caption h2{font-size:clamp(1.5rem,4vw,2.4rem)}.slide-caption p{font-size:1rem;margin:.1rem 0 .8rem}
+.slide::after{background:linear-gradient(transparent 70%,rgba(0,0,0,.6))}
+@media(max-width:760px){.slider{height:calc(100vw + 130px)}.slide-caption{left:.75rem;right:.75rem;max-width:none;bottom:2.6rem;padding:.7rem 1rem}.slide-caption p{display:none}.slide-caption h2{font-size:1.35rem}.slide-caption .btn{padding:.4rem 1.2rem;font-size:.9rem}}

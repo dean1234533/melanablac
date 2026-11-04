@@ -31,8 +31,18 @@ const works = [
   ['Gateway Card', 'arches', 5, 'Greeting Cards', 450, 'A5 greeting card, blank inside, with envelope.'],
 ];
 const svg = (body, c) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><defs><radialGradient id="g" cx="50%" cy="40%" r="80%"><stop offset="0" stop-color="${c[2]}" stop-opacity=".45"/><stop offset="1" stop-color="${c[0]}"/></radialGradient></defs><rect width="${W}" height="${H}" fill="${c[0]}"/><rect width="${W}" height="${H}" fill="url(#g)"/>${body}<rect x="14" y="14" width="${W - 28}" height="${H - 28}" fill="none" stroke="${c[1]}" stroke-width="5"/></svg>`;
+const manifestPath = 'public/art/cards/manifest.json';
+const real = fs.existsSync(manifestPath) ? JSON.parse(fs.readFileSync(manifestPath, 'utf8')) : null;
 const q = (t) => `'${String(t).replace(/'/g, "''")}'`;
 let sql = ''; const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+if (real) {
+  real.forEach((w, i) => {
+    sql += `INSERT INTO products (slug,title,description,price_pence,category,images,stock,featured,sort) VALUES (${q(w.slug)},${q(w.title)},${q(w.description)},${w.price_pence},${q(w.category)},${q(JSON.stringify([w.image]))},25,${i < 8 ? 1 : 0},${i});\n`;
+  });
+  real.slice(0, 5).forEach((w, i) => {
+    sql += `INSERT INTO slides (image,title,subtitle,link,sort) VALUES (${q(w.image)},${q(w.title)},${q('Original illustrated greeting card')},${q('/product/' + w.slug)},${i});\n`;
+  });
+} else {
 works.forEach(([title, st, p, cat, price, desc], i) => {
   const c = pal[p]; const f = `${slug(title)}.svg`;
   fs.writeFileSync(`public/art/${f}`, svg(styles[st](c), c));
@@ -43,5 +53,6 @@ works.forEach(([title, st, p, cat, price, desc], i) => {
   fs.writeFileSync(`public/art/${f}`, svg(styles[st](c), c).replace(`viewBox="0 0 ${W} ${H}"`, `viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice"`));
   sql += `INSERT INTO slides (image,title,subtitle,link,sort) VALUES ('/art/${f}',${q(t)},${q(['Original framed art', 'Light in the dark', 'Power in every line'][i])},'/shop',${i});\n`;
 });
+}
 fs.writeFileSync('seed.sql', sql);
 console.log('seed.sql + art written');
