@@ -1,0 +1,277 @@
+import { json, err, sha256, randomToken, hashPassword, safeEqual, getAdmin, sessionCookie, getContent, slugify, sendEmail, notifyAdmins, stripeCheckout, verifyStripeSig, siteUrl, esc } from '../lib/util.js';
+import { CONTENT_FIELDS, formatPrice } from '../../src/shared/contentSchema.js';
+
+const isEmail = (e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e || '');
+const adminEmails = (env) => (env.ADMIN_EMAIL || '').toLowerCase().split(',').map((s) => s.trim()).filter(Boolean);
+const clip = (v, n) => String(v ?? '').slice(0, n);
+const parseProduct = (r) => ({ ...r, images: JSON.parse(r.images || '[]') });
+const validPassword = (p) => typeof p === 'string' && p.length >= 10 && p.length <= 200;
+
+async function body(req) {
+  try { return await req.json(); } catch { return {}; }
+}
+
+export async function onRequest({ request, env, params }) {
+  const url = new URL(request.url);
+  const seg = (params.path || []);
+  const method = request.method;
+  const route = seg[0];
+  try {
+    // ---------- public ----------
+    if (route === 'site' && method === 'GET') {
+      const content = await getContent(env);
+      const { results: slides } = await env.DB.prepare('SELECT * FROM slides ORDER BY sort, id').all();
+      const { results: cats } = await env.DB.prepare("SELECT DISTINCT category FROM products WHERE status='published' ORDER BY category").all();
+      const { results: featured } = await env.DB.prepare("SELECT * FROM products WHERE status='published' AND featured=1 ORDER BY sort LIMIT 8").all();
+      return json({ content, slides, categories: cats.map((c) => c.category), featured: featured.map(parseProduct) }, 200, { 'cache-control': 'public, max-age=30' });
+    }
+    if (route === 'products' && method === 'GET') {
+      if (seg[1]) {
+        const r = await env.DB.prepare("SELECT * FROM products WHERE slug = ? AND status='published'").bind(seg[1]).first();
+        return r ? json(parseProduct(r)) : err('Not found', 404);
+      }
+      const cat = url.searchParams.get('category');
+      const q = cat ? env.DB.prepare("SELECT * FROM products WHERE status='published' AND category=? ORDER BY sort, id DESC").bind(cat) : env.DB.prepare("SELECT * FROM products WHERE status='published' ORDER BY sort, id DESC");
+      return json((await q.all()).results.map(parseProduct));
+    }
+    if (route === 'media' && method === 'GET') {
+      const key = seg.slice(1).join('/');
+      const obj = await env.MEDIA.get(key);
+      if (!obj) return new Response('Not found', { status: 404 });
+      return new Response(obj.body, { headers: { 'content-type': obj.httpMetadata?.contentType || 'application/octet-stream', 'cache-control': 'public, max-age=31536000, immutable' } });
+    }
+    if (route === 'contact' && method === 'POST') {
+      const b = await body(request);
+      if (!b.name || !isEmail(b.email) || !b.body) return err('Please fill in name, a valid email and a message.');
+      if (b.website) return json({ ok: true }); // honeypot
+      await env.DB.prepare('INSERT INTO messages (name,email,body) VALUES (?,?,?)').bind(clip(b.name, 120), clip(b.email, 200), clip(b.body, 5000)).run();
+      await notifyAdmins(env, { title: 'New message', body: `${clip(b.name, 60)}: ${clip(b.body, 100)}`, url: '/admin/messages' });
+      return json({ ok: true });
+    }
+    if (route === 'checkout' && method === 'POST') {
+      const b = await body(request);
+      if (!b.name || !isEmail(b.email)) return err('Name and a valid email are required.');
+      if (!Array.isArray(b.items) || !b.items.length) return err('Your basket is empty.');
+      const a = b.address || {};
+      if (!a.line1 || !a.city || !a.postcode) return err('Please enter your full delivery address.');
+      const items = [];
+      for (const it of b.items.slice(0, 30)) {
+        const p = await env.DB.prepare("SELECT * FROM products WHERE id=? AND status='published'").bind(Number(it.id)).first();
+        const qty = Math.max(1, Math.min(10, parseInt(it.qty) || 1));
+        if (!p) return err('An item in your basket is no longer available.');
+        if (p.stock < qty) return err(`Sorry, only ${p.stock} of "${p.title}" left.`);
+        items.push({ id: p.id, title: p.title, price_pence: p.price_pence, qty, image: JSON.parse(p.images || '[]')[0] || '' });
+      }
+      const total = items.reduce((s, i) => s + i.price_pence * i.qty, 0);
+      const number = 'MB' + Date.now().toString(36).toUpperCase().slice(-6) + randomToken(1).toUpperCase();
+      const order = { number, email: clip(b.email, 200), name: clip(b.name, 120) };
+      const useStripe = !!env.STRIPE_SECRET_KEY;
+      await env.DB.batch([
+        env.DB.prepare('INSERT INTO orders (number,email,name,address,items,total_pence,status) VALUES (?,?,?,?,?,?,?)')
+          .bind(number, order.email, order.name, JSON.stringify({ line1: clip(a.line1, 200), line2: clip(a.line2, 200), city: clip(a.city, 100), postcode: clip(a.postcode, 20) }), JSON.stringify(items), total, useStripe ? 'awaiting_payment' : 'new'),
+        ...items.map((i) => env.DB.prepare('UPDATE products SET stock = MAX(0, stock - ?) WHERE id = ?').bind(i.qty, i.id)),
+      ]);
+      const content = await getContent(env);
+      const sym = content['site.currency'];
+      if (useStripe) {
+        try {
+          const s = await stripeCheckout(env, { order, items, origin: siteUrl(env, request) });
+          await env.DB.prepare('UPDATE orders SET stripe_session=? WHERE number=?').bind(s.id, number).run();
+          return json({ number, redirect: s.url });
+        } catch (e) { return err('Payment could not be started: ' + e.message, 502); }
+      }
+      await notifyAdmins(env, { title: `New order ${number}`, body: `${order.name} - ${formatPrice(total, sym)}`, url: '/admin/orders' });
+      await sendEmail(env, { to: order.email, subject: `Order ${number} received`, html: `<p>Thank you ${esc(order.name)}! We received your order <b>${number}</b> totalling ${formatPrice(total, sym)}. We will be in touch shortly with payment and delivery details.</p>` });
+      return json({ number });
+    }
+    if (route === 'order' && method === 'GET' && seg[1]) {
+      const o = await env.DB.prepare('SELECT number,name,items,total_pence,status,created_at FROM orders WHERE number=?').bind(seg[1]).first();
+      return o ? json({ ...o, items: JSON.parse(o.items) }) : err('Not found', 404);
+    }
+    if (route === 'stripe-webhook' && method === 'POST') {
+      const raw = await request.text();
+      if (!(await verifyStripeSig(env, raw, request.headers.get('stripe-signature')))) return err('bad signature', 400);
+      const ev = JSON.parse(raw);
+      if (ev.type === 'checkout.session.completed') {
+        const num = ev.data.object.client_reference_id;
+        const o = await env.DB.prepare('SELECT * FROM orders WHERE number=?').bind(num).first();
+        if (o && o.status === 'awaiting_payment') {
+          await env.DB.prepare("UPDATE orders SET status='paid' WHERE number=?").bind(num).run();
+          await notifyAdmins(env, { title: `Paid order ${num}`, body: `${o.name} - ${formatPrice(o.total_pence)}`, url: '/admin/orders' });
+        }
+      }
+      return json({ received: true });
+    }
+
+    // ---------- admin auth (no session needed) ----------
+    if (route === 'admin' && seg[1] === 'login' && method === 'POST') {
+      const b = await body(request);
+      const email = clip(b.email, 200).toLowerCase().trim();
+      const a = await env.DB.prepare('SELECT * FROM admins WHERE email=?').bind(email).first();
+      await new Promise((r) => setTimeout(r, 300));
+      if (!a || !a.password_hash) return err('Invalid email or password.', 401);
+      const { hash } = await hashPassword(String(b.password || ''), a.salt);
+      if (!safeEqual(hash, a.password_hash)) return err('Invalid email or password.', 401);
+      const token = randomToken();
+      await env.DB.prepare('INSERT INTO sessions (token_hash, admin_id, expires) VALUES (?,?,?)').bind(await sha256(token), a.id, Date.now() + 14 * 864e5).run();
+      return json({ ok: true, email: a.email }, 200, { 'set-cookie': sessionCookie(token, request) });
+    }
+    if (route === 'admin' && seg[1] === 'forgot' && method === 'POST') {
+      const b = await body(request);
+      const email = clip(b.email, 200).toLowerCase().trim();
+      const generic = { ok: true, message: 'If that email belongs to an admin, a reset link has been sent.' };
+      if (!adminEmails(env).includes(email)) return json(generic);
+      let a = await env.DB.prepare('SELECT * FROM admins WHERE email=?').bind(email).first();
+      if (!a) { await env.DB.prepare('INSERT INTO admins (email) VALUES (?)').bind(email).run(); a = await env.DB.prepare('SELECT * FROM admins WHERE email=?').bind(email).first(); }
+      const token = randomToken();
+      await env.DB.prepare('INSERT INTO reset_tokens (token_hash, admin_id, expires) VALUES (?,?,?)').bind(await sha256(token), a.id, Date.now() + 3600e3).run();
+      const link = `${siteUrl(env, request)}/admin/reset?token=${token}`;
+      const mail = await sendEmail(env, { to: email, subject: 'Reset your MelanaBlac admin password', html: `<p>Use this link to set a new password. It expires in 1 hour.</p><p><a href="${link}">${link}</a></p><p>If you did not ask for this, ignore this email.</p>` });
+      return json(env.DEV_MODE ? { ...generic, devLink: link, mail } : generic);
+    }
+    if (route === 'admin' && seg[1] === 'reset' && method === 'POST') {
+      const b = await body(request);
+      if (!validPassword(b.password)) return err('Password must be at least 10 characters.');
+      const t = await env.DB.prepare('SELECT * FROM reset_tokens WHERE token_hash=? AND used=0 AND expires>?').bind(await sha256(String(b.token || '')), Date.now()).first();
+      if (!t) return err('This reset link is invalid or has expired.', 400);
+      const { hash, salt } = await hashPassword(b.password);
+      await env.DB.batch([
+        env.DB.prepare('UPDATE admins SET password_hash=?, salt=? WHERE id=?').bind(hash, salt, t.admin_id),
+        env.DB.prepare('UPDATE reset_tokens SET used=1 WHERE token_hash=?').bind(t.token_hash),
+        env.DB.prepare('DELETE FROM sessions WHERE admin_id=?').bind(t.admin_id),
+      ]);
+      return json({ ok: true });
+    }
+
+    // ---------- admin (session required) ----------
+    if (route === 'admin') {
+      const admin = await getAdmin(request, env);
+      if (seg[1] === 'me') return admin ? json({ email: admin.email }) : err('Not signed in', 401);
+      if (!admin) return err('Not signed in', 401);
+      if (method !== 'GET' && !request.headers.get('x-requested-with')) return err('Bad request', 400);
+      const sub = seg[1], id = seg[2];
+
+      if (sub === 'logout' && method === 'POST') {
+        const tok = (request.headers.get('cookie') || '').match(/mb_session=([a-f0-9]+)/)?.[1];
+        if (tok) await env.DB.prepare('DELETE FROM sessions WHERE token_hash=?').bind(await sha256(tok)).run();
+        return json({ ok: true }, 200, { 'set-cookie': sessionCookie('', request, 0) });
+      }
+      if (sub === 'password' && method === 'POST') {
+        const b = await body(request);
+        const a = await env.DB.prepare('SELECT * FROM admins WHERE id=?').bind(admin.id).first();
+        const cur = await hashPassword(String(b.current || ''), a.salt);
+        if (!safeEqual(cur.hash, a.password_hash)) return err('Current password is incorrect.', 400);
+        if (!validPassword(b.next)) return err('New password must be at least 10 characters.');
+        const n = await hashPassword(b.next);
+        await env.DB.prepare('UPDATE admins SET password_hash=?, salt=? WHERE id=?').bind(n.hash, n.salt, admin.id).run();
+        return json({ ok: true });
+      }
+      if (sub === 'stats') {
+        const q = async (s) => (await env.DB.prepare(s).first()).n;
+        return json({
+          products: await q("SELECT COUNT(*) n FROM products"), published: await q("SELECT COUNT(*) n FROM products WHERE status='published'"),
+          orders: await q('SELECT COUNT(*) n FROM orders'), newOrders: await q("SELECT COUNT(*) n FROM orders WHERE status IN ('new','paid')"),
+          revenue: await q("SELECT COALESCE(SUM(total_pence),0) n FROM orders WHERE status IN ('paid','shipped','completed')"),
+          unread: await q('SELECT COUNT(*) n FROM messages WHERE is_read=0'), lowStock: await q("SELECT COUNT(*) n FROM products WHERE stock<=1 AND status='published'"),
+          subscribers: await q('SELECT COUNT(*) n FROM push_subs'),
+          pushConfigured: !!(env.VAPID_PRIVATE_JWK && env.VAPID_PUBLIC_KEY), emailConfigured: !!env.RESEND_API_KEY, stripeConfigured: !!env.STRIPE_SECRET_KEY,
+        });
+      }
+      if (sub === 'upload' && method === 'POST') {
+        const type = (request.headers.get('content-type') || '').split(';')[0];
+        const ext = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif', 'image/avif': 'avif' }[type];
+        if (!ext) return err('Only JPG, PNG, WebP, GIF or AVIF images are allowed.');
+        const buf = await request.arrayBuffer();
+        if (buf.byteLength > 12 * 1024 * 1024) return err('Image is larger than 12MB.', 413);
+        if (!buf.byteLength) return err('Empty file.');
+        const key = `${Date.now()}-${randomToken(4)}.${ext}`;
+        await env.MEDIA.put(key, buf, { httpMetadata: { contentType: type } });
+        return json({ url: `/api/media/${key}` });
+      }
+      if (sub === 'products') {
+        if (method === 'GET') return json((await env.DB.prepare('SELECT * FROM products ORDER BY sort, id DESC').all()).results.map(parseProduct));
+        const b = await body(request);
+        if (method === 'DELETE' && id) { await env.DB.prepare('DELETE FROM products WHERE id=?').bind(id).run(); return json({ ok: true }); }
+        if (method === 'POST' || method === 'PUT') {
+          if (!b.title || !clip(b.title, 200).trim()) return err('Title is required.');
+          const price = Math.round(Number(b.price_pence));
+          if (!Number.isFinite(price) || price < 0) return err('Enter a valid price.');
+          const images = Array.isArray(b.images) ? b.images.filter((x) => typeof x === 'string').slice(0, 12) : [];
+          const vals = [clip(b.title, 200), clip(b.description, 8000), price, clip(b.category || 'Gallery', 60), JSON.stringify(images), Math.max(0, parseInt(b.stock) || 0), b.status === 'draft' ? 'draft' : 'published', b.featured ? 1 : 0, clip(b.seo_title, 120), clip(b.seo_description, 320), clip(b.etsy_url, 500), parseInt(b.sort) || 0];
+          if (method === 'POST') {
+            let slug = slugify(b.slug || b.title) || 'product';
+            if (await env.DB.prepare('SELECT 1 FROM products WHERE slug=?').bind(slug).first()) slug += '-' + randomToken(2);
+            const r = await env.DB.prepare('INSERT INTO products (title,description,price_pence,category,images,stock,status,featured,seo_title,seo_description,etsy_url,sort,slug) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)').bind(...vals, slug).run();
+            return json({ ok: true, id: r.meta.last_row_id, slug });
+          }
+          await env.DB.prepare('UPDATE products SET title=?,description=?,price_pence=?,category=?,images=?,stock=?,status=?,featured=?,seo_title=?,seo_description=?,etsy_url=?,sort=? WHERE id=?').bind(...vals, id).run();
+          return json({ ok: true });
+        }
+      }
+      if (sub === 'slides') {
+        if (method === 'GET') return json((await env.DB.prepare('SELECT * FROM slides ORDER BY sort,id').all()).results);
+        const b = await body(request);
+        if (method === 'DELETE' && id) { await env.DB.prepare('DELETE FROM slides WHERE id=?').bind(id).run(); return json({ ok: true }); }
+        if (method === 'POST') {
+          if (!b.image) return err('Choose an image.');
+          await env.DB.prepare('INSERT INTO slides (image,title,subtitle,link,sort) VALUES (?,?,?,?,?)').bind(clip(b.image, 500), clip(b.title, 120), clip(b.subtitle, 200), clip(b.link, 300), parseInt(b.sort) || 99).run();
+          return json({ ok: true });
+        }
+        if (method === 'PUT' && id) {
+          await env.DB.prepare('UPDATE slides SET image=?,title=?,subtitle=?,link=?,sort=? WHERE id=?').bind(clip(b.image, 500), clip(b.title, 120), clip(b.subtitle, 200), clip(b.link, 300), parseInt(b.sort) || 0, id).run();
+          return json({ ok: true });
+        }
+      }
+      if (sub === 'content') {
+        if (method === 'GET') return json(await getContent(env));
+        if (method === 'PUT') {
+          const b = await body(request);
+          const valid = new Set(CONTENT_FIELDS.map((f) => f.key));
+          const stmts = Object.entries(b).filter(([k]) => valid.has(k)).map(([k, v]) => env.DB.prepare('INSERT INTO content (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').bind(k, clip(v, 8000)));
+          if (stmts.length) await env.DB.batch(stmts);
+          return json({ ok: true, saved: stmts.length });
+        }
+      }
+      if (sub === 'orders') {
+        if (method === 'GET') return json((await env.DB.prepare('SELECT * FROM orders ORDER BY id DESC LIMIT 200').all()).results.map((o) => ({ ...o, items: JSON.parse(o.items), address: JSON.parse(o.address) })));
+        if (method === 'PUT' && id) {
+          const b = await body(request);
+          if (!['new', 'awaiting_payment', 'paid', 'shipped', 'completed', 'cancelled'].includes(b.status)) return err('Bad status');
+          await env.DB.prepare('UPDATE orders SET status=? WHERE id=?').bind(b.status, id).run();
+          return json({ ok: true });
+        }
+      }
+      if (sub === 'messages') {
+        if (method === 'GET') return json((await env.DB.prepare('SELECT * FROM messages ORDER BY id DESC LIMIT 200').all()).results);
+        if (method === 'PUT' && id) { await env.DB.prepare('UPDATE messages SET is_read=1 WHERE id=?').bind(id).run(); return json({ ok: true }); }
+        if (method === 'DELETE' && id) { await env.DB.prepare('DELETE FROM messages WHERE id=?').bind(id).run(); return json({ ok: true }); }
+      }
+      if (sub === 'push') {
+        if (seg[2] === 'key') return json({ key: env.VAPID_PUBLIC_KEY || null });
+        if (seg[2] === 'subscribe' && method === 'POST') {
+          const b = await body(request);
+          if (!b.endpoint || !/^https:\/\//.test(b.endpoint)) return err('Bad subscription');
+          await env.DB.prepare('INSERT INTO push_subs (endpoint,p256dh,auth,admin_id) VALUES (?,?,?,?) ON CONFLICT(endpoint) DO UPDATE SET admin_id=excluded.admin_id').bind(b.endpoint, b.keys?.p256dh || '', b.keys?.auth || '', admin.id).run();
+          return json({ ok: true });
+        }
+        if (seg[2] === 'unsubscribe' && method === 'POST') {
+          const b = await body(request);
+          await env.DB.prepare('DELETE FROM push_subs WHERE endpoint=?').bind(b.endpoint || '').run();
+          return json({ ok: true });
+        }
+        if (seg[2] === 'test' && method === 'POST') {
+          const r = await notifyAdmins(env, { title: 'Test notification', body: 'Push notifications are working on this device.', url: '/admin/' });
+          return json({ ok: true, ...r });
+        }
+      }
+      if (sub === 'notifications') {
+        if (seg[2] === 'latest') return json((await env.DB.prepare('SELECT * FROM notifications ORDER BY id DESC LIMIT 1').first()) || null);
+        return json((await env.DB.prepare('SELECT * FROM notifications ORDER BY id DESC LIMIT 50').all()).results);
+      }
+    }
+    return err('Not found', 404);
+  } catch (e) {
+    console.error(e);
+    return err('Server error: ' + (e.message || e), 500);
+  }
+}
