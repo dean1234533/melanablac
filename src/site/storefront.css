@@ -371,11 +371,13 @@
   background: #e4e5dd;
 }
 .storefront .card-img img {
-  height: auto;
-  max-height: 100%;
+  position: absolute;
+  inset: 0;
   width: 100%;
+  height: 100%;
+  max-height: none;
+  padding: 25px;
   object-fit: contain;
-  box-shadow: 2px 7px 13px #29251e18;
   transition: transform 0.45s;
 }
 .storefront .card-img:hover img {
@@ -567,10 +569,13 @@
   scroll-snap-align: start;
 }
 .motion-grid .media-player {
-  aspect-ratio: 1.2;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
+  background: var(--bg2);
 }
 .motion-grid .vid {
+  position: absolute;
+  inset: 0;
   height: 100%;
   width: 100%;
   object-fit: cover;
@@ -1111,7 +1116,7 @@
     gap: 15px;
   }
   .motion-grid .media-player {
-    aspect-ratio: 1;
+    aspect-ratio: 4 / 3;
   }
   .storefront .pause-editorial {
     padding: 55px 5%;
@@ -1221,4 +1226,20 @@
   color: #fffdf8;
   font-size: 9px;
   padding: 4px 8px;
+}
+
+.collection-monogram {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font:
+    italic 64px "Cormorant Garamond",
+    Georgia,
+    serif;
+  color: var(--gold);
+}
+@media (max-width: 1050px) {
+  .storefront .card-img img {
+    padding: 18px;
+  }
 }

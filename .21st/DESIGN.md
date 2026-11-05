@@ -7,3 +7,5 @@ The homepage introduces the brand, shows the curated collection, tells the creat
 21st initialization completed; catalogue search requires a signed-in 21st account in this environment. The redesign uses the project's React primitives and original assets.
 
 Use the existing signature logo asset (`public/logo-dark.png`) in the header and footer. Do not recreate the logo as typeset text.
+
+Homepage artwork should not repeat between the curated edit and category covers. Product images use consistent uncropped frames; gallery films fill fixed 4:3 slides across desktop and mobile.

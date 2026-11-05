@@ -21,24 +21,73 @@ export function Home() {
   const { t, featured, categories, loaded, error } = useSite();
   useSEO(t("seo.home.title"), t("seo.home.description"));
   const [feels, setFeels] = useState("");
-  const motion = t("video.motionList")
-    .split("\n")
-    .map((x) => x.trim())
-    .filter(Boolean);
-  const collectionImages = [
-    "happy-21st-birthday-black-gold",
-    "merry-christmas-walk-under-the-star",
-    "earthstrong-fearfully-and-wonderfully-made",
-    "mother-s-day-icon-of-grace",
-    "nativity-mother-and-child-in-silver-blue",
-  ];
-  const collectionNames = [
-    "Birthday Cards",
-    "Christmas Cards",
-    "Inspirational Cards",
-    "Mother's Day Cards",
-    "Nativity Cards",
-  ];
+  const reservedFilms = new Set([
+    t("video.hero"),
+    t("video.why"),
+    t("video.pause"),
+  ]);
+  const motion = [
+    ...new Set(
+      t("video.motionList")
+        .split("\n")
+        .map((x) => x.trim())
+        .filter(Boolean),
+    ),
+  ].filter((src) => !reservedFilms.has(src));
+  const curated = [];
+  const usedImages = new Set();
+  const usedCategories = new Set();
+  // Lead with different occasions, then fill remaining spaces with unique artwork.
+  for (const diverse of [true, false]) {
+    for (const product of featured) {
+      const image = product.images?.[0];
+      if (
+        curated.length >= 4 ||
+        !image ||
+        usedImages.has(image) ||
+        (diverse && usedCategories.has(product.category))
+      )
+        continue;
+      curated.push(product);
+      usedImages.add(image);
+      usedCategories.add(product.category);
+    }
+  }
+  const collectionCovers = {
+    "Birthday Cards": [
+      "happy-30th-birthday-silver-headwrap",
+      "happy-21st-birthday-tune-in",
+    ],
+    "Christmas Cards": [
+      "christmas-holiday-season-blessings",
+      "christmas-a-season-of-grace",
+    ],
+    "Inspirational Cards": [
+      "becoming-her-curls-and-gold",
+      "becoming-her-locs-and-gold",
+    ],
+    "Mother's Day Cards": [
+      "mother-s-day-the-original-queen",
+      "mother-s-day-icon-of-grace",
+    ],
+    "Nativity Cards": [
+      "nativity-emmanuel",
+      "nativity-holy-family-by-starlight",
+    ],
+  };
+  const collections = (
+    categories.length ? categories : Object.keys(collectionCovers)
+  ).map((name) => {
+    const candidates = [
+      ...(collectionCovers[name] || []).map(
+        (slug) => "/art/cards/" + slug + ".jpg",
+      ),
+      ...featured.filter((p) => p.category === name).map((p) => p.images?.[0]),
+    ];
+    const image = candidates.find((src) => src && !usedImages.has(src));
+    if (image) usedImages.add(image);
+    return { name, image };
+  });
   return (
     <>
       <section className="editorial-hero">
@@ -129,9 +178,9 @@ export function Home() {
             </Link>
           </div>
         ) : loaded ? (
-          featured.length ? (
+          curated.length ? (
             <div className="curated-grid">
-              {featured.slice(0, 4).map((p) => (
+              {curated.map((p) => (
                 <ProductCard key={p.id} p={p} />
               ))}
             </div>
@@ -193,34 +242,31 @@ export function Home() {
           </Link>
         </div>
         <div className="collection-tiles">
-          {(categories.length ? categories : collectionNames).map(
-            (category, i) => (
-              <Link
-                to={"/shop?category=" + encodeURIComponent(category)}
-                className="collection-tile"
-                key={category}
-              >
-                <div>
+          {collections.map(({ name: category, image }, i) => (
+            <Link
+              to={"/shop?category=" + encodeURIComponent(category)}
+              className="collection-tile"
+              key={category}
+            >
+              <div>
+                {image ? (
                   <img
-                    src={
-                      "/art/cards/" +
-                      collectionImages[
-                        Math.max(0, collectionNames.indexOf(category)) %
-                          collectionImages.length
-                      ] +
-                      ".jpg"
-                    }
+                    src={image}
                     loading="lazy"
                     alt={category + " illustrated collection"}
                   />
-                  <span className="tile-number">0{i + 1}</span>
-                </div>
-                <h3>
-                  {category} <Arrow />
-                </h3>
-              </Link>
-            ),
-          )}
+                ) : (
+                  <span className="collection-monogram" aria-hidden="true">
+                    M.
+                  </span>
+                )}
+                <span className="tile-number">0{i + 1}</span>
+              </div>
+              <h3>
+                {category} <Arrow />
+              </h3>
+            </Link>
+          ))}
         </div>
       </section>
       {motion.length > 0 && (
