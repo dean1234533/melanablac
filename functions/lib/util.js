@@ -40,7 +40,8 @@ export async function getContent(env) {
   const out = { ...DEFAULTS };
   try {
     const { results } = await env.DB.prepare('SELECT key, value FROM content').all();
-    for (const r of results) if (r.value !== '') out[r.key] = r.value;
+    // Blank means "use the default", except video fields where blank means "hide this video".
+    for (const r of results) if (r.value !== '' || /^video\.(hero|welcome|why|pause|motionList)$/.test(r.key)) out[r.key] = r.value;
   } catch {}
   return out;
 }

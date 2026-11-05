@@ -47,7 +47,8 @@ globalThis.HTMLRewriter = class {
     return new Response(body, { status: res.status, headers });
   }
 };
-const env = { DB, ...(process.env.NO_R2 ? {} : { MEDIA }), DEV_MODE: '1', ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'dbs_workouts@yahoo.com', VAPID_PUBLIC_KEY: fs.readFileSync(path.join(root, '.dev-vapid-public'), 'utf8').trim(), VAPID_PRIVATE_JWK: fs.readFileSync(path.join(root, '.dev-vapid-private'), 'utf8').trim().replace(/^'|'$/g, ''), ...(process.env.DEV_ENV ? JSON.parse(process.env.DEV_ENV) : {}) };
+const ASSETS = { fetch: async (req) => staticRes(new URL(req.url).pathname) };
+const env = { ASSETS, DB, ...(process.env.NO_R2 ? {} : { MEDIA }), DEV_MODE: '1', ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'dbs_workouts@yahoo.com', VAPID_PUBLIC_KEY: fs.readFileSync(path.join(root, '.dev-vapid-public'), 'utf8').trim(), VAPID_PRIVATE_JWK: fs.readFileSync(path.join(root, '.dev-vapid-private'), 'utf8').trim().replace(/^'|'$/g, ''), ...(process.env.DEV_ENV ? JSON.parse(process.env.DEV_ENV) : {}) };
 
 const mime = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.ico': 'image/x-icon' };
 const dist = path.join(root, 'dist');
@@ -64,6 +65,7 @@ const mw = (await load('_middleware.js')).onRequest;
 const apiH = (await load('api/[[path]].js')).onRequest;
 const sitemap = (await load('sitemap.xml.js')).onRequest;
 const robots = (await load('robots.txt.js')).onRequest;
+const video = (await load('video/[[path]].js')).onRequest;
 
 http.createServer(async (req, res) => {
   try {
@@ -74,6 +76,7 @@ http.createServer(async (req, res) => {
     const next = async () => staticRes(url.pathname);
     if (url.pathname.startsWith('/api/')) response = await apiH({ request, env, params: { path: url.pathname.slice(5).split('/').filter(Boolean) } });
     else if (url.pathname === '/sitemap.xml') response = await sitemap({ request, env });
+    else if (url.pathname.startsWith('/video/')) response = await video({ request, env });
     else if (url.pathname === '/robots.txt') response = await robots({ request, env });
     else response = await mw({ request, env, next });
     const headers = {}; response.headers.forEach((v, k) => { headers[k] = v; });

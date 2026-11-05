@@ -4,6 +4,7 @@ import { api } from '../api.js';
 import { useSite, useSEO } from './SiteContext.jsx';
 import Slider from './Slider.jsx';
 import Gallery, { Lightbox } from './Gallery.jsx';
+import Video from './Video.jsx';
 
 const Loading = () => <div className="center muted pad">Loading…</div>;
 
@@ -11,15 +12,17 @@ export function Home() {
   const { t, slides, featured, loaded, error } = useSite();
   useSEO(t('seo.home.title'), t('seo.home.description'));
   const [feels, setFeels] = useState('');
+  const motion = t('video.motionList').split('\n').map((x) => x.trim()).filter(Boolean);
   return (
     <>
-      <Slider slides={slides} />
+      {t('video.hero') && <section className="hero-video"><Video src={t('video.hero')} lazy={false} label="Melana Blac gallery" className="cover" /></section>}
       <section className="hero-text">
         <p className="kicker">{t('home.kicker')}</p>
         <h1 className="script">{t('home.title')}</h1>
         <p className="tagline">{t('home.tagline')}</p>
         <Link to="/shop" className="btn gold">{t('home.cta')}</Link>
       </section>
+      <Slider slides={slides} />
       {error && <p className="center err">{error}</p>}
       <section className="section">
         <h2 className="section-title">Featured Pieces</h2>
@@ -27,23 +30,40 @@ export function Home() {
         <p className="center"><Link to="/shop" className="btn">See the whole collection</Link></p>
       </section>
       <section className="section narrow center">
+        {t('video.welcome') && <Video src={t('video.welcome')} className="wide round" />}
         <h2 className="section-title">{t('home.welcomeTitle')}</h2>
         <p className="lead">{t('home.welcomeBody')}</p>
         <Link to="/about" className="btn">Meet the Artist →</Link>
       </section>
       <section className="section band">
-        <div className="narrow center">
-          <h2 className="section-title">{t('home.whyTitle')}</h2>
-          <p className="lead">{t('home.whyBody')}</p>
+        <div className={'split' + (t('video.why') ? '' : ' single')}>
+          {t('video.why') && <Video src={t('video.why')} className="square round" />}
+          <div className="center-sm">
+            <h2 className="section-title left">{t('home.whyTitle')}</h2>
+            <p className="lead">{t('home.whyBody')}</p>
+          </div>
         </div>
       </section>
-      <section className="section narrow center">
-        <h2 className="section-title">{t('home.pauseTitle')}</h2>
-        <p className="lead">{t('home.pauseBody')}</p>
-        <div className="feels" role="group" aria-label="How does it make you feel">
-          {['Empowered', 'Seen', 'Calm', 'Curious', 'Moved'].map((f) => <button key={f} className={'chip' + (feels === f ? ' on' : '')} aria-pressed={feels === f} onClick={() => setFeels(f)}>{f}</button>)}
+      {motion.length > 0 && (
+        <section className="section motion">
+          <h2 className="section-title">{t('video.motionTitle')}</h2>
+          <div className="strip" tabIndex={0} aria-label="Gallery videos, scroll sideways">
+            {motion.map((m) => <Video key={m} src={m} className="strip-item round" />)}
+          </div>
+        </section>
+      )}
+      <section className="section">
+        <div className={'split reverse' + (t('video.pause') ? '' : ' single')}>
+          {t('video.pause') && <Video src={t('video.pause')} className="square round" />}
+          <div className="center-sm">
+            <h2 className="section-title left">{t('home.pauseTitle')}</h2>
+            <p className="lead">{t('home.pauseBody')}</p>
+            <div className="feels" role="group" aria-label="How does it make you feel">
+              {['Empowered', 'Seen', 'Calm', 'Curious', 'Moved'].map((f) => <button key={f} className={'chip' + (feels === f ? ' on' : '')} aria-pressed={feels === f} onClick={() => setFeels(f)}>{f}</button>)}
+            </div>
+            {feels && <p className="muted" role="status">Thank you. Art that makes you feel {feels.toLowerCase()} is art that is working. <Link to="/shop">Find your piece →</Link></p>}
+          </div>
         </div>
-        {feels && <p className="muted" role="status">Thank you. Art that makes you feel {feels.toLowerCase()} is art that is working. <Link to="/shop">Find your piece →</Link></p>}
       </section>
     </>
   );
