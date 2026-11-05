@@ -191,13 +191,47 @@
   background: #d4af37;
 }
 .storefront .hero-copy .btn.primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   background: var(--gold);
   color: #121212;
   border-color: var(--gold);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
-.storefront .hero-copy .btn.primary:hover {
-  background: #c9ab47;
-  border-color: #c9ab47;
+.storefront .hero-copy .btn.primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 20%, #fff7d66b 50%, transparent 80%);
+  transform: translateX(-110%);
+  transition: transform 0.65s ease;
+}
+.storefront .hero-copy .btn.primary:focus-visible {
+  background: #e3c45a;
+  border-color: var(--gold);
+  box-shadow: 0 8px 24px #d4af3733;
+  transform: translateY(-3px);
+  outline-color: var(--gold);
+}
+.storefront .hero-copy .btn.primary:focus-visible::before {
+  transform: translateX(110%);
+}
+@media (hover: hover) and (pointer: fine) {
+  .storefront .hero-copy .btn.primary:hover:not(:disabled) {
+    background: #e3c45a;
+    border-color: var(--gold);
+    box-shadow: 0 8px 24px #d4af3733;
+    transform: translateY(-3px);
+  }
+  .storefront .hero-copy .btn.primary:hover::before {
+    transform: translateX(110%);
+  }
+}
+.storefront .hero-copy .btn.primary:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 .hero-copy .hero-footnote p,
 .hero-copy .hero-footnote strong {
@@ -1288,6 +1322,12 @@
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .storefront .hero-copy .btn.primary {
+    transform: none;
+  }
+  .storefront .hero-copy .btn.primary::before {
+    display: none;
   }
   .storefront * {
     scroll-behavior: auto !important;
