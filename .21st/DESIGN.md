@@ -9,3 +9,5 @@ The homepage introduces the brand, shows the curated collection, tells the creat
 Use the existing signature logo asset (`public/logo-dark.png`) in the header and footer. Do not recreate the logo as typeset text.
 
 Homepage artwork should not repeat between the curated edit and category covers. Product images use consistent uncropped frames; gallery films fill fixed 4:3 slides across desktop and mobile.
+
+Hero copy and the shop button overlay the full-width gallery film. Use a dark scrim and warm light text for readability on desktop and mobile.
