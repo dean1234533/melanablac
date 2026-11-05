@@ -673,9 +673,6 @@
   color: #4b5144;
   transition: background 0.2s;
 }
-.feels .chip span {
-  margin-left: 15px;
-}
 .storefront .chip.on,
 .storefront .chip:hover {
   background: #292e27;
@@ -1169,9 +1166,6 @@
   .storefront .chip {
     font-size: 9px;
     padding: 9px 13px;
-  }
-  .feels .chip span {
-    margin-left: 8px;
   }
   .storefront .footer {
     padding: 55px 5% 20px;

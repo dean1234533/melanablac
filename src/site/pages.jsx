@@ -109,7 +109,7 @@ export function Home() {
           </h1>
           <p className="hero-description">{t("home.tagline")}</p>
           <Link to="/shop" className="btn primary">
-            {t("home.cta")} <Arrow />
+            {t("home.cta")}
           </Link>
           <div className="hero-footnote">
             <span className="mini-mark">m.</span>
@@ -316,7 +316,7 @@ export function Home() {
               aria-pressed={feels === f}
               onClick={() => setFeels(f)}
             >
-              {f} <span aria-hidden="true">↗</span>
+              {f}
             </button>
           ))}
         </div>
@@ -835,7 +835,7 @@ export function About() {
           <em>with a conversation.</em>
         </h2>
         <Link className="btn" to="/contact">
-          Get in touch <Arrow />
+          Get in touch
         </Link>
       </section>
     </>

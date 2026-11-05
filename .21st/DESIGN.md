@@ -13,3 +13,5 @@ Homepage artwork should not repeat between the curated edit and category covers.
 Hero copy and the shop button overlay the full-width gallery film. Use a dark scrim and warm light text for readability on desktop and mobile.
 
 Per user preference, videos have no visible play/pause controls. Continue muted playback while on screen and honour reduced motion.
+
+Buttons use text labels without arrow icons; arrows may remain on editorial text links and artwork navigation.
