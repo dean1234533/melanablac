@@ -1,3 +1,4 @@
+import { DEFAULT_SHARE_IMAGE } from '../src/shared/contentSchema.js';
 import { optimizedImage } from '../src/shared/mediaPolicy.js';
 import { getContent, esc, siteUrl, getAdmin } from './lib/util.js';
 
@@ -41,8 +42,9 @@ export async function onRequest({ request, env, next }) {
   }
   if (isAdmin) { title = 'MelanaBlac Admin'; desc = 'Manage your art shop.'; }
   const abs = (i) => { const image = optimizedImage(i); return image && image.startsWith('/') ? origin + image : image; };
+  const shareImage = image ? `<meta property="og:image" content="${esc(abs(image))}"><meta property="og:image:alt" content="${esc(image === DEFAULT_SHARE_IMAGE ? 'MelanaBlac artwork: a portrait with an African sunset and acacia trees' : title)}">${image === DEFAULT_SHARE_IMAGE ? '<meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1024"><meta property="og:image:height" content="1024">' : ''}<meta name="twitter:image" content="${esc(abs(image))}">` : '';
   const head = `<meta name="description" content="${esc(desc)}"><link rel="canonical" href="${origin}${p}">` +
-    (isAdmin ? '<meta name="robots" content="noindex,nofollow">' : `<meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:type" content="${type_}"><meta property="og:url" content="${origin}${p}">${image ? `<meta property="og:image" content="${esc(abs(image))}">` : ''}<meta name="twitter:card" content="summary_large_image">`) + extra;
+    (isAdmin ? '<meta name="robots" content="noindex,nofollow">' : `<meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:type" content="${type_}"><meta property="og:url" content="${origin}${p}">${shareImage}<meta property="og:site_name" content="${esc(c['site.name'])}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(desc)}">`) + extra;
   return new HTMLRewriter()
     .on('title', { element(e) { e.setInnerContent(title || 'MelanaBlac'); } })
     .on('head', { element(e) { e.append(head, { html: true }); } })

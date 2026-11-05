@@ -72,3 +72,5 @@ After signing in, a floating install guide explains how to add Studio on the cur
 Open the installed app, sign in, then use Settings → Enable notifications and allow the browser/device prompt. Permission is requested directly from that button click; notification setup is prepared beforehand. Notifications are opt-in per device, and Send test is available after subscribing. Production requires the existing VAPID Pages secrets and HTTPS. Local setup checks do not install the app or grant notification permission on behalf of the owner.
 
 Run `npm run test:pwa` to check service worker setup, permission timing, failed subscriptions, and turning notifications off without sending real push messages.
+
+The default link-preview image is the original melanablac.com sharing artwork, compressed and hosted at `/share/melanablac.jpg`. It is used for Home, Shop, About and Contact unless overridden in SEO settings; individual products continue using their own artwork. Open Graph and Twitter tags are rendered in the initial HTML for sharing crawlers.

@@ -837,5 +837,12 @@
     "output": "video/why.mp4",
     "originalBytes": 458599,
     "optimizedBytes": 328130
+  },
+  "share/melanablac.jpg": {
+    "profile": 2,
+    "hash": "ea95765649986ad803ea267aa6682d74ebc51651592ddff3d7622d940ba1d65a",
+    "output": "share/melanablac.webp",
+    "originalBytes": 145168,
+    "optimizedBytes": 128692
   }
 }

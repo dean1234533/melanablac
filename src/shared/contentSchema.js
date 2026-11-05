@@ -1,4 +1,5 @@
 // Every editable piece of site text. Admin dashboard renders this list; storefront reads values with these defaults.
+export const DEFAULT_SHARE_IMAGE = '/share/melanablac.jpg';
 export const CONTENT_FIELDS = [
   { group: 'Home page', key: 'home.kicker', label: 'Small heading above title', def: 'Original art. Framed in gold.' },
   { group: 'Home page', key: 'home.title', label: 'Main title', def: 'Art Beyond Boundaries' },
@@ -30,16 +31,16 @@ export const CONTENT_FIELDS = [
   { group: 'Site', key: 'site.currency', label: 'Currency symbol', def: '£' },
   { group: 'SEO: Home', key: 'seo.home.title', label: 'Title tag', def: 'MelanaBlac | Original Art Gallery & Shop' },
   { group: 'SEO: Home', key: 'seo.home.description', label: 'Meta description', def: 'Shop original framed artwork, bold, gold and unforgettable. Free UK delivery on framed prints.', multiline: true },
-  { group: 'SEO: Home', key: 'seo.home.image', label: 'Share image URL', def: '' },
+  { group: 'SEO: Home', key: 'seo.home.image', label: 'Share image URL', def: DEFAULT_SHARE_IMAGE },
   { group: 'SEO: Shop', key: 'seo.shop.title', label: 'Title tag', def: 'Shop Original Art | MelanaBlac' },
   { group: 'SEO: Shop', key: 'seo.shop.description', label: 'Meta description', def: 'Browse the full MelanaBlac gallery of original framed art and greeting cards.', multiline: true },
-  { group: 'SEO: Shop', key: 'seo.shop.image', label: 'Share image URL', def: '' },
+  { group: 'SEO: Shop', key: 'seo.shop.image', label: 'Share image URL', def: DEFAULT_SHARE_IMAGE },
   { group: 'SEO: About', key: 'seo.about.title', label: 'Title tag', def: 'Meet the Artist | MelanaBlac' },
   { group: 'SEO: About', key: 'seo.about.description', label: 'Meta description', def: 'The story and inspiration behind the MelanaBlac art collection.', multiline: true },
-  { group: 'SEO: About', key: 'seo.about.image', label: 'Share image URL', def: '' },
+  { group: 'SEO: About', key: 'seo.about.image', label: 'Share image URL', def: DEFAULT_SHARE_IMAGE },
   { group: 'SEO: Contact', key: 'seo.contact.title', label: 'Title tag', def: 'Contact | MelanaBlac' },
   { group: 'SEO: Contact', key: 'seo.contact.description', label: 'Meta description', def: 'Contact MelanaBlac about commissions, orders and framing.', multiline: true },
-  { group: 'SEO: Contact', key: 'seo.contact.image', label: 'Share image URL', def: '' },
+  { group: 'SEO: Contact', key: 'seo.contact.image', label: 'Share image URL', def: DEFAULT_SHARE_IMAGE },
 ];
 export const DEFAULTS = Object.fromEntries(CONTENT_FIELDS.map((f) => [f.key, f.def]));
 export const formatPrice = (pence, sym = '£') => `${sym}${(pence / 100).toFixed(2)}`;
