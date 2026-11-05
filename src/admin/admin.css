@@ -303,46 +303,6 @@
   margin-top: 3px;
   min-height: 46px;
 }
-.admin-workspace .admin-button-effect.btn.gold {
-  position: relative;
-  overflow: hidden;
-  border-color: #121212;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-}
-.admin-workspace .admin-button-effect.btn.gold::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(110deg, transparent 20%, #fff7d66b 50%, transparent 80%);
-  transform: translateX(-110%);
-  transition: transform 0.65s ease;
-}
-.admin-workspace .admin-button-effect.btn.gold:focus-visible {
-  background: #e3c45a;
-  border-color: #121212;
-  outline-color: #121212;
-  box-shadow: 0 7px 18px #12121226;
-  transform: translateY(-3px);
-}
-.admin-workspace .admin-button-effect.btn.gold:focus-visible::before {
-  transform: translateX(110%);
-}
-@media (hover: hover) and (pointer: fine) {
-  .admin-workspace .admin-button-effect.btn.gold:hover:not(:disabled) {
-    background: #e3c45a;
-    border-color: #121212;
-    box-shadow: 0 7px 18px #12121226;
-    transform: translateY(-3px);
-  }
-  .admin-workspace .admin-button-effect.btn.gold:hover:not(:disabled)::before {
-    transform: translateX(110%);
-  }
-}
-.admin-workspace .admin-button-effect.btn.gold:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: none;
-}
 .auth-card .center {
   font-size: 11px;
   margin: 0;
@@ -1298,12 +1258,6 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .admin-workspace .admin-button-effect.btn.gold {
-    transform: none !important;
-  }
-  .admin-workspace .admin-button-effect.btn.gold::before {
-    display: none;
-  }
   .admin-workspace * {
     transition: none !important;
     scroll-behavior: auto !important;
@@ -1347,4 +1301,73 @@
   font-size: 9px;
   min-height: 32px;
   min-width: 40px;
+}
+
+/* Shared treatment for boxed actions; links and filter chips retain their styling. */
+.admin-workspace .btn.btn {
+  --action-hover: #f2e5b4;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #121212;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+.admin-workspace .btn.btn:is(.gold, .primary) {
+  --action-hover: #e3c45a;
+}
+.admin-workspace .btn.btn.danger {
+  --action-hover: #f7e9e5;
+}
+.admin-workspace .btn.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 20%, #fff7d66b 50%, transparent 80%);
+  transform: translateX(-110%);
+  transition: transform 0.65s ease;
+}
+.admin-workspace .btn.btn:focus-visible:not(:disabled):not(:has(input:disabled)) {
+  background: var(--action-hover);
+  border-color: #121212;
+  outline: 2px solid #121212;
+  outline-offset: 4px;
+  box-shadow: 0 7px 18px #12121226;
+  transform: translateY(-3px);
+}
+.admin-workspace .btn.btn:focus-visible:not(:disabled):not(:has(input:disabled))::before {
+  transform: translateX(110%);
+}
+@media (hover: hover) and (pointer: fine) {
+  .admin-workspace .btn.btn:hover:not(:disabled):not(:has(input:disabled)) {
+    background: var(--action-hover);
+    border-color: #121212;
+    box-shadow: 0 7px 18px #12121226;
+    transform: translateY(-3px);
+  }
+  .admin-workspace .btn.btn:hover:not(:disabled):not(:has(input:disabled))::before {
+    transform: translateX(110%);
+  }
+}
+.admin-workspace .btn.btn:active:not(:disabled):not(:has(input:disabled)) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+.admin-workspace .btn.btn:disabled,
+.admin-workspace .btn.btn:has(input:disabled) {
+  transition: none;
+  transform: none;
+  box-shadow: none;
+}
+.admin-workspace .btn.btn:disabled::before,
+.admin-workspace .btn.btn:has(input:disabled)::before {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin-workspace .btn.btn {
+    transform: none !important;
+    transition: none !important;
+  }
+  .admin-workspace .btn.btn::before {
+    display: none;
+  }
 }

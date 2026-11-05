@@ -63,7 +63,8 @@
     "On mobile, show the complete hero film with contain sizing and overlay its heading; keep description and button below. Retain the full text overlay on desktop.",
     "Product cards and collection boxes use black backgrounds with gold borders and readable light text, retaining white page backgrounds.",
     "Enquiries open with an uncropped gallery film and overlaid heading, followed by a short introduction beside the white form, stacked on mobile.",
-    "Artwork editor uses plain-language sections and one customer description; optional Google search overrides and display order are collapsed with automatic fallback guidance."
+    "Artwork editor uses plain-language sections and one customer description; optional Google search overrides and display order are collapsed with automatic fallback guidance.",
+    "Use black borders and consistent hover/focus effects for boxed actions throughout the storefront and admin; preserve gold filter borders, destructive colour cues and reduced-motion/disabled states."
   ],
   "evidence": [
     {

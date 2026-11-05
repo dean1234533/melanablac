@@ -244,7 +244,7 @@ function Login({ onLogin }) {
           </div>
         </label>
         <Flash msg={err} kind="err" />
-        <button className="btn gold auth-signin admin-button-effect" disabled={busy}>
+        <button className="btn gold auth-signin" disabled={busy}>
           {busy ? "Signing in…" : "Sign in"}
         </button>
         <p className="center">
@@ -602,7 +602,7 @@ function Dashboard({ stats }) {
           <h1>Studio overview</h1>
           <p className="muted">A little organisation. More room to create.</p>
         </div>
-        <Link className="btn gold admin-button-effect" to="/admin/products/new">
+        <Link className="btn gold" to="/admin/products/new">
           Add artwork
         </Link>
       </div>
@@ -819,7 +819,7 @@ function Products() {
     <>
       <div className="row">
         <h1>Artwork</h1>
-        <Link className="btn gold admin-button-effect" to="/admin/products/new">
+        <Link className="btn gold" to="/admin/products/new">
           + Add artwork
         </Link>
       </div>
@@ -1122,7 +1122,7 @@ function ProductEditor() {
       <Flash msg={err} kind="err" />
       <Flash msg={ok} />
       <div className="editor-actions">
-        <button className="btn gold admin-button-effect" disabled={busy}>{busy ? "Saving…" : "Save artwork"}</button>
+        <button className="btn gold" disabled={busy}>{busy ? "Saving…" : "Save artwork"}</button>
         <Link to="/admin/products">Cancel</Link>
       </div>
     </form>

@@ -190,49 +190,6 @@
 .hero-copy .gold-rule {
   background: #d4af37;
 }
-.storefront .hero-copy .btn.primary {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  background: var(--gold);
-  color: #121212;
-  border-color: #fff;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-}
-.storefront .hero-copy .btn.primary::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(110deg, transparent 20%, #fff7d66b 50%, transparent 80%);
-  transform: translateX(-110%);
-  transition: transform 0.65s ease;
-}
-.storefront .hero-copy .btn.primary:focus-visible {
-  background: #e3c45a;
-  border-color: #fff;
-  box-shadow: 0 8px 24px #d4af3733;
-  transform: translateY(-3px);
-  outline-color: var(--gold);
-}
-.storefront .hero-copy .btn.primary:focus-visible::before {
-  transform: translateX(110%);
-}
-@media (hover: hover) and (pointer: fine) {
-  .storefront .hero-copy .btn.primary:hover:not(:disabled) {
-    background: #e3c45a;
-    border-color: #fff;
-    box-shadow: 0 8px 24px #d4af3733;
-    transform: translateY(-3px);
-  }
-  .storefront .hero-copy .btn.primary:hover::before {
-    transform: translateX(110%);
-  }
-}
-.storefront .hero-copy .btn.primary:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
 .hero-copy .hero-footnote p,
 .hero-copy .hero-footnote strong {
   color: #f4eee0;
@@ -515,18 +472,13 @@
   grid-column: 1/-1;
   justify-self: start;
   margin-top: 6px;
-  padding: 3px 0;
-  min-height: 28px;
+  padding: 8px 12px;
+  min-height: 36px;
   font-size: 9px;
-  border: 0;
-  color: var(--gold);
-  background: transparent;
-  border-bottom: 1px solid var(--gold);
+  border: 1px solid #121212;
+  color: #121212;
+  background: var(--gold);
   gap: 8px;
-}
-.storefront .card-body .btn:hover {
-  background: none;
-  color: var(--card-text);
 }
 .artist-editorial {
   display: grid;
@@ -982,44 +934,6 @@
 .storefront .contact-form-panel .form {
   margin: 0;
 }
-.storefront .contact-form-panel .form > .btn.gold {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid #121212;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-}
-.storefront .contact-form-panel .form > .btn.gold::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(110deg, transparent 20%, #fff7d66b 50%, transparent 80%);
-  transform: translateX(-110%);
-  transition: transform 0.65s ease;
-}
-.storefront .contact-form-panel .form > .btn.gold:focus-visible {
-  background: #e3c45a;
-  box-shadow: 0 7px 18px #12121226;
-  transform: translateY(-3px);
-  outline-color: #121212;
-}
-.storefront .contact-form-panel .form > .btn.gold:focus-visible::before {
-  transform: translateX(110%);
-}
-@media (hover: hover) and (pointer: fine) {
-  .storefront .contact-form-panel .form > .btn.gold:hover:not(:disabled) {
-    background: #e3c45a;
-    box-shadow: 0 7px 18px #12121226;
-    transform: translateY(-3px);
-  }
-  .storefront .contact-form-panel .form > .btn.gold:hover:not(:disabled)::before {
-    transform: translateX(110%);
-  }
-}
-.storefront .contact-form-panel .form > .btn.gold:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: none;
-}
 @media (max-width: 760px) {
   .contact-hero {
     margin-top: 20px;
@@ -1457,14 +1371,6 @@
   html {
     scroll-behavior: auto;
   }
-  .storefront .hero-copy .btn.primary,
-  .storefront .contact-form-panel .form > .btn.gold {
-    transform: none !important;
-  }
-  .storefront .hero-copy .btn.primary::before,
-  .storefront .contact-form-panel .form > .btn.gold::before {
-    display: none;
-  }
   .storefront * {
     scroll-behavior: auto !important;
     transition: none !important;
@@ -1503,5 +1409,74 @@
 @media (max-width: 1050px) {
   .storefront .card-img img {
     padding: 18px;
+  }
+}
+
+/* Shared treatment for boxed actions; links and filter chips retain their styling. */
+.storefront .btn.btn {
+  --action-hover: #f2e5b4;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #121212;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+.storefront .btn.btn:is(.gold, .primary) {
+  --action-hover: #e3c45a;
+}
+.storefront .btn.btn.danger {
+  --action-hover: #f7e9e5;
+}
+.storefront .btn.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 20%, #fff7d66b 50%, transparent 80%);
+  transform: translateX(-110%);
+  transition: transform 0.65s ease;
+}
+.storefront .btn.btn:focus-visible:not(:disabled):not(:has(input:disabled)) {
+  background: var(--action-hover);
+  border-color: #121212;
+  outline: 2px solid #121212;
+  outline-offset: 4px;
+  box-shadow: 0 7px 18px #12121226;
+  transform: translateY(-3px);
+}
+.storefront .btn.btn:focus-visible:not(:disabled):not(:has(input:disabled))::before {
+  transform: translateX(110%);
+}
+@media (hover: hover) and (pointer: fine) {
+  .storefront .btn.btn:hover:not(:disabled):not(:has(input:disabled)) {
+    background: var(--action-hover);
+    border-color: #121212;
+    box-shadow: 0 7px 18px #12121226;
+    transform: translateY(-3px);
+  }
+  .storefront .btn.btn:hover:not(:disabled):not(:has(input:disabled))::before {
+    transform: translateX(110%);
+  }
+}
+.storefront .btn.btn:active:not(:disabled):not(:has(input:disabled)) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+.storefront .btn.btn:disabled,
+.storefront .btn.btn:has(input:disabled) {
+  transition: none;
+  transform: none;
+  box-shadow: none;
+}
+.storefront .btn.btn:disabled::before,
+.storefront .btn.btn:has(input:disabled)::before {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .storefront .btn.btn {
+    transform: none !important;
+    transition: none !important;
+  }
+  .storefront .btn.btn::before {
+    display: none;
   }
 }

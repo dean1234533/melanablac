@@ -31,3 +31,5 @@ Product cards and collection boxes use black backgrounds, fine brand-gold border
 The enquiries page opens with a wide, uncropped gallery film and overlaid heading, followed by an open white enquiry area. Keep its short introduction beside the form on desktop and above it on phones. Avoid promotional copy panels.
 
 Keep the artwork editor in plain language with grouped details, images and availability. Show one customer description; collapse optional search overrides and display order, explaining automatic title/description fallbacks.
+
+Boxed action buttons across storefront and Studio use black borders and consistent sweep, lift, shadow, focus and press effects. Preserve gold filter borders and red destructive text. Disabled/busy actions stay still; reduced motion disables the sweep and lift.
