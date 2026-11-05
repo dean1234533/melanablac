@@ -1,6 +1,6 @@
 # MelanaBlac design context
 
-A contemporary editorial gallery and independent illustrated card shop. Warm paper, ink, muted olive and restrained gold; Cormorant Garamond display type paired with Inter. Square edges, fine rules, spacious layouts and original art rather than decorative UI cards.
+A contemporary editorial gallery and independent illustrated card shop. White and warm paper, black ink and the established gold (#D4AF37); Cormorant Garamond display type paired with Inter. Square edges, fine rules, spacious layouts and original art rather than decorative UI cards.
 
 The homepage introduces the brand, shows the curated collection, tells the creative story, and offers category navigation. Product images remain uncropped. Responsive layouts, keyboard focus, reduced motion are required. The existing commerce, contact and admin flows are retained. External marketplace links are removed.
 
@@ -16,8 +16,12 @@ Per user preference, videos have no visible play/pause controls. Continue muted 
 
 Do not use arrow icons anywhere in the storefront or admin. Use text labels for links, navigation and image reordering.
 
-The private Studio uses the original signature logo, warm paper, sage navigation and restrained dark-green actions. Dashboard figures come from the authenticated APIs; no fabricated trends or charts. Sign-in has a dedicated branded panel, password visibility control and recovery. Mobile navigation must close on Escape and route changes. Keep admin CSS scoped to the workspace.
+The private Studio uses the original signature logo, white and warm paper, black navigation text and brand-gold actions. Dashboard figures come from the authenticated APIs; no fabricated trends or charts. Sign-in has a dedicated branded panel, password visibility control and recovery. Mobile navigation must close on Escape and route changes. Keep admin CSS scoped to the workspace.
 
 Three quick clicks on the storefront header logo open admin sign-in. A single click remains the homepage link. The shortcut is navigation only; server-side password protection is required.
 
 Serve compressed WebP artwork and posters, preserve logo transparency, and retain the original artwork proportions. Admin image and video pickers compress uploads automatically. Video conversion must retain frame timing and soundtracks; video processing code is loaded only when uploading a film.
+
+Brand palette verified against https://melanablac.com: #121212 black, #D4AF37 primary gold, #C9AB47 secondary gold, and white. Keep the light backgrounds; use #806519 for small gold text on white to maintain readable contrast.
+
+On mobile the hero video uses its complete frame, contain fitting, and a viewport height cap. Place hero text below the clip so it does not obscure the artwork. Desktop retains the overlaid copy.

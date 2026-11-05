@@ -6,7 +6,7 @@ self.addEventListener('fetch', (e) => {
   const u = new URL(e.request.url);
   if (e.request.method !== 'GET' || u.origin !== location.origin || u.pathname.startsWith('/api/')) return;
   if (e.request.mode === 'navigate') {
-    e.respondWith(fetch(e.request).catch(() => new Response('<!doctype html><meta name=viewport content="width=device-width"><body style="background:#f6f3ed;color:#303b2c;font-family:sans-serif;text-align:center;padding:4rem"><h1>You are offline</h1><p>Reconnect to manage your shop.</p>', { headers: { 'content-type': 'text/html' } })));
+    e.respondWith(fetch(e.request).catch(() => new Response('<!doctype html><meta name=viewport content="width=device-width"><body style="background:#f6f3ed;color:#121212;font-family:sans-serif;text-align:center;padding:4rem"><h1>You are offline</h1><p>Reconnect to manage your shop.</p>', { headers: { 'content-type': 'text/html' } })));
     return;
   }
   if (u.pathname.startsWith('/assets/') || u.pathname.startsWith('/admin/icon')) {

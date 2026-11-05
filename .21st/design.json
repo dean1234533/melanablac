@@ -15,9 +15,10 @@
     "colorMode": "light",
     "colors": {
       "paper": "#f6f3ed",
-      "ink": "#232621",
-      "olive": "#797d68",
-      "gold": "#887047"
+      "ink": "#121212",
+      "gold": "#d4af37",
+      "goldSecondary": "#c9ab47",
+      "goldText": "#806519"
     },
     "typography": {
       "display": "Cormorant Garamond",
@@ -45,12 +46,13 @@
     "avoid": []
   },
   "decisions": [
-    "Contemporary editorial gallery: warm paper, ink, muted olive, restrained gold.",
+    "Retain the white editorial design; use the established black and gold brand palette from melanablac.com.",
     "Use original artwork and existing films; no stock replacements.",
     "Keep the real catalogue, category filters, basket, checkout, contact and administration.",
     "Remove external marketplace links and editable marketplace settings.",
     "Muted films without visible playback buttons; honour reduced motion.",
-    "Preserve the original signature logo using public/logo-dark.png on ivory, in both header and footer."
+    "Preserve the original signature logo using public/logo-dark.png on ivory, in both header and footer.",
+    "On mobile, show the complete hero film with contain sizing above the hero copy; retain the text overlay on desktop."
   ],
   "evidence": [
     {
@@ -60,6 +62,10 @@
     {
       "fact": "project.stack:vite",
       "source": "package.json"
+    },
+    {
+      "fact": "Brand colours: gold #D4AF37, secondary gold #C9AB47, black #121212 and white.",
+      "source": "https://melanablac.com (computed styles inspected with Ego Lite)"
     }
   ],
   "generatedAt": "2026-11-05T04:05:06.129Z"
