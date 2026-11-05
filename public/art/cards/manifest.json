@@ -28,5 +28,25 @@
   "description": "Illustrated 21st birthday greeting card in black and gold: a woman with long braids stands beside balloons, gifts and a birthday cake. A5, blank inside, with envelope.",
   "price_pence": 450,
   "category": "Greeting Cards"
+ },
+ {
+  "source": "21BD017.png",
+  "title": "18th Birthday: To My Beautiful Daughter",
+  "slug": "18th-birthday-to-my-beautiful-daughter",
+  "image": "/art/cards/18th-birthday-to-my-beautiful-daughter.jpg",
+  "thumb": "/art/cards/thumb-18th-birthday-to-my-beautiful-daughter.jpg",
+  "description": "Illustrated 18th birthday greeting card for a daughter: a woman in a pink off-the-shoulder top holds a glass of champagne beside pink and black gift boxes, flowers and balloons. A5, blank inside, with envelope.",
+  "price_pence": 450,
+  "category": "Greeting Cards"
+ },
+ {
+  "source": "21BD017A_1_.png",
+  "title": "18th Birthday: To My Beautiful Sister",
+  "slug": "18th-birthday-to-my-beautiful-sister",
+  "image": "/art/cards/18th-birthday-to-my-beautiful-sister.jpg",
+  "thumb": "/art/cards/thumb-18th-birthday-to-my-beautiful-sister.jpg",
+  "description": "Illustrated 18th birthday greeting card for a sister: a woman in a pink off-the-shoulder top holds a glass of champagne beside pink and black gift boxes, flowers and balloons. A5, blank inside, with envelope.",
+  "price_pence": 450,
+  "category": "Greeting Cards"
  }
 ]
