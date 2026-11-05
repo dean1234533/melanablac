@@ -60,7 +60,7 @@
     "Remove external marketplace links and editable marketplace settings.",
     "Muted films without visible playback buttons; honour reduced motion.",
     "Preserve the original signature logo using public/logo-dark.png on ivory, in both header and footer.",
-    "On mobile, show the complete hero film with contain sizing above the hero copy; retain the text overlay on desktop.",
+    "On mobile, show the complete hero film with contain sizing and overlay its heading; keep description and button below. Retain the full text overlay on desktop.",
     "Product cards and collection boxes use black backgrounds with gold borders and readable light text, retaining white page backgrounds."
   ],
   "evidence": [

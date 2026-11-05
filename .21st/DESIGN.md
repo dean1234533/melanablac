@@ -24,6 +24,6 @@ Serve compressed WebP artwork and posters, preserve logo transparency, and retai
 
 Brand palette verified against https://melanablac.com: #121212 black, #D4AF37 primary gold, #C9AB47 secondary gold, and white. Keep the light backgrounds; use #806519 for small gold text on white to maintain readable contrast.
 
-On mobile the hero video uses its complete frame, contain fitting, and a viewport height cap. Place hero text below the clip so it does not obscure the artwork. Desktop retains the overlaid copy.
+On mobile the hero video uses its complete frame, contain fitting, and a viewport height cap. Overlay the kicker and heading on the clip with compact mobile type; keep the description and button below it. Desktop retains the full overlaid copy.
 
 Product cards and collection boxes use black backgrounds, fine brand-gold borders, light titles and gold details; keep the surrounding white layout.

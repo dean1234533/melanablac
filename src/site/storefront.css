@@ -1030,20 +1030,28 @@
   }
   .editorial-hero {
     min-height: 0;
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding-bottom: 35px;
   }
   .hero-copy {
-    width: 100%;
-    padding: 40px 6% 45px;
+    display: contents;
+  }
+  .hero-heading {
+    grid-area: 1 / 1;
+    align-self: center;
+    z-index: 2;
+    padding: 16px 6%;
+    pointer-events: none;
+    text-shadow: 0 2px 16px #000;
   }
   .hero-copy .eyebrow {
     font-size: 8px;
-    margin-bottom: 22px;
+    margin-bottom: 8px;
   }
   .hero-copy h1 {
-    font-size: clamp(48px, 16vw, 62px);
-    margin: 0 0 22px;
+    font-size: clamp(32px, 9vw, 48px);
+    margin: 0;
   }
   .hero-description {
     max-width: 360px;
@@ -1057,8 +1065,8 @@
     position: relative;
     inset: auto;
     height: auto;
-    order: -1;
-    flex: none;
+    grid-area: 1 / 1;
+    min-width: 0;
   }
   .hero-art > .media-player,
   .hero-art > img {
@@ -1078,10 +1086,16 @@
     object-fit: contain;
   }
   .hero-art::after {
-    display: none;
+    display: block;
+    background: linear-gradient(90deg, #12121299, transparent);
   }
   .hero-copy .hero-description {
     max-width: 290px;
+    margin: 24px 6% 22px;
+  }
+  .storefront .hero-copy > .btn.primary {
+    justify-self: start;
+    margin: 0 6%;
   }
   .hero-art .vid {
     width: 100%;
@@ -1091,6 +1105,7 @@
     object-position: center;
   }
   .hero-art-caption {
+    display: none;
     position: relative;
     inset: auto;
     background: #121212;

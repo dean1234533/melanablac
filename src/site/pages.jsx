@@ -92,21 +92,23 @@ export function Home() {
     <>
       <section className="editorial-hero">
         <div className="hero-copy">
-          <p className="eyebrow">
-            <span className="gold-rule" />
-            {t("home.kicker")}
-          </p>
-          <h1>
-            {t("home.title").toLowerCase() === "art beyond boundaries" ? (
-              <>
-                Art beyond
-                <br />
-                <em>boundaries.</em>
-              </>
-            ) : (
-              t("home.title")
-            )}
-          </h1>
+          <div className="hero-heading">
+            <p className="eyebrow">
+              <span className="gold-rule" />
+              {t("home.kicker")}
+            </p>
+            <h1>
+              {t("home.title").toLowerCase() === "art beyond boundaries" ? (
+                <>
+                  Art beyond
+                  <br />
+                  <em>boundaries.</em>
+                </>
+              ) : (
+                t("home.title")
+              )}
+            </h1>
+          </div>
           <p className="hero-description">{t("home.tagline")}</p>
           <Link to="/shop" className="btn primary">
             {t("home.cta")}
