@@ -13,23 +13,26 @@ React (Vite) storefront with a Cloudflare Pages Functions backend (D1 database, 
 `npm install && npm run seed && node scripts/make-vapid.mjs && npm run start:local` then open http://localhost:8788.
 `scripts/dev-server.mjs` runs the real functions with SQLite/filesystem stand-ins for D1/R2 (useful where workerd can't run). In dev mode the forgot-password page shows the reset link on screen. Visit `/admin/forgot` with `dbs_workouts@yahoo.com` to set the first password.
 
-## Deploy (Cloudflare account for dbs_workouts@yahoo.com)
-```
-npx wrangler login                      # sign in as dbs_workouts@yahoo.com
-npx wrangler d1 create melanablac       # copy database_id into wrangler.toml
-npx wrangler r2 bucket create melanablac-media
-npm run seed && npm run db:remote       # schema + sample data (WARNING: schema.sql drops tables)
-npx wrangler pages project create melanablac --production-branch main
-npm run deploy
-```
-Then set secrets (`npx wrangler pages secret put NAME --project-name melanablac`):
+## Live deployment (dbs_workouts@yahoo.com Cloudflare account)
+- Site: https://melanablac.pages.dev  ·  Admin: https://melanablac.pages.dev/admin
+- D1 database `melanablac` (id in `wrangler.toml`), Pages project `melanablac`, VAPID push keys set as Pages secrets.
+- R2 is not enabled on the account, so uploaded images are stored in D1 (`media` table; the admin shrinks photos to <1.5MB first).
+  To use R2 instead: enable R2 in the dashboard, `npx wrangler r2 bucket create melanablac-media`, uncomment the binding in `wrangler.toml`, redeploy.
+- Redeploy after changes: `npm run deploy` (wrangler must be logged in as dbs_workouts@yahoo.com: `npx wrangler whoami`).
+- Reseeding the live DB wipes everything: `npm run seed && npm run db:remote` (only for a fresh start).
+- A temporary admin password was created directly in the database (not by email) and saved outside the repo. Change it in Admin > Settings.
+
+### Still to add (secrets)
+`npx wrangler pages secret put NAME --project-name melanablac`
 | Secret | Purpose |
 |---|---|
-| `RESEND_API_KEY` | password reset + order emails (verify a sending domain in Resend and set `RESEND_FROM` in wrangler.toml) |
-| `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_JWK` | push notifications. Generate with `node scripts/make-vapid.mjs` |
-| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | optional card payments. Webhook URL: `/api/stripe-webhook`, event `checkout.session.completed`. Without Stripe, orders are saved as "new" and you arrange payment yourself |
+| `RESEND_API_KEY` | password reset + order emails. Verify a domain in Resend and set `RESEND_FROM` in `wrangler.toml` (the default sender only delivers to the Resend account owner) |
+| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | optional card payments. Webhook `/api/stripe-webhook`, event `checkout.session.completed`. Without Stripe, orders are saved as "new" and you arrange payment yourself |
 
-Set `SITE_URL` in `wrangler.toml` to your real domain. Only emails in `ADMIN_EMAIL` can create/reset an admin password.
+Set `SITE_URL` in `wrangler.toml` if you attach a custom domain. Only emails in `ADMIN_EMAIL` can create/reset an admin password.
+
+### Importing more artwork
+Put PNGs in a folder, add titles/categories to `scripts/art-titles.json`, run `node scripts/import-art.mjs <folder> && npm run seed`. Or just add pieces from the admin dashboard.
 
 ## Notes
 - Admin sign-in has no rate limiting yet. Consider a Cloudflare WAF rate-limit rule on `/api/admin/login`.
