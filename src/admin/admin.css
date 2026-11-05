@@ -303,13 +303,13 @@
   margin-top: 3px;
   min-height: 46px;
 }
-.admin-workspace .auth-signin.btn.gold {
+.admin-workspace .admin-button-effect.btn.gold {
   position: relative;
   overflow: hidden;
   border-color: #121212;
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
-.admin-workspace .auth-signin.btn.gold::before {
+.admin-workspace .admin-button-effect.btn.gold::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -318,28 +318,28 @@
   transform: translateX(-110%);
   transition: transform 0.65s ease;
 }
-.admin-workspace .auth-signin.btn.gold:focus-visible {
+.admin-workspace .admin-button-effect.btn.gold:focus-visible {
   background: #e3c45a;
   border-color: #121212;
   outline-color: #121212;
   box-shadow: 0 7px 18px #12121226;
   transform: translateY(-3px);
 }
-.admin-workspace .auth-signin.btn.gold:focus-visible::before {
+.admin-workspace .admin-button-effect.btn.gold:focus-visible::before {
   transform: translateX(110%);
 }
 @media (hover: hover) and (pointer: fine) {
-  .admin-workspace .auth-signin.btn.gold:hover:not(:disabled) {
+  .admin-workspace .admin-button-effect.btn.gold:hover:not(:disabled) {
     background: #e3c45a;
     border-color: #121212;
     box-shadow: 0 7px 18px #12121226;
     transform: translateY(-3px);
   }
-  .admin-workspace .auth-signin.btn.gold:hover:not(:disabled)::before {
+  .admin-workspace .admin-button-effect.btn.gold:hover:not(:disabled)::before {
     transform: translateX(110%);
   }
 }
-.admin-workspace .auth-signin.btn.gold:active:not(:disabled) {
+.admin-workspace .admin-button-effect.btn.gold:active:not(:disabled) {
   transform: translateY(0);
   box-shadow: none;
 }
@@ -1210,10 +1210,10 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .admin-workspace .auth-signin.btn.gold {
+  .admin-workspace .admin-button-effect.btn.gold {
     transform: none !important;
   }
-  .admin-workspace .auth-signin.btn.gold::before {
+  .admin-workspace .admin-button-effect.btn.gold::before {
     display: none;
   }
   .admin-workspace * {
