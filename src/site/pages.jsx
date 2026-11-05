@@ -6,6 +6,8 @@ import Slider from './Slider.jsx';
 import Gallery, { Lightbox } from './Gallery.jsx';
 import Video from './Video.jsx';
 
+// "MelanaBlac" is shown as Melana (gold) + Blac (light), like the original brand styling.
+const brandName = (n) => { const m = /^(melana)\s*(blac)$/i.exec(n || ''); return m ? <><span className="gold">{m[1]}</span><span className="light">{m[2]}</span></> : n; };
 const Loading = () => <div className="center muted pad">Loading…</div>;
 
 export function Home() {
@@ -18,11 +20,14 @@ export function Home() {
       <section className={'hero-banner' + (t('video.hero') ? ' has-video' : '')}>
         {t('video.hero') && <Video src={t('video.hero')} lazy={false} className="bg" />}
         <div className="hero-overlay">
-          <p className="kicker">{t('home.kicker')}</p>
-          <h1 className="script">{t('home.title')}</h1>
-          <p className="tagline">{t('home.tagline')}</p>
-          <Link to="/shop" className="btn gold">{t('home.cta')}</Link>
+          <h1 className="brand-name script" aria-label={t('site.name')}>{brandName(t('site.name'))}</h1>
         </div>
+      </section>
+      <section className="hero-text">
+        <p className="kicker">{t('home.kicker')}</p>
+        <h2 className="hero-title script">{t('home.title')}</h2>
+        <p className="tagline">{t('home.tagline')}</p>
+        <Link to="/shop" className="btn gold">{t('home.cta')}</Link>
       </section>
       <Slider slides={slides} />
       {error && <p className="center err">{error}</p>}

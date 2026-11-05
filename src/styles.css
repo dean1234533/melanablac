@@ -110,3 +110,12 @@ fieldset{border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.2rem
 .hero-overlay .tagline{max-width:640px;margin:0 auto 1.6rem;font-size:1.2rem}
 .has-video .hero-overlay h1,.has-video .hero-overlay .tagline,.has-video .hero-overlay .kicker{text-shadow:0 2px 14px rgba(0,0,0,.85)}
 .has-video .hero-overlay .tagline{color:#fff}
+/* hero shows only the business name over the video */
+.hero-banner.has-video{min-height:clamp(420px,72vh,720px)}
+.hero-overlay{max-width:none}
+.brand-name{font-size:clamp(3.4rem,15vw,10rem);line-height:1.05;margin:0;text-shadow:0 4px 24px rgba(0,0,0,.9)}
+.brand-name .gold{color:var(--gold2)}.brand-name .light{color:#f4f1ea}
+.hero-banner:not(.has-video) .brand-name{text-shadow:none}
+.hero-title{font-size:clamp(2.2rem,6vw,3.6rem);margin:.2rem 0;color:var(--gold2)}
+.hero-banner+.hero-text{padding-top:2.5rem}
+.hero-overlay .brand-name{font-size:clamp(3.6rem,15vw,9.5rem);margin:0;color:inherit}
