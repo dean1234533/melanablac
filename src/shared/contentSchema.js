@@ -26,7 +26,6 @@ export const CONTENT_FIELDS = [
   { group: 'Site', key: 'site.name', label: 'Site name', def: 'MelanaBlac' },
   { group: 'Site', key: 'site.footer', label: 'Footer text', def: 'Original art. Handled with care.' },
   { group: 'Site', key: 'site.email', label: 'Contact email', def: 'hello@melanablac.com' },
-  { group: 'Site', key: 'site.etsy', label: 'Etsy shop link', def: 'https://www.etsy.com/uk/shop/Melanablac' },
   { group: 'Site', key: 'site.instagram', label: 'Instagram link', def: '' },
   { group: 'Site', key: 'site.currency', label: 'Currency symbol', def: '£' },
   { group: 'SEO: Home', key: 'seo.home.title', label: 'Title tag', def: 'MelanaBlac | Original Art Gallery & Shop' },

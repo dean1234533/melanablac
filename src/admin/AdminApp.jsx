@@ -138,7 +138,7 @@ function Dashboard({ stats }) {
   );
 }
 
-const emptyP = { title: '', description: '', price_pence: 0, category: 'Gallery', images: [], stock: 1, status: 'published', featured: 0, seo_title: '', seo_description: '', etsy_url: '', sort: 0 };
+const emptyP = { title: '', description: '', price_pence: 0, category: 'Gallery', images: [], stock: 1, status: 'published', featured: 0, seo_title: '', seo_description: '', sort: 0 };
 
 function Products() {
   const [list, setList] = useState(null); const [err, setErr] = useState('');
@@ -223,7 +223,6 @@ function ProductEditor() {
       <fieldset><legend>SEO</legend>
         <label>SEO title<input value={p.seo_title} onChange={set('seo_title')} maxLength="120" placeholder={`${p.title || 'Title'} | MelanaBlac`} /><small className={p.seo_title.length > 60 ? 'warn' : 'muted'}>{p.seo_title.length}/60 recommended</small></label>
         <label>SEO description<textarea rows="3" value={p.seo_description} onChange={set('seo_description')} maxLength="320" /><small className={p.seo_description.length > 160 ? 'warn' : 'muted'}>{p.seo_description.length}/160 recommended</small></label>
-        <label>Etsy link (optional)<input type="url" value={p.etsy_url} onChange={set('etsy_url')} /></label>
         <label>Sort order (lower first)<input type="number" value={p.sort} onChange={set('sort')} /></label>
       </fieldset>
       <Flash msg={err} kind="err" /><Flash msg={ok} />

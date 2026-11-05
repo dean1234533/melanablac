@@ -2,7 +2,7 @@
 
 React (Vite) storefront with a Cloudflare Pages Functions backend (D1 database, R2 images). No Firebase needed.
 
-- **Storefront**: hero slider, masonry gallery with lightbox, shop with categories, product pages with image slides, basket, checkout, contact form.
+- **Storefront**: editorial gallery homepage, curated cards, category collections, masonry gallery with accessible lightbox, shop with categories, product pages with image slides, basket, checkout, contact form.
 - **Admin PWA** at `/admin`: add/edit/delete artwork (multi-image upload), manage home slides, edit all site text, SEO titles/descriptions per page and per artwork, orders, messages, push notifications, password change.
 - Install-the-app pop-up (Android/desktop install prompt + iOS Add-to-Home-Screen steps).
 - Forgot password emails a reset link via **Resend**.
@@ -32,8 +32,8 @@ React (Vite) storefront with a Cloudflare Pages Functions backend (D1 database, 
 Set `SITE_URL` in `wrangler.toml` if you attach a custom domain. Only emails in `ADMIN_EMAIL` can create/reset an admin password.
 
 ### Videos
-Nine looping gallery clips live in `public/video/` (mp4 + matching poster `.jpg`): hero background (the home-page text sits over it), "why I create", "pause", and a scrolling "Gallery in Motion" strip.
-They play muted, only while on screen, and are skipped for visitors who prefer reduced motion. `functions/video/[[path]].js` serves them with HTTP Range support, which Safari/iOS needs.
+Looping gallery clips live in `public/video/` (mp4 + matching poster `.jpg`): split hero gallery film, "why I create", "pause", and a scrolling "Gallery in Motion" strip.
+They play muted only while on screen. Each visible film has play/pause controls; visitors who prefer reduced motion see a paused poster until they choose to play. `functions/video/[[path]].js` serves them with HTTP Range support, which Safari/iOS needs.
 Change or hide any of them in Admin > Site text > Videos (paths or links; blank hides). New clips need to be added to `public/video/` and redeployed, because R2 is not enabled for uploads yet. Keep each file under 25MB.
 
 ### Importing more artwork

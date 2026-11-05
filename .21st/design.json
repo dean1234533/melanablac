@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "project": {
+    "name": "melanablac",
+    "productType": "Independent art and illustrated greeting card storefront",
+    "stack": ["react", "vite"]
+  },
+  "sources": {
+    "tokens": ["src/site/storefront.css"],
+    "components": [],
+    "assets": ["public/art/cards", "public/video"],
+    "instructions": []
+  },
+  "design": {
+    "colorMode": "light",
+    "colors": {
+      "paper": "#f6f3ed",
+      "ink": "#232621",
+      "olive": "#797d68",
+      "gold": "#887047"
+    },
+    "typography": {
+      "display": "Cormorant Garamond",
+      "body": "Inter"
+    },
+    "spacing": {
+      "section": "85px",
+      "mobileSection": "55px"
+    },
+    "radius": {
+      "default": "0"
+    },
+    "motion": {
+      "reducedMotion": true
+    },
+    "density": "editorial"
+  },
+  "components": {
+    "installed": [],
+    "preferredPrimitives": [],
+    "patterns": []
+  },
+  "constraints": {
+    "must": [],
+    "avoid": []
+  },
+  "decisions": [
+    "Contemporary editorial gallery: warm paper, ink, muted olive, restrained gold.",
+    "Use original artwork and existing films; no stock replacements.",
+    "Keep the real catalogue, category filters, basket, checkout, contact and administration.",
+    "Remove external marketplace links and editable marketplace settings.",
+    "Pause controls and reduced-motion handling on all gallery films."
+  ],
+  "evidence": [
+    {
+      "fact": "project.stack:react",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:vite",
+      "source": "package.json"
+    }
+  ],
+  "generatedAt": "2026-11-05T04:05:06.129Z"
+}
