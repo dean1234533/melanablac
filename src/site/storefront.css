@@ -689,6 +689,9 @@
   color: #faf7f0;
   border-color: #121212;
 }
+.storefront .feels .chip {
+  border-color: var(--gold);
+}
 .storefront .feeling-response {
   margin-top: 22px;
 }
