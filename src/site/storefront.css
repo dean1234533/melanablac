@@ -982,6 +982,44 @@
 .storefront .contact-form-panel .form {
   margin: 0;
 }
+.storefront .contact-form-panel .form > .btn.gold {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #121212;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+.storefront .contact-form-panel .form > .btn.gold::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 20%, #fff7d66b 50%, transparent 80%);
+  transform: translateX(-110%);
+  transition: transform 0.65s ease;
+}
+.storefront .contact-form-panel .form > .btn.gold:focus-visible {
+  background: #e3c45a;
+  box-shadow: 0 7px 18px #12121226;
+  transform: translateY(-3px);
+  outline-color: #121212;
+}
+.storefront .contact-form-panel .form > .btn.gold:focus-visible::before {
+  transform: translateX(110%);
+}
+@media (hover: hover) and (pointer: fine) {
+  .storefront .contact-form-panel .form > .btn.gold:hover:not(:disabled) {
+    background: #e3c45a;
+    box-shadow: 0 7px 18px #12121226;
+    transform: translateY(-3px);
+  }
+  .storefront .contact-form-panel .form > .btn.gold:hover:not(:disabled)::before {
+    transform: translateX(110%);
+  }
+}
+.storefront .contact-form-panel .form > .btn.gold:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
 @media (max-width: 760px) {
   .contact-hero {
     margin-top: 20px;
@@ -1419,10 +1457,12 @@
   html {
     scroll-behavior: auto;
   }
-  .storefront .hero-copy .btn.primary {
+  .storefront .hero-copy .btn.primary,
+  .storefront .contact-form-panel .form > .btn.gold {
     transform: none !important;
   }
-  .storefront .hero-copy .btn.primary::before {
+  .storefront .hero-copy .btn.primary::before,
+  .storefront .contact-form-panel .form > .btn.gold::before {
     display: none;
   }
   .storefront * {
