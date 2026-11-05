@@ -138,7 +138,9 @@ export default function Layout() {
             <div>
               <p className="eyebrow">Explore</p>
               <Link to="/shop">The Collection</Link>
+              <Link to="/cards">Cards by occasion</Link>
               <Link to="/about">Our Story</Link>
+              <Link to="/faq">FAQ</Link>
               <Link to="/contact">Get in Touch</Link>
               <Link to="/cart">Your Bag</Link>
             </div>
@@ -156,6 +158,9 @@ export default function Layout() {
                   Instagram
                 </a>
               )}
+              <Link to="/cards/birthday-cards">Birthday cards</Link>
+              <Link to="/cards/christmas-cards">Christmas cards</Link>
+              <Link to="/cards/mothers-day-cards">Mother&rsquo;s Day cards</Link>
               <p>{t("site.footer")}</p>
             </div>
           </div>

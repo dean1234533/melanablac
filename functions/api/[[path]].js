@@ -1,8 +1,9 @@
 import { optimizedImage, MAX_UPLOAD_BYTES } from '../../src/shared/mediaPolicy.js';
 import { mediaResponse, storeMedia, readLimitedBody, validMediaBytes } from '../lib/media.js';
 import { consumeAuthLimit, validAdminRequest } from '../lib/adminAuth.js';
-import { json, err, sha256, randomToken, hashPassword, safeEqual, getAdmin, sessionCookie, ADMIN_SESSION_SECONDS, getContent, slugify, sendEmail, notifyAdmins, stripeCheckout, verifyStripeSig, siteUrl, esc } from '../lib/util.js';
+import { json, err, sha256, randomToken, hashPassword, safeEqual, getAdmin, sessionCookie, ADMIN_SESSION_SECONDS, getContent, slugify, sendEmail, notifyAdmins, stripeCheckout, stripeExpire, verifyStripeSig, siteUrl, esc } from '../lib/util.js';
 import { CONTENT_FIELDS, formatPrice } from '../../src/shared/contentSchema.js';
+import { deliveryFeePence, DELIVERY_ITEM_ID } from '../../src/shared/delivery.js';
 
 const isEmail = (e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e || '');
 const adminEmails = (env) => (env.ADMIN_EMAIL || '').toLowerCase().split(',').map((s) => s.trim()).filter(Boolean);
@@ -54,6 +55,14 @@ export async function onRequest({ request, env, params }) {
       if (b.website) return json({ ok: true }); // honeypot
       await env.DB.prepare('INSERT INTO messages (name,email,body) VALUES (?,?,?)').bind(clip(b.name, 120), clip(b.email, 200), clip(b.body, 5000)).run();
       await notifyAdmins(env, { title: 'New message', body: `${clip(b.name, 60)}: ${clip(b.body, 100)}`, url: '/admin/messages' });
+      // Email the enquiry to the owner; replying to the email replies to the visitor.
+      const owner = (env.NOTIFY_EMAIL || '').split(',')[0].trim() || adminEmails(env)[0];
+      if (owner) {
+        try {
+          const mail = await sendEmail(env, { to: owner, replyTo: clip(b.email, 200), subject: `New MelanaBlac enquiry from ${clip(b.name, 80)}`, html: `<p><b>${esc(clip(b.name, 120))}</b> (<a href="mailto:${esc(clip(b.email, 200))}">${esc(clip(b.email, 200))}</a>) sent a message through the website:</p><p style="white-space:pre-wrap">${esc(clip(b.body, 5000))}</p><p><a href="${siteUrl(env, request)}/admin/messages">Open in Studio</a></p>` });
+          if (!mail.sent) console.error('Enquiry email not sent', mail.reason || mail.detail);
+        } catch (e) { console.error('Enquiry email failed', e); }
+      }
       return json({ ok: true });
     }
     if (route === 'checkout' && method === 'POST') {
@@ -70,6 +79,10 @@ export async function onRequest({ request, env, params }) {
         if (p.stock < qty) return err(`Sorry, only ${p.stock} of "${p.title}" left.`);
         items.push({ id: p.id, title: p.title, price_pence: p.price_pence, qty, image: JSON.parse(p.images || '[]')[0] || '' });
       }
+      const content = await getContent(env);
+      const delivery = deliveryFeePence(content, items.reduce((s, i) => s + i.price_pence * i.qty, 0));
+      const stockItems = items.slice();
+      if (delivery > 0) items.push({ id: DELIVERY_ITEM_ID, title: 'UK delivery', price_pence: delivery, qty: 1, image: '' });
       const total = items.reduce((s, i) => s + i.price_pence * i.qty, 0);
       const number = 'MB' + Date.now().toString(36).toUpperCase().slice(-6) + randomToken(1).toUpperCase();
       const order = { number, email: clip(b.email, 200), name: clip(b.name, 120) };
@@ -77,9 +90,8 @@ export async function onRequest({ request, env, params }) {
       await env.DB.batch([
         env.DB.prepare('INSERT INTO orders (number,email,name,address,items,total_pence,status) VALUES (?,?,?,?,?,?,?)')
           .bind(number, order.email, order.name, JSON.stringify({ line1: clip(a.line1, 200), line2: clip(a.line2, 200), city: clip(a.city, 100), postcode: clip(a.postcode, 20) }), JSON.stringify(items), total, useStripe ? 'awaiting_payment' : 'new'),
-        ...items.map((i) => env.DB.prepare('UPDATE products SET stock = MAX(0, stock - ?) WHERE id = ?').bind(i.qty, i.id)),
+        ...stockItems.map((i) => env.DB.prepare('UPDATE products SET stock = MAX(0, stock - ?) WHERE id = ?').bind(i.qty, i.id)),
       ]);
-      const content = await getContent(env);
       const sym = content['site.currency'];
       if (useStripe) {
         try {
@@ -96,17 +108,55 @@ export async function onRequest({ request, env, params }) {
       const o = await env.DB.prepare('SELECT number,name,items,total_pence,status,created_at FROM orders WHERE number=?').bind(seg[1]).first();
       return o ? json({ ...o, items: JSON.parse(o.items) }) : err('Not found', 404);
     }
+    // Release the stock held by an unpaid order (safe to call twice: only the first caller changes the status).
+    const releaseOrder = async (o) => {
+      const done = await env.DB.prepare("UPDATE orders SET status='cancelled' WHERE number=? AND status='awaiting_payment'").bind(o.number).run();
+      if (!done.meta?.changes) return false;
+      const items = JSON.parse(o.items || '[]').filter((i) => i.id !== DELIVERY_ITEM_ID);
+      await env.DB.batch(items.map((i) => env.DB.prepare('UPDATE products SET stock = stock + ? WHERE id = ?').bind(i.qty, i.id)));
+      return true;
+    };
+    if (route === 'order' && seg[2] === 'cancel' && method === 'POST' && seg[1]) {
+      const o = await env.DB.prepare('SELECT * FROM orders WHERE number=?').bind(seg[1]).first();
+      if (!o) return err('Not found', 404);
+      if (o.status !== 'awaiting_payment') return json({ ok: true, status: o.status });
+      if (env.STRIPE_SECRET_KEY && o.stripe_session) {
+        try { await stripeExpire(env, o.stripe_session); } catch (e) {
+          // Already paid or already expired: let the webhook decide, do not release stock here.
+          return json({ ok: true, status: o.status });
+        }
+      }
+      await releaseOrder(o);
+      return json({ ok: true, status: 'cancelled' });
+    }
     if (route === 'stripe-webhook' && method === 'POST') {
       const raw = await request.text();
       if (!(await verifyStripeSig(env, raw, request.headers.get('stripe-signature')))) return err('bad signature', 400);
-      const ev = JSON.parse(raw);
-      if (ev.type === 'checkout.session.completed') {
-        const num = ev.data.object.client_reference_id;
-        const o = await env.DB.prepare('SELECT * FROM orders WHERE number=?').bind(num).first();
-        if (o && o.status === 'awaiting_payment') {
-          await env.DB.prepare("UPDATE orders SET status='paid' WHERE number=?").bind(num).run();
-          await notifyAdmins(env, { title: `Paid order ${num}`, body: `${o.name} - ${formatPrice(o.total_pence)}`, url: '/admin/orders' });
+      let ev; try { ev = JSON.parse(raw); } catch { return err('bad payload', 400); }
+      const session = ev.data?.object || {};
+      const num = session.client_reference_id || session.metadata?.order_number;
+      const o = num ? await env.DB.prepare('SELECT * FROM orders WHERE number=?').bind(num).first() : null;
+      if (o && ['checkout.session.completed', 'checkout.session.async_payment_succeeded'].includes(ev.type) && o.status === 'awaiting_payment') {
+        const matches = session.payment_status === 'paid' && session.amount_total === o.total_pence && String(session.currency).toLowerCase() === 'gbp';
+        if (session.payment_status === 'unpaid') return json({ received: true }); // wait for the async success event
+        if (!matches) {
+          await notifyAdmins(env, { title: `Check order ${num}`, body: 'Stripe payment did not match the order total. Review it in Stripe.', url: '/admin/orders' });
+        } else {
+          const done = await env.DB.prepare("UPDATE orders SET status='paid' WHERE number=? AND status='awaiting_payment'").bind(num).run();
+          if (done.meta?.changes) {
+            const content = await getContent(env);
+            const total = formatPrice(o.total_pence, content['site.currency']);
+            await notifyAdmins(env, { title: `Paid order ${num}`, body: `${o.name} - ${total}`, url: '/admin/orders' });
+            const lines = JSON.parse(o.items || '[]').map((i) => `<li>${i.qty} × ${esc(i.title)}</li>`).join('');
+            const to = (env.NOTIFY_EMAIL || '').split(',')[0].trim() || adminEmails(env)[0];
+            try {
+              await sendEmail(env, { to: o.email, subject: `Payment received for order ${num}`, html: `<p>Thank you ${esc(o.name)}! We received your payment of ${total} for order <b>${num}</b>.</p><ul>${lines}</ul><p>We will let you know when it has been sent.</p>` });
+              if (to) await sendEmail(env, { to, replyTo: o.email, subject: `Paid order ${num} (${total})`, html: `<p><b>${esc(o.name)}</b> (${esc(o.email)}) paid ${total}.</p><ul>${lines}</ul><p>Delivery address: ${esc(Object.values(JSON.parse(o.address || '{}')).filter(Boolean).join(', '))}</p><p><a href="${siteUrl(env, request)}/admin/orders">Open orders</a></p>` });
+            } catch (e) { console.error('Order email failed', e); }
+          }
         }
+      } else if (o && ['checkout.session.expired', 'checkout.session.async_payment_failed'].includes(ev.type)) {
+        await releaseOrder(o);
       }
       return json({ received: true });
     }

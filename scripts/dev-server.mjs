@@ -40,6 +40,7 @@ globalThis.HTMLRewriter = class {
       for (const [sel, h] of hs) {
         if (sel === 'title') h.element({ setInnerContent: (t) => { html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;')}</title>`); } });
         if (sel === 'head') h.element({ append: (c) => { html = html.replace('</head>', c + '</head>'); } });
+        if (sel === 'body') h.element({ append: (c) => { html = html.replace('</body>', c + '</body>'); } });
       }
       ctrl.enqueue(new TextEncoder().encode(html)); ctrl.close();
     } });
@@ -65,6 +66,7 @@ const mw = (await load('_middleware.js')).onRequest;
 const apiH = (await load('api/[[path]].js')).onRequest;
 const sitemap = (await load('sitemap.xml.js')).onRequest;
 const robots = (await load('robots.txt.js')).onRequest;
+const llms = (await load('llms.txt.js')).onRequest;
 const video = (await load('video/[[path]].js')).onRequest;
 
 http.createServer(async (req, res) => {
@@ -78,6 +80,7 @@ http.createServer(async (req, res) => {
     else if (url.pathname === '/sitemap.xml') response = await sitemap({ request, env });
     else if (url.pathname.startsWith('/video/')) response = await video({ request, env });
     else if (url.pathname === '/robots.txt') response = await robots({ request, env });
+    else if (url.pathname === '/llms.txt') response = await llms({ request, env });
     else response = await mw({ request, env, next });
     const headers = {}; response.headers.forEach((v, k) => { headers[k] = v; });
     const sc = response.headers.getSetCookie?.(); if (sc?.length) headers['set-cookie'] = sc;

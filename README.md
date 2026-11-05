@@ -74,3 +74,32 @@ Open the installed app, sign in, then use Settings → Enable notifications and 
 Run `npm run test:pwa` to check service worker setup, permission timing, failed subscriptions, and turning notifications off without sending real push messages.
 
 The default link-preview image is the original melanablac.com sharing artwork, compressed and hosted at `/share/melanablac.jpg`. It is used for Home, Shop, About and Contact unless overridden in SEO settings; individual products continue using their own artwork. Open Graph and Twitter tags are rendered in the initial HTML for sharing crawlers.
+
+## SEO, GEO and AEO
+
+- Every public page gets title, description, canonical, robots, hreflang (en-GB), Open Graph and Twitter tags plus JSON-LD (OnlineStore, WebSite, WebPage/CollectionPage, BreadcrumbList, ItemList, Product, FAQPage, Article) from `functions/_middleware.js` and `functions/lib/seo.js`.
+- Crawler-readable HTML is added in a `<noscript>` block, so AI assistants that do not run JavaScript still see the content.
+- Landing pages and guides live as data in `src/shared/seoPages.js` (routes `/cards`, `/cards/*`, `/guides/*`, `/faq`). Add a page there and it appears in the site, sitemap, `llms.txt` and structured data. Pages with fewer than 2 matching products are set to noindex and left out of the sitemap.
+- `/sitemap.xml` (with product images), `/robots.txt` (AI and search crawlers allowed; admin, API, cart and checkout blocked) and `/llms.txt` are generated from the live catalogue.
+- Unknown URLs return a real 404 with noindex; cart, checkout and order pages are noindex.
+- Run `npm run test:seo` to check the page data.
+
+## Stripe payments
+
+Checkout uses Stripe's hosted payment page (cards, Apple Pay and Google Pay appear automatically when enabled in Stripe). Without Stripe keys, orders are saved as "new" and the owner arranges payment by hand.
+
+How it behaves once keys are set:
+- Checkout saves the order as `awaiting_payment`, holds the stock, and sends the customer to Stripe. The session expires after about 30 minutes.
+- Stripe tells the site what happened through a signed webhook (`/api/stripe-webhook`). Payment is only accepted if the signature is valid, is less than 5 minutes old, and the amount and currency (GBP) match the order. The order then becomes `paid`, the owner gets a push notification, and Resend emails the customer and the owner (needs the Resend key and `NOTIFY_EMAIL`).
+- If the customer backs out, or the session expires or fails, the order is `cancelled` and the stock goes back on sale. Repeat webhooks are harmless.
+- The basket is only cleared after a successful payment.
+
+Set-up (Stripe test mode first):
+1. In the Stripe dashboard (Developers, API keys) copy the secret key (`sk_test_...`).
+2. Developers, Webhooks, add endpoint `https://<your-site>/api/stripe-webhook` with the events `checkout.session.completed`, `checkout.session.expired`, `checkout.session.async_payment_succeeded` and `checkout.session.async_payment_failed`. Copy its signing secret (`whsec_...`).
+3. From this folder, as the dbs_workouts@yahoo.com Cloudflare account:
+   `npx wrangler pages secret put STRIPE_SECRET_KEY --project-name melanablac`
+   `npx wrangler pages secret put STRIPE_WEBHOOK_SECRET --project-name melanablac`
+4. Place a test order with card `4242 4242 4242 4242`, any future date and any CVC. Check it shows as `paid` in Studio, then repeat with live keys.
+
+UK delivery is charged as its own line in the basket, at checkout, in Stripe and in the order. It is £3.50 for now. Change it in Studio under Site text, Shop: "UK delivery fee in pounds" (0 for free) and optionally "Free delivery once the basket reaches this many pounds". The site, FAQ and `llms.txt` wording follow it. Run `npm run test:stripe` to check the payment flow.

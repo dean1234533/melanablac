@@ -52,12 +52,12 @@ export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&a
 export const siteUrl = (env, req) => (env.SITE_URL && !env.DEV_MODE ? env.SITE_URL : new URL(req.url).origin);
 
 // ---------- Email (Resend) ----------
-export async function sendEmail(env, { to, subject, html }) {
+export async function sendEmail(env, { to, subject, html, replyTo }) {
   if (!env.RESEND_API_KEY) return { sent: false, reason: 'RESEND_API_KEY not set' };
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ from: env.RESEND_FROM || 'MelanaBlac <onboarding@resend.dev>', to: [to], subject, html }),
+    body: JSON.stringify({ from: env.RESEND_FROM || 'MelanaBlac <onboarding@resend.dev>', to: [to], subject, html, ...(replyTo ? { reply_to: replyTo } : {}) }),
   });
   return { sent: r.ok, status: r.status, detail: r.ok ? undefined : await r.text() };
 }
@@ -94,23 +94,38 @@ export async function stripeCheckout(env, { order, items, origin }) {
   p.set('customer_email', order.email);
   p.set('client_reference_id', order.number);
   p.set('success_url', `${origin}/order/${order.number}?paid=1`);
-  p.set('cancel_url', `${origin}/cart`);
-  p.set('shipping_address_collection[allowed_countries][0]', 'GB');
+  p.set('cancel_url', `${origin}/cart?cancelled=${order.number}`);
+  // Stripe needs at least 30 minutes; unpaid sessions expire and the stock is released by the webhook.
+  p.set('expires_at', String(Math.floor(Date.now() / 1000) + 31 * 60));
+  p.set('metadata[order_number]', order.number);
+  p.set('payment_intent_data[description]', `MelanaBlac order ${order.number}`);
+  p.set('payment_intent_data[metadata][order_number]', order.number);
   items.forEach((it, i) => {
     p.set(`line_items[${i}][quantity]`, String(it.qty));
     p.set(`line_items[${i}][price_data][currency]`, 'gbp');
     p.set(`line_items[${i}][price_data][unit_amount]`, String(it.price_pence));
     p.set(`line_items[${i}][price_data][product_data][name]`, it.title);
+    const img = it.image && it.image.startsWith('/') ? origin + it.image : it.image;
+    if (img && /^https:\/\//.test(img)) p.set(`line_items[${i}][price_data][product_data][images][0]`, img);
   });
-  const r = await fetch('https://api.stripe.com/v1/checkout/sessions', { method: 'POST', headers: { authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, 'content-type': 'application/x-www-form-urlencoded' }, body: p });
+  const r = await fetch('https://api.stripe.com/v1/checkout/sessions', { method: 'POST', headers: { authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, 'content-type': 'application/x-www-form-urlencoded', 'idempotency-key': `mb-checkout-${order.number}` }, body: p });
   const j = await r.json();
   if (!r.ok) throw new Error(j.error?.message || 'Stripe error');
   return j;
 }
-export async function verifyStripeSig(env, raw, header) {
+export async function stripeExpire(env, sessionId) {
+  const r = await fetch(`https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(sessionId)}/expire`, { method: 'POST', headers: { authorization: `Bearer ${env.STRIPE_SECRET_KEY}` } });
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error?.message || 'Stripe error');
+  return j;
+}
+export async function verifyStripeSig(env, raw, header, now = Date.now()) {
   if (!env.STRIPE_WEBHOOK_SECRET || !header) return false;
-  const parts = Object.fromEntries(header.split(',').map((x) => x.split('=')));
+  const pairs = header.split(',').map((x) => x.trim().split('='));
+  const t = pairs.find(([k]) => k === 't')?.[1];
+  const sigs = pairs.filter(([k]) => k === 'v1').map(([, v]) => v);
+  if (!t || !sigs.length || Math.abs(now / 1000 - Number(t)) > 300) return false; // reject replays older than 5 minutes
   const key = await crypto.subtle.importKey('raw', enc.encode(env.STRIPE_WEBHOOK_SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-  const sig = toHex(await crypto.subtle.sign('HMAC', key, enc.encode(`${parts.t}.${raw}`)));
-  return safeEqual(sig, parts.v1 || '');
+  const sig = toHex(await crypto.subtle.sign('HMAC', key, enc.encode(`${t}.${raw}`)));
+  return sigs.some((v) => safeEqual(sig, v));
 }

@@ -10,8 +10,9 @@ import { optimizedImage } from "../shared/mediaPolicy.js";
 import { useSite, useSEO } from "./SiteContext.jsx";
 import Gallery, { Lightbox } from "./Gallery.jsx";
 import Video from "./Video.jsx";
+import { SEO_PAGES } from "../shared/seoPages.js";
 
-const Loading = () => (
+export const Loading = () => (
   <div className="center muted pad" role="status">
     Preparing the collection…
   </div>
@@ -395,6 +396,15 @@ export function Shop() {
           Gallery view
         </button>
       </div>
+      <p className="center muted small seo-occasions">
+        Browse by occasion:{" "}
+        {SEO_PAGES.filter((x) => x.kind === "category").map((x, i) => (
+          <span key={x.path}>
+            {i > 0 && " · "}
+            <Link to={x.path}>{x.h1}</Link>
+          </span>
+        ))}
+      </p>
       {error && <p className="err center">{error}</p>}
       {error ? (
         <p className="center">
@@ -419,7 +429,7 @@ export function Shop() {
   );
 }
 
-function ProductCard({ p }) {
+export function ProductCard({ p }) {
   const { money, add } = useSite();
   const [added, setAdded] = useState(false);
   return (
@@ -452,7 +462,7 @@ function ProductCard({ p }) {
 
 export function Product() {
   const { slug } = useParams();
-  const { money, add, t } = useSite();
+  const { money, add, t, deliveryNote } = useSite();
   const [p, setP] = useState(undefined);
   const [img, setImg] = useState(0);
   const [qty, setQty] = useState(1);
@@ -511,7 +521,12 @@ export function Product() {
         )}
       </div>
       <div className="p-info">
-        <p className="kicker">{p.category}</p>
+        <p className="kicker">
+          {(() => {
+            const cp = SEO_PAGES.find((x) => x.kind === "category" && x.category === p.category);
+            return cp ? <Link to={cp.path}>{p.category}</Link> : p.category;
+          })()}
+        </p>
         <h1>{p.title}</h1>
         <p className="price big">{money(p.price_pence)}</p>
         <p className="desc">{p.description}</p>
@@ -557,7 +572,7 @@ export function Product() {
             )}
           </div>
         )}
-        <p className="muted small">{t("shop.shipping")}</p>
+        <p className="muted small">{deliveryNote}</p>
       </div>
       {zoom && (
         <Lightbox
@@ -571,12 +586,22 @@ export function Product() {
 }
 
 export function Cart() {
-  const { cart, setQty, remove, total, money } = useSite();
+  const { cart, setQty, remove, total, money, delivery, grandTotal } = useSite();
+  const [params] = useSearchParams();
+  const cancelled = params.get("cancelled");
+  const [cancelMsg, setCancelMsg] = useState("");
   useSEO("Your basket | MelanaBlac", "");
+  useEffect(() => {
+    if (!cancelled) return;
+    api("order/" + encodeURIComponent(cancelled) + "/cancel", { method: "POST" })
+      .then((r) => setCancelMsg(r.status === "paid" ? "That order was already paid, thank you." : "Payment was cancelled. Your basket is still here whenever you are ready."))
+      .catch(() => setCancelMsg("Payment was cancelled. Your basket is still here."));
+  }, [cancelled]);
   if (!cart.length)
     return (
       <section className="section center">
         <h1 className="section-title">Your basket is empty</h1>
+        {cancelMsg && <p className="muted" role="status">{cancelMsg}</p>}
         <Link to="/shop" className="btn gold">
           Browse the gallery
         </Link>
@@ -610,8 +635,11 @@ export function Cart() {
           </button>
         </div>
       ))}
+      <p className="muted small">
+        Subtotal {money(total)}. {delivery > 0 ? `UK delivery ${money(delivery)}.` : "Free UK delivery."}
+      </p>
       <p className="total">
-        Total <b>{money(total)}</b>
+        Total <b>{money(grandTotal)}</b>
       </p>
       <p className="right">
         <Link to="/checkout" className="btn gold">
@@ -623,7 +651,7 @@ export function Cart() {
 }
 
 export function Checkout() {
-  const { cart, total, money, clear } = useSite();
+  const { cart, total, money, clear, delivery, grandTotal } = useSite();
   const nav = useNavigate();
   const [f, setF] = useState({
     name: "",
@@ -665,9 +693,12 @@ export function Checkout() {
           items: cart.map((i) => ({ id: i.id, qty: i.qty })),
         },
       });
-      clear();
-      if (r.redirect) window.location.href = r.redirect;
-      else nav("/order/" + r.number);
+      if (r.redirect) {
+        window.location.href = r.redirect; // basket is cleared on the order page after payment
+      } else {
+        clear();
+        nav("/order/" + r.number);
+      }
     } catch (e2) {
       setError(e2.message);
       setBusy(false);
@@ -733,8 +764,11 @@ export function Checkout() {
             />
           </label>
         </div>
+        <p className="muted small">
+          Subtotal {money(total)}. {delivery > 0 ? `UK delivery ${money(delivery)}.` : "Free UK delivery."}
+        </p>
         <p className="total">
-          Order total <b>{money(total)}</b>
+          Order total <b>{money(grandTotal)}</b>
         </p>
         {error && (
           <p className="err" role="alert">
@@ -751,13 +785,27 @@ export function Checkout() {
 
 export function OrderDone() {
   const { number } = useParams();
-  const { money } = useSite();
+  const { money, clear } = useSite();
+  const [params] = useSearchParams();
   const [o, setO] = useState(undefined);
   useSEO("Order confirmed | MelanaBlac", "");
   useEffect(() => {
-    api("order/" + number)
-      .then(setO)
-      .catch(() => setO(null));
+    if (params.get("paid")) clear();
+  }, []);
+  useEffect(() => {
+    let active = true;
+    let tries = 0;
+    const load = () =>
+      api("order/" + number)
+        .then((order) => {
+          if (!active) return;
+          setO(order);
+          // Stripe confirms payment by webhook a moment after the redirect; check again briefly.
+          if (order.status === "awaiting_payment" && params.get("paid") && tries++ < 8) setTimeout(load, 2000);
+        })
+        .catch(() => active && setO(null));
+    load();
+    return () => { active = false; };
   }, [number]);
   if (o === undefined) return <Loading />;
   if (!o)
@@ -773,7 +821,11 @@ export function OrderDone() {
         Order <b>{o.number}</b> is{" "}
         {o.status === "awaiting_payment"
           ? "awaiting payment confirmation"
-          : "confirmed"}
+          : o.status === "cancelled"
+            ? "cancelled"
+            : o.status === "new"
+              ? "received. We will be in touch about payment and delivery"
+              : "confirmed"}
         . Total {money(o.total_pence)}.
       </p>
       <ul className="plain">

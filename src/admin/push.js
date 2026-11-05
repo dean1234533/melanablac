@@ -16,7 +16,7 @@ export async function currentSub() {
 }
 export async function preparePush() {
   if (!pushSupported()) throw new Error("Install Studio on your Home Screen and open it there to enable notifications, or use a browser that supports web push.");
-  const [{ key }, registration] = await Promise.all([api("admin/push/key"), registerSW()]);
+  const [{ key }, registration] = await withTimeout(Promise.all([api("admin/push/key"), registerSW()]), 15000, "Could not reach the server. Check your connection and reopen Studio.");
   if (!key) throw new Error("Notifications are not configured on the server yet.");
   if (!registration) throw new Error("The notification service could not start. Reload Studio and try again.");
   if (!registration.active) {
@@ -38,16 +38,34 @@ export async function preparePush() {
   }
   return { key, registration };
 }
+const withTimeout = (promise, ms, message) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error(message)), ms))]);
+const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const isStandalone = () => window.matchMedia?.("(display-mode: standalone)").matches || navigator.standalone === true;
 export async function enablePush(prepared) {
+  if (isIOS() && !isStandalone()) throw new Error("On iPhone or iPad, open Studio from its Home Screen icon (Share, then Add to Home Screen) and enable notifications there.");
   if (!pushSupported()) throw new Error("This browser does not support notifications. On iPhone or iPad, install Studio on your Home Screen first.");
   if (!prepared?.key || !prepared.registration) throw new Error("Notifications are still setting up. Wait a moment and try again.");
   // Ask directly in the button gesture; awaiting a fetch first breaks iOS permission prompts.
-  const permission = Notification.permission === "granted" ? "granted" : await Notification.requestPermission();
+  const permission = Notification.permission === "granted" ? "granted" : await withTimeout(Notification.requestPermission(), 60000, "No answer to the notification prompt. Tap Enable notifications and choose Allow.");
   if (permission !== "granted") throw new Error(permission === "denied" ? "Notifications are blocked. Allow them in your browser or device notification settings, then try again." : "Permission was not granted. Tap Enable notifications when you are ready.");
   const { registration, key } = prepared;
   let sub = await registration.pushManager.getSubscription();
   const created = !sub;
-  if (!sub) sub = await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: toUint8(key) });
+  if (!sub) {
+    try {
+      sub = await withTimeout(registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: toUint8(key) }), 20000, "Your device did not respond. Close and reopen Studio, check you are online, then try again.");
+    } catch (error) {
+      if (error?.name === "InvalidStateError") {
+        // A stale subscription from an older key blocks a new one: clear it and retry once.
+        await (await registration.pushManager.getSubscription())?.unsubscribe().catch(() => {});
+        sub = await withTimeout(registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: toUint8(key) }), 20000, "Your device did not respond. Close and reopen Studio, then try again.");
+      } else if (error?.name === "NotAllowedError") {
+        throw new Error("Notifications are blocked for Studio. Allow them in your device or browser notification settings, then try again.");
+      } else if (error?.name === "AbortError") {
+        throw new Error("Your browser's push service could not be reached. Check your connection (in Brave, turn on Google services for push messaging) and try again.");
+      } else throw error;
+    }
+  }
   try {
     await api("admin/push/subscribe", { method: "POST", body: sub.toJSON() });
   } catch (error) {

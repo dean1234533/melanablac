@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { api } from '../api.js';
 import { DEFAULTS } from '../shared/contentSchema.js';
+import { deliveryFeePence, deliveryText } from '../shared/delivery.js';
 
 const Ctx = createContext(null);
 export const useSite = () => useContext(Ctx);
@@ -22,8 +23,11 @@ export function SiteProvider({ children }) {
   const count = cart.reduce((s, i) => s + i.qty, 0);
   const total = cart.reduce((s, i) => s + i.qty * i.price_pence, 0);
   const t = (k) => site.content[k] ?? DEFAULTS[k] ?? '';
+  const delivery = deliveryFeePence({ ...DEFAULTS, ...site.content }, total);
+  const grandTotal = total + delivery;
+  const deliveryNote = deliveryText({ ...DEFAULTS, ...site.content });
   const money = (p) => `${t('site.currency')}${(p / 100).toFixed(2)}`;
-  return <Ctx.Provider value={{ ...site, t, money, cart, add, setQty, remove, clear, count, total }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ ...site, t, money, cart, add, setQty, remove, clear, count, total, delivery, grandTotal, deliveryNote }}>{children}</Ctx.Provider>;
 }
 
 // Client-side SEO (the server also injects tags for crawlers).

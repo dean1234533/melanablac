@@ -1480,3 +1480,30 @@
     display: none;
   }
 }
+
+/* Hero "Shop the Gallery" button: white border (overrides the black action border). */
+.storefront .hero-copy .btn.btn.primary {
+  border: 2px solid #fff;
+}
+
+/* SEO landing pages, guides and FAQ */
+.storefront .seo-page { max-width: 1100px; margin: 0 auto; }
+.storefront .seo-crumbs { font-size: 12px; letter-spacing: 0.04em; color: #6b645a; margin-bottom: 18px; }
+.storefront .seo-crumbs a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.storefront .seo-prose { max-width: 720px; margin: 28px auto; }
+.storefront .seo-prose h2 { font-family: "Cormorant Garamond", serif; font-weight: 500; font-size: clamp(24px, 3vw, 32px); margin: 36px 0 12px; }
+.storefront .seo-prose p { line-height: 1.75; margin: 0 0 14px; }
+.storefront .seo-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.storefront .seo-links li { display: grid; gap: 2px; }
+.storefront .seo-links a { text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+.storefront .seo-links span { color: #6b645a; font-size: 14px; line-height: 1.5; }
+.storefront .seo-links.inline { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.storefront .seo-faq { max-width: 720px; margin: 48px auto 0; }
+.storefront .seo-faq h2 { font-family: "Cormorant Garamond", serif; font-weight: 500; font-size: clamp(24px, 3vw, 32px); margin-bottom: 14px; }
+.storefront .seo-faq details { border-top: 1px solid #12121233; padding: 14px 0; }
+.storefront .seo-faq details:last-child { border-bottom: 1px solid #12121233; }
+.storefront .seo-faq summary { cursor: pointer; font-weight: 500; }
+.storefront .seo-faq summary:focus-visible { outline: 2px solid #d4af37; outline-offset: 4px; }
+.storefront .seo-faq p { margin: 10px 0 0; line-height: 1.7; color: #3b362f; }
+.storefront .seo-occasions a { text-decoration: underline; text-underline-offset: 3px; }
+.storefront .kicker a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }

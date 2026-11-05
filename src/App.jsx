@@ -2,6 +2,8 @@ import React, { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { SiteProvider } from './site/SiteContext.jsx';
 import Layout from './site/Layout.jsx';
+import { SeoPage, FaqPage } from './site/SeoPages.jsx';
+import { SEO_PAGES } from './shared/seoPages.js';
 import { Home, Shop, Product, Cart, Checkout, OrderDone, About, Contact, NotFound } from './site/pages.jsx';
 const Admin = lazy(() => import('./admin/AdminApp.jsx'));
 
@@ -25,6 +27,8 @@ function Site() {
         <Route path="order/:number" element={<OrderDone />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
+        <Route path="faq" element={<FaqPage />} />
+        {SEO_PAGES.map((p) => <Route key={p.path} path={p.path.slice(1)} element={<SeoPage path={p.path} />} />)}
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
