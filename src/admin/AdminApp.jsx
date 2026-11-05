@@ -1035,118 +1035,96 @@ function ProductEditor() {
     setBusy(false);
   };
   return (
-    <form className="form wide" onSubmit={save}>
+    <form className="form wide artwork-editor" onSubmit={save}>
       <div className="row">
-        <h1>{id ? "Edit artwork" : "Add artwork"}</h1>
-        <Link to="/admin/products">Back</Link>
+        <div>
+          <h1>{id ? "Edit artwork" : "Add artwork"}</h1>
+          <p className="editor-intro">Add the details and images customers will see in your shop.</p>
+        </div>
+        <Link to="/admin/products">Back to artwork</Link>
       </div>
-      <label>
-        Title
-        <input
-          required
-          value={p.title}
-          onChange={set("title")}
-          maxLength="200"
-        />
-      </label>
-      <label>
-        Description
-        <textarea
-          rows="5"
-          value={p.description}
-          onChange={set("description")}
-        />
-      </label>
-      <div className="two">
+      <fieldset>
+        <legend>Artwork details</legend>
         <label>
-          Price (£)
-          <input
-            required
-            inputMode="decimal"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            placeholder="85.00"
-          />
+          Artwork title
+          <input required value={p.title} onChange={set("title")} maxLength="200" placeholder="Give your artwork a name" />
         </label>
         <label>
-          Stock
-          <input
-            type="number"
-            min="0"
-            value={p.stock}
-            onChange={set("stock")}
-          />
+          Description
+          <textarea rows="5" value={p.description} onChange={set("description")} placeholder="Describe the artwork, its size, materials and what is included." />
+          <small className="field-help">This is the description customers read on the artwork page.</small>
         </label>
-      </div>
-      <div className="two">
         <label>
           Category
           <input list="cats" value={p.category} onChange={set("category")} />
           <datalist id="cats">
+            <option>Birthday Cards</option>
+            <option>Christmas Cards</option>
+            <option>Inspirational Cards</option>
+            <option>Mother's Day Cards</option>
+            <option>Nativity Cards</option>
             <option>Gallery</option>
-            <option>Greeting Cards</option>
             <option>Prints</option>
           </datalist>
+          <small className="field-help">Choose an existing category or type a new one.</small>
         </label>
+      </fieldset>
+      <fieldset>
+        <legend>Artwork images</legend>
+        <p className="field-help">Upload one or more photos. The first image is the main shop image. Images are compressed automatically.</p>
+        <ImageUploader images={p.images} onChange={(images) => setP({ ...p, images })} />
+      </fieldset>
+      <fieldset>
+        <legend>Price & availability</legend>
+        <div className="two">
+          <label>
+            Price (£)
+            <input required inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="4.50" />
+          </label>
+          <label>
+            Quantity available
+            <input type="number" min="0" value={p.stock} onChange={set("stock")} />
+          </label>
+        </div>
         <label>
-          Status
+          Visibility
           <select value={p.status} onChange={set("status")}>
-            <option value="published">Published</option>
-            <option value="draft">Draft (hidden)</option>
+            <option value="published">Visible in the shop</option>
+            <option value="draft">Draft (hidden from the shop)</option>
           </select>
         </label>
-      </div>
-      <label className="check">
-        <input
-          type="checkbox"
-          checked={!!p.featured}
-          onChange={set("featured")}
-        />{" "}
-        Feature on home page
-      </label>
-      <fieldset>
-        <legend>Images (first is the main image)</legend>
-        <ImageUploader
-          images={p.images}
-          onChange={(images) => setP({ ...p, images })}
-        />
-      </fieldset>
-      <fieldset>
-        <legend>SEO</legend>
-        <label>
-          SEO title
-          <input
-            value={p.seo_title}
-            onChange={set("seo_title")}
-            maxLength="120"
-            placeholder={`${p.title || "Title"} | MelanaBlac`}
-          />
-          <small className={p.seo_title.length > 60 ? "warn" : "muted"}>
-            {p.seo_title.length}/60 recommended
-          </small>
-        </label>
-        <label>
-          SEO description
-          <textarea
-            rows="3"
-            value={p.seo_description}
-            onChange={set("seo_description")}
-            maxLength="320"
-          />
-          <small className={p.seo_description.length > 160 ? "warn" : "muted"}>
-            {p.seo_description.length}/160 recommended
-          </small>
-        </label>
-        <label>
-          Sort order (lower first)
-          <input type="number" value={p.sort} onChange={set("sort")} />
+        <label className="check">
+          <input type="checkbox" checked={!!p.featured} onChange={set("featured")} />
+          Feature on home page
         </label>
       </fieldset>
+      <details className="editor-options">
+        <summary>Optional settings <span>Google search & display order</span></summary>
+        <div className="editor-options-body">
+          <p className="field-help">You can skip this section. Google search details use your artwork title and description automatically unless you enter something different here.</p>
+          <label>
+            Google search title
+            <input value={p.seo_title} onChange={set("seo_title")} maxLength="120" placeholder={`${p.title || "Artwork title"} | MelanaBlac`} />
+            <small className={p.seo_title.length > 60 ? "warn" : "field-help"}>Optional · aim for up to 60 characters{p.seo_title ? ` (${p.seo_title.length} entered)` : ""}</small>
+          </label>
+          <label>
+            Google search summary
+            <textarea rows="3" value={p.seo_description} onChange={set("seo_description")} maxLength="320" placeholder={p.description.slice(0, 155) || "Your artwork description will be used automatically."} />
+            <small className={p.seo_description.length > 160 ? "warn" : "field-help"}>Optional · aim for up to 160 characters{p.seo_description ? ` (${p.seo_description.length} entered)` : ""}</small>
+          </label>
+          <label>
+            Display position
+            <input type="number" value={p.sort} onChange={set("sort")} />
+            <small className="field-help">Smaller numbers appear first in the shop. Leave at 0 if the order does not matter.</small>
+          </label>
+        </div>
+      </details>
       <Flash msg={err} kind="err" />
       <Flash msg={ok} />
-      <button className="btn gold" disabled={busy}>
-        {busy ? "Saving…" : "Save artwork"}
-      </button>
+      <div className="editor-actions">
+        <button className="btn gold admin-button-effect" disabled={busy}>{busy ? "Saving…" : "Save artwork"}</button>
+        <Link to="/admin/products">Cancel</Link>
+      </div>
     </form>
   );
 }

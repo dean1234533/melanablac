@@ -884,6 +884,94 @@
   color: #706b63;
 }
 /* Artwork, orders, content editing and settings. */
+.artwork-editor .editor-intro {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 12px 0 0;
+  line-height: 1.8;
+}
+.artwork-editor .row {
+  align-items: start;
+  margin-bottom: 8px;
+  gap: 20px;
+}
+.artwork-editor .row > a {
+  flex-shrink: 0;
+  font-size: 11px;
+  text-underline-offset: 4px;
+}
+.admin-workspace .artwork-editor fieldset {
+  margin: 0;
+  min-width: 0;
+}
+.artwork-editor label,
+.artwork-editor input,
+.artwork-editor textarea,
+.artwork-editor select {
+  min-width: 0;
+  max-width: 100%;
+}
+.artwork-editor .field-help {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.editor-options {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.editor-options summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  padding: 20px 24px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 12px;
+  font-weight: 500;
+}
+.editor-options summary::-webkit-details-marker {
+  display: none;
+}
+.editor-options summary span {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.editor-options summary::after {
+  content: "+";
+  margin-left: auto;
+  font-size: 18px;
+  color: var(--gold2);
+}
+.editor-options[open] summary::after {
+  content: "−";
+}
+.editor-options summary:focus-visible {
+  outline: 2px solid var(--gold2);
+  outline-offset: 3px;
+}
+.editor-options-body {
+  display: grid;
+  gap: 22px;
+  border-top: 1px solid var(--line);
+  padding: 24px;
+}
+.editor-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.editor-actions > a {
+  font-size: 11px;
+  text-underline-offset: 4px;
+}
+
 .admin-workspace .row h1 {
   margin: 0;
 }
