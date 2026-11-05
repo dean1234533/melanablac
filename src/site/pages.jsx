@@ -859,51 +859,74 @@ export function Contact() {
   };
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
   return (
-    <section className="section narrow">
-      <p className="eyebrow center">ENQUIRIES & COMMISSIONS</p>
-      <h1 className="section-title">{t("contact.title")}</h1>
-      <p className="center lead">{t("contact.body")}</p>
-      {state.done ? (
-        <p className="center ok" role="status">
-          Thank you. Your message has been sent.
-        </p>
-      ) : (
-        <form className="form" onSubmit={submit}>
-          <label>
-            Name
-            <input required value={f.name} onChange={set("name")} />
-          </label>
-          <label>
-            Email
-            <input
-              required
-              type="email"
-              value={f.email}
-              onChange={set("email")}
-            />
-          </label>
-          <label>
-            Message
-            <textarea required rows="6" value={f.body} onChange={set("body")} />
-          </label>
-          <input
-            className="hp"
-            tabIndex="-1"
-            autoComplete="off"
-            aria-hidden="true"
-            value={f.website}
-            onChange={set("website")}
+    <section className="section contact-editorial">
+      <header className="contact-intro">
+        <p className="eyebrow">ENQUIRIES & COMMISSIONS</p>
+        <h1 className="section-title">{t("contact.title")}</h1>
+        <p className="lead">{t("contact.body")}</p>
+      </header>
+      <div className="contact-layout">
+        <figure className="contact-film">
+          <Video
+            src="/video/gallery-frame.mp4"
+            lazy={false}
+            label="Framed MelanaBlac artwork inside the gallery"
           />
-          {state.error && (
-            <p className="err" role="alert">
-              {state.error}
+          <figcaption>
+            <p className="eyebrow">A LITTLE ART. A LASTING CONNECTION.</p>
+            <h2>Something meaningful<br /><em>starts here.</em></h2>
+            <p>From a first idea to a piece that feels like you, let’s start a conversation.</p>
+            <div className="contact-topics">
+              <span>Commissions</span>
+              <span>Collaborations</span>
+              <span>Enquiries</span>
+            </div>
+          </figcaption>
+        </figure>
+        <div className="contact-form-panel">
+          {state.done ? (
+            <p className="center ok" role="status">
+              Thank you. Your message has been sent.
             </p>
+          ) : (
+            <form className="form" onSubmit={submit}>
+              <label>
+                Name
+                <input required value={f.name} onChange={set("name")} />
+              </label>
+              <label>
+                Email
+                <input
+                  required
+                  type="email"
+                  value={f.email}
+                  onChange={set("email")}
+                />
+              </label>
+              <label>
+                Message
+                <textarea required rows="6" value={f.body} onChange={set("body")} />
+              </label>
+              <input
+                className="hp"
+                tabIndex="-1"
+                autoComplete="off"
+                aria-hidden="true"
+                value={f.website}
+                onChange={set("website")}
+              />
+              {state.error && (
+                <p className="err" role="alert">
+                  {state.error}
+                </p>
+              )}
+              <button className="btn gold" disabled={state.busy}>
+                {state.busy ? "Sending…" : "Send message"}
+              </button>
+            </form>
           )}
-          <button className="btn gold" disabled={state.busy}>
-            {state.busy ? "Sending…" : "Send message"}
-          </button>
-        </form>
-      )}
+        </div>
+      </div>
     </section>
   );
 }

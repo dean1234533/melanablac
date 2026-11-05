@@ -27,3 +27,5 @@ Brand palette verified against https://melanablac.com: #121212 black, #D4AF37 pr
 On mobile the hero video uses its complete frame, contain fitting, and a viewport height cap. Overlay the kicker and heading on the clip with compact mobile type; keep the description and button below it. Desktop retains the full overlaid copy.
 
 Product cards and collection boxes use black backgrounds, fine brand-gold borders, light titles and gold details; keep the surrounding white layout.
+
+The enquiries page pairs an existing compressed gallery film in a black, gold-bordered editorial panel with a white form. Stack the film above the form on phones and preserve the whole video frame.
