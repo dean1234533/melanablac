@@ -244,7 +244,7 @@ function Login({ onLogin }) {
           </div>
         </label>
         <Flash msg={err} kind="err" />
-        <button className="btn gold" disabled={busy}>
+        <button className="btn gold auth-signin" disabled={busy}>
           {busy ? "Signing in…" : "Sign in"}
         </button>
         <p className="center">
