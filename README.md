@@ -32,7 +32,7 @@ React (Vite) storefront with a Cloudflare Pages Functions backend (D1 database, 
 Set `SITE_URL` in `wrangler.toml` if you attach a custom domain. Only emails in `ADMIN_EMAIL` can create/reset an admin password.
 
 ### Videos
-Looping gallery clips live in `public/video/` (mp4 + matching poster `.jpg`): split hero gallery film, "why I create", "pause", and a scrolling "Gallery in Motion" strip.
+Looping gallery clips live in `public/video/` (mp4 + matching poster `.jpg`): full-width hero gallery film with overlaid text and shop button, "why I create", "pause", and a scrolling "Gallery in Motion" strip.
 They play muted only while on screen. Each visible film has play/pause controls; visitors who prefer reduced motion see a paused poster until they choose to play. `functions/video/[[path]].js` serves them with HTTP Range support, which Safari/iOS needs.
 Change or hide any of them in Admin > Site text > Videos (paths or links; blank hides). New clips need to be added to `public/video/` and redeployed, because R2 is not enabled for uploads yet. Keep each file under 25MB.
 
