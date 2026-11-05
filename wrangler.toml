@@ -3,16 +3,18 @@ pages_build_output_dir = "dist"
 compatibility_date = "2024-11-01"
 
 # After logging in with the dbs_workouts@yahoo.com Cloudflare account:
-#   npx wrangler d1 create melanablac        -> paste database_id below
-#   npx wrangler r2 bucket create melanablac-media
+# Database created on the dbs_workouts@yahoo.com account:
 [[d1_databases]]
 binding = "DB"
 database_name = "melanablac"
-database_id = "REPLACE_WITH_D1_ID"
+database_id = "d576d5a5-df26-4c11-a3e3-d99fb38d1a73"
 
-[[r2_buckets]]
-binding = "MEDIA"
-bucket_name = "melanablac-media"
+# Optional: once R2 is enabled on the account, create a bucket and uncomment to store images there
+# instead of in D1:
+#   npx wrangler r2 bucket create melanablac-media
+# [[r2_buckets]]
+# binding = "MEDIA"
+# bucket_name = "melanablac-media"
 
 [vars]
 ADMIN_EMAIL = "dbs_workouts@yahoo.com"

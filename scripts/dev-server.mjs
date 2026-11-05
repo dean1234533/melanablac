@@ -47,7 +47,7 @@ globalThis.HTMLRewriter = class {
     return new Response(body, { status: res.status, headers });
   }
 };
-const env = { DB, MEDIA, DEV_MODE: '1', ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'dbs_workouts@yahoo.com', VAPID_PUBLIC_KEY: fs.readFileSync(path.join(root, '.dev-vapid-public'), 'utf8').trim(), VAPID_PRIVATE_JWK: fs.readFileSync(path.join(root, '.dev-vapid-private'), 'utf8').trim().replace(/^'|'$/g, ''), ...(process.env.DEV_ENV ? JSON.parse(process.env.DEV_ENV) : {}) };
+const env = { DB, ...(process.env.NO_R2 ? {} : { MEDIA }), DEV_MODE: '1', ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'dbs_workouts@yahoo.com', VAPID_PUBLIC_KEY: fs.readFileSync(path.join(root, '.dev-vapid-public'), 'utf8').trim(), VAPID_PRIVATE_JWK: fs.readFileSync(path.join(root, '.dev-vapid-private'), 'utf8').trim().replace(/^'|'$/g, ''), ...(process.env.DEV_ENV ? JSON.parse(process.env.DEV_ENV) : {}) };
 
 const mime = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.ico': 'image/x-icon' };
 const dist = path.join(root, 'dist');

@@ -36,9 +36,14 @@ export async function onRequest({ request, env, params }) {
     }
     if (route === 'media' && method === 'GET') {
       const key = seg.slice(1).join('/');
-      const obj = await env.MEDIA.get(key);
-      if (!obj) return new Response('Not found', { status: 404 });
-      return new Response(obj.body, { headers: { 'content-type': obj.httpMetadata?.contentType || 'application/octet-stream', 'cache-control': 'public, max-age=31536000, immutable' } });
+      if (env.MEDIA) {
+        const obj = await env.MEDIA.get(key);
+        if (obj) return new Response(obj.body, { headers: { 'content-type': obj.httpMetadata?.contentType || 'application/octet-stream', 'cache-control': 'public, max-age=31536000, immutable' } });
+      }
+      const row = await env.DB.prepare('SELECT type, data FROM media WHERE key = ?').bind(key).first();
+      if (!row) return new Response('Not found', { status: 404 });
+      const bin = Uint8Array.from(atob(row.data), (c) => c.charCodeAt(0));
+      return new Response(bin, { headers: { 'content-type': row.type, 'cache-control': 'public, max-age=31536000, immutable' } });
     }
     if (route === 'contact' && method === 'POST') {
       const b = await body(request);
@@ -182,10 +187,16 @@ export async function onRequest({ request, env, params }) {
         const ext = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif', 'image/avif': 'avif' }[type];
         if (!ext) return err('Only JPG, PNG, WebP, GIF or AVIF images are allowed.');
         const buf = await request.arrayBuffer();
-        if (buf.byteLength > 12 * 1024 * 1024) return err('Image is larger than 12MB.', 413);
+        const limit = env.MEDIA ? 12 * 1024 * 1024 : 1_500_000; // D1 rows are limited to 2MB
+        if (buf.byteLength > limit) return err(`Image is too large (${(buf.byteLength / 1048576).toFixed(1)}MB). Max ${env.MEDIA ? 12 : 1.5}MB.`, 413);
         if (!buf.byteLength) return err('Empty file.');
         const key = `${Date.now()}-${randomToken(4)}.${ext}`;
-        await env.MEDIA.put(key, buf, { httpMetadata: { contentType: type } });
+        if (env.MEDIA) await env.MEDIA.put(key, buf, { httpMetadata: { contentType: type } });
+        else {
+          let bin = ''; const u8 = new Uint8Array(buf);
+          for (let i = 0; i < u8.length; i += 0x8000) bin += String.fromCharCode(...u8.subarray(i, i + 0x8000));
+          await env.DB.prepare('INSERT INTO media (key,type,data) VALUES (?,?,?)').bind(key, type, btoa(bin)).run();
+        }
         return json({ url: `/api/media/${key}` });
       }
       if (sub === 'products') {
