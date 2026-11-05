@@ -1324,7 +1324,7 @@
     scroll-behavior: auto;
   }
   .storefront .hero-copy .btn.primary {
-    transform: none;
+    transform: none !important;
   }
   .storefront .hero-copy .btn.primary::before {
     display: none;
