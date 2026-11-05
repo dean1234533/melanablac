@@ -5,3 +5,5 @@ A contemporary editorial gallery and independent illustrated card shop. Warm pap
 The homepage introduces the brand, shows the curated collection, tells the creative story, and offers category navigation. Product images remain uncropped. Responsive layouts, keyboard focus, video pause controls and reduced motion are required. The existing commerce, contact and admin flows are retained. External marketplace links are removed.
 
 21st initialization completed; catalogue search requires a signed-in 21st account in this environment. The redesign uses the project's React primitives and original assets.
+
+Use the existing signature logo asset (`public/logo-dark.png`) in the header and footer. Do not recreate the logo as typeset text.

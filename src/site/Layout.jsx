@@ -6,13 +6,8 @@ import "./storefront.css";
 export function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
-export function Wordmark() {
-  return (
-    <span className="wordmark">
-      Melana<span>Blac</span>
-      <sup>ART & SOUL</sup>
-    </span>
-  );
+function BrandLogo() {
+  return <img className="brand-logo" src="/logo-dark.png" alt="MelanaBlac" width="1000" height="226" />;
 }
 export default function Layout() {
   const { t, count } = useSite();
@@ -42,7 +37,7 @@ export default function Layout() {
       </div>
       <header className="nav">
         <Link to="/" className="logo" aria-label="MelanaBlac home">
-          <Wordmark />
+          <BrandLogo />
         </Link>
         <nav id="main-nav" className={open ? "open" : ""} aria-label="Main">
           {[
@@ -130,7 +125,7 @@ export default function Layout() {
         </div>
         <div className="footer-brand">
           <Link to="/" aria-label="MelanaBlac home">
-            <Wordmark />
+            <BrandLogo />
           </Link>
           <span>Colour. Culture. Courage.</span>
         </div>

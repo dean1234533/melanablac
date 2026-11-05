@@ -3,12 +3,20 @@
   "project": {
     "name": "melanablac",
     "productType": "Independent art and illustrated greeting card storefront",
-    "stack": ["react", "vite"]
+    "stack": [
+      "react",
+      "vite"
+    ]
   },
   "sources": {
-    "tokens": ["src/site/storefront.css"],
+    "tokens": [
+      "src/site/storefront.css"
+    ],
     "components": [],
-    "assets": ["public/art/cards", "public/video"],
+    "assets": [
+      "public/art/cards",
+      "public/video"
+    ],
     "instructions": []
   },
   "design": {
@@ -49,7 +57,8 @@
     "Use original artwork and existing films; no stock replacements.",
     "Keep the real catalogue, category filters, basket, checkout, contact and administration.",
     "Remove external marketplace links and editable marketplace settings.",
-    "Pause controls and reduced-motion handling on all gallery films."
+    "Pause controls and reduced-motion handling on all gallery films.",
+    "Preserve the original signature logo using public/logo-dark.png on ivory, in both header and footer."
   ],
   "evidence": [
     {
