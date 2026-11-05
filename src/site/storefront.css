@@ -723,7 +723,8 @@
   color: #faf7f0;
   border-color: #121212;
 }
-.storefront .feels .chip {
+.storefront .feels .chip,
+.storefront .filters .chip {
   border-color: var(--gold);
 }
 .storefront .feeling-response {
