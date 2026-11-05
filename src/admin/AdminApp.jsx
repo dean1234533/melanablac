@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Link,
   NavLink,
@@ -10,7 +10,7 @@ import {
   useParams,
   useLocation,
 } from "react-router-dom";
-import { api, uploadImage } from "../api.js";
+import { api, uploadImage, uploadVideo } from "../api.js";
 import { CONTENT_FIELDS, formatPrice } from "../shared/contentSchema.js";
 import { InstallSteps, _d } from "./InstallBanner.jsx";
 import "./admin.css";
@@ -624,7 +624,7 @@ function Dashboard({ stats }) {
           </Link>
         </div>
         <img
-          src="/art/cards/becoming-her-curls-and-gold.jpg"
+          src="/art/cards/becoming-her-curls-and-gold.webp"
           alt="Illustrated portrait from the MelanaBlac collection"
         />
       </div>
@@ -952,10 +952,10 @@ function ImageUploader({ images, onChange }) {
         ))}
       </div>
       <label className="btn small file">
-        {busy ? "Uploading…" : "+ Upload images"}
+        {busy ? "Compressing & uploading…" : "+ Upload images"}
         <input
           type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+          accept="image/jpeg,image/png,image/webp,image/avif"
           multiple
           onChange={pick}
           disabled={busy}
@@ -1263,12 +1263,68 @@ function Slides() {
   );
 }
 
+function VideoUpload({ onUpload, disabled, setUploading }) {
+  const input = useRef(null);
+  const preview = useRef(null);
+  const [progress, setProgress] = useState("");
+  const [error, setError] = useState("");
+  const pick = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    setUploading(true);
+    setError("");
+    setProgress("Preparing video…");
+    try {
+      const result = await uploadVideo(file, setProgress, preview.current);
+      onUpload(result.url);
+      setProgress("Compressed video ready. Save changes to publish it.");
+    } catch (e) {
+      setError(e.message);
+      setProgress("");
+    } finally {
+      setUploading(false);
+    }
+  };
+  return (
+    <div className="video-upload">
+      <input
+        ref={input}
+        type="file"
+        accept="video/mp4,video/webm,video/quicktime,video/x-m4v"
+        hidden
+        onChange={pick}
+        disabled={disabled}
+      />
+      <button
+        type="button"
+        className="btn small"
+        onClick={() => input.current.click()}
+        disabled={disabled}
+      >
+        Upload video
+      </button>
+      <small className="muted">
+        Compressed automatically. Clips up to 30 seconds.
+      </small>
+      {progress && (
+        <p role="status" className="muted small">
+          {progress}
+        </p>
+      )}
+      <div className="compression-preview" ref={preview} />
+      <Flash msg={error} kind="err" />
+    </div>
+  );
+}
+
 function ContentEditor({ groups, title, note }) {
   const fields = CONTENT_FIELDS.filter((f) => groups(f.group));
   const [vals, setVals] = useState(null);
   const [err, setErr] = useState("");
   const [ok, setOk] = useState("");
   const [busy, setBusy] = useState(false);
+  const [uploading, setUploading] = useState(false);
   useEffect(() => {
     api("admin/content")
       .then(setVals)
@@ -1311,38 +1367,63 @@ function ContentEditor({ groups, title, note }) {
                 isD = f.key.endsWith(".description");
               const L = vals[f.key]?.length || 0;
               return (
-                <label key={f.key}>
-                  {f.label}
-                  {f.multiline ? (
-                    <textarea
-                      rows="4"
-                      value={vals[f.key] || ""}
-                      onChange={(e) =>
-                        setVals({ ...vals, [f.key]: e.target.value })
-                      }
-                    />
-                  ) : (
-                    <input
-                      value={vals[f.key] || ""}
-                      onChange={(e) =>
-                        setVals({ ...vals, [f.key]: e.target.value })
+                <div key={f.key}>
+                  <label>
+                    {f.label}
+                    {f.multiline ? (
+                      <textarea
+                        rows="4"
+                        value={vals[f.key] || ""}
+                        onChange={(e) =>
+                          setVals({ ...vals, [f.key]: e.target.value })
+                        }
+                      />
+                    ) : (
+                      <input
+                        value={vals[f.key] || ""}
+                        onChange={(e) =>
+                          setVals({ ...vals, [f.key]: e.target.value })
+                        }
+                      />
+                    )}
+                    {((isT && f.group.startsWith("SEO")) ||
+                      (isD && f.group.startsWith("SEO"))) && (
+                      <small
+                        className={L > (isT ? 60 : 160) ? "warn" : "muted"}
+                      >
+                        {L}/{isT ? 60 : 160} recommended
+                      </small>
+                    )}
+                  </label>
+                  {[
+                    "video.hero",
+                    "video.welcome",
+                    "video.why",
+                    "video.pause",
+                    "video.motionList",
+                  ].includes(f.key) && (
+                    <VideoUpload
+                      disabled={busy || uploading}
+                      setUploading={setUploading}
+                      onUpload={(url) =>
+                        setVals((current) => ({
+                          ...current,
+                          [f.key]:
+                            f.key === "video.motionList"
+                              ? [current[f.key], url].filter(Boolean).join("\n")
+                              : url,
+                        }))
                       }
                     />
                   )}
-                  {((isT && f.group.startsWith("SEO")) ||
-                    (isD && f.group.startsWith("SEO"))) && (
-                    <small className={L > (isT ? 60 : 160) ? "warn" : "muted"}>
-                      {L}/{isT ? 60 : 160} recommended
-                    </small>
-                  )}
-                </label>
+                </div>
               );
             })}
         </fieldset>
       ))}
       <Flash msg={err} kind="err" />
       <Flash msg={ok} />
-      <button className="btn gold" disabled={busy}>
+      <button className="btn gold" disabled={busy || uploading}>
         {busy ? "Saving…" : "Save changes"}
       </button>
     </form>

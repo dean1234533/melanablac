@@ -13,9 +13,13 @@
     "db:remote": "wrangler d1 execute melanablac --remote --file=schema.sql && wrangler d1 execute melanablac --remote --file=seed.sql",
     "pages:dev": "npm run build && wrangler pages dev dist --port 8788 --compatibility-date=2024-11-01 --d1=DB --r2=MEDIA --binding DEV_MODE=1 ADMIN_EMAIL=dbs_workouts@yahoo.com VAPID_PUBLIC_KEY=$(cat .dev-vapid-public) VAPID_PRIVATE_JWK=$(cat .dev-vapid-private)",
     "deploy": "npm run build && wrangler pages deploy dist --project-name melanablac",
-    "test:admin": "node --test tests/admin-auth.test.mjs"
+    "test:admin": "node --test tests/admin-auth.test.mjs",
+    "media:optimize": "node scripts/optimize-media.mjs",
+    "prebuild": "npm run media:optimize",
+    "test:media": "node --test tests/media.test.mjs"
   },
   "dependencies": {
+    "mediabunny": "^1.65.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0"

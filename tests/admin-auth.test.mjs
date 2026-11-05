@@ -342,17 +342,125 @@ test("security migration preserves catalogue and passwords while revoking old se
   f.sqlite.close();
 });
 
-test('simple admin username authenticates the existing owner account', async () => {
-  const f=await fixture();
-  const response=await f.call('admin/login',{method:'POST',body:{username:'admin',password}});
-  assert.equal(response.status,200);
-  assert.equal((await response.json()).email,email);
-  assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM admins').get().n,1);
+test("simple admin username authenticates the existing owner account", async () => {
+  const f = await fixture();
+  const response = await f.call("admin/login", {
+    method: "POST",
+    body: { username: "admin", password },
+  });
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).email, email);
+  assert.equal(f.sqlite.prepare("SELECT COUNT(*) n FROM admins").get().n, 1);
   f.sqlite.close();
 });
-test('username alias and email share the same sign-in rate limit', async () => {
-  const f=await fixture();
-  for(let i=0;i<10;i++) assert.equal((await f.call('admin/login',{method:'POST',body:{username:i%2?'admin':email,password:'wrong'}})).status,401);
-  assert.equal((await f.call('admin/login',{method:'POST',body:{username:'admin',password}})).status,429);
+test("username alias and email share the same sign-in rate limit", async () => {
+  const f = await fixture();
+  for (let i = 0; i < 10; i++)
+    assert.equal(
+      (
+        await f.call("admin/login", {
+          method: "POST",
+          body: { username: i % 2 ? "admin" : email, password: "wrong" },
+        })
+      ).status,
+      401,
+    );
+  assert.equal(
+    (
+      await f.call("admin/login", {
+        method: "POST",
+        body: { username: "admin", password },
+      })
+    ).status,
+    429,
+  );
+  f.sqlite.close();
+});
+
+test("compressed video uploads and byte-range playback work with D1 storage", async () => {
+  const f = await fixture(),
+    cookie = await f.login();
+  const form = new FormData();
+  form.append(
+    "video",
+    new Blob(
+      [
+        fs.readFileSync(
+          new URL("../public/video/welcome.mp4", import.meta.url),
+        ),
+      ],
+      { type: "video/mp4" },
+    ),
+    "clip.mp4",
+  );
+  form.append(
+    "poster",
+    new Blob(
+      [
+        fs.readFileSync(
+          new URL("../public/video/welcome.webp", import.meta.url),
+        ),
+      ],
+      { type: "image/webp" },
+    ),
+    "poster.webp",
+  );
+  const request = new Request(
+    "https://example.invalid/api/admin/upload-video",
+    {
+      method: "POST",
+      headers: {
+        cookie,
+        origin: "https://example.invalid",
+        "x-requested-with": "mb",
+      },
+      body: form,
+    },
+  );
+  const response = await onRequest({
+    request,
+    env: f.env,
+    params: { path: ["admin", "upload-video"] },
+  });
+  assert.equal(response.status, 200);
+  const result = await response.json();
+  assert.ok(result.poster.endsWith(".webp"));
+  const ranged = await onRequest({
+    request: new Request("https://example.invalid" + result.url, {
+      headers: { range: "bytes=0-1023" },
+    }),
+    env: f.env,
+    params: { path: result.url.slice(5).split("/") },
+  });
+  assert.equal(ranged.status, 206);
+  assert.equal(ranged.headers.get("content-type"), "video/mp4");
+  assert.equal((await ranged.arrayBuffer()).byteLength, 1024);
+  assert.equal(f.sqlite.prepare("SELECT COUNT(*) n FROM media").get().n, 2);
+  f.sqlite.close();
+});
+test("image uploads reject oversized and incorrectly labelled content", async () => {
+  const f = await fixture(),
+    cookie = await f.login();
+  for (const [bytes, status] of [
+    [new Uint8Array(1_400_001), 413],
+    [new TextEncoder().encode("not an image"), 400],
+  ]) {
+    const response = await onRequest({
+      request: new Request("https://example.invalid/api/admin/upload", {
+        method: "POST",
+        headers: {
+          cookie,
+          origin: "https://example.invalid",
+          "x-requested-with": "mb",
+          "content-type": "image/webp",
+        },
+        body: bytes,
+      }),
+      env: f.env,
+      params: { path: ["admin", "upload"] },
+    });
+    assert.equal(response.status, status);
+  }
+  assert.equal(f.sqlite.prepare("SELECT COUNT(*) n FROM media").get().n, 0);
   f.sqlite.close();
 });

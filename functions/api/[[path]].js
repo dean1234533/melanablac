@@ -1,3 +1,5 @@
+import { optimizedImage, MAX_UPLOAD_BYTES } from '../../src/shared/mediaPolicy.js';
+import { mediaResponse, storeMedia, readLimitedBody, validMediaBytes } from '../lib/media.js';
 import { consumeAuthLimit, validAdminRequest } from '../lib/adminAuth.js';
 import { json, err, sha256, randomToken, hashPassword, safeEqual, getAdmin, sessionCookie, ADMIN_SESSION_SECONDS, getContent, slugify, sendEmail, notifyAdmins, stripeCheckout, verifyStripeSig, siteUrl, esc } from '../lib/util.js';
 import { CONTENT_FIELDS, formatPrice } from '../../src/shared/contentSchema.js';
@@ -5,7 +7,7 @@ import { CONTENT_FIELDS, formatPrice } from '../../src/shared/contentSchema.js';
 const isEmail = (e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e || '');
 const adminEmails = (env) => (env.ADMIN_EMAIL || '').toLowerCase().split(',').map((s) => s.trim()).filter(Boolean);
 const clip = (v, n) => String(v ?? '').slice(0, n);
-const parseProduct = (r) => ({ ...r, images: JSON.parse(r.images || '[]') });
+const parseProduct = (r) => ({ ...r, images: JSON.parse(r.images || '[]').map(optimizedImage) });
 const validPassword = (p) => typeof p === 'string' && p.length >= 10 && p.length <= 200;
 
 async function body(req) {
@@ -24,7 +26,7 @@ export async function onRequest({ request, env, params }) {
       const { results: slides } = await env.DB.prepare('SELECT * FROM slides ORDER BY sort, id').all();
       const { results: cats } = await env.DB.prepare("SELECT DISTINCT category FROM products WHERE status='published' ORDER BY category").all();
       const { results: featured } = await env.DB.prepare("SELECT * FROM products WHERE status='published' AND featured=1 ORDER BY sort LIMIT 8").all();
-      return json({ content, slides, categories: cats.map((c) => c.category), featured: featured.map(parseProduct) }, 200, { 'cache-control': 'public, max-age=30' });
+      return json({ content, slides: slides.map((s) => ({ ...s, image: optimizedImage(s.image) })), categories: cats.map((c) => c.category), featured: featured.map(parseProduct) }, 200, { 'cache-control': 'public, max-age=30' });
     }
     if (route === 'products' && method === 'GET') {
       if (seg[1]) {
@@ -35,16 +37,16 @@ export async function onRequest({ request, env, params }) {
       const q = cat ? env.DB.prepare("SELECT * FROM products WHERE status='published' AND category=? ORDER BY sort, id DESC").bind(cat) : env.DB.prepare("SELECT * FROM products WHERE status='published' ORDER BY sort, id DESC");
       return json((await q.all()).results.map(parseProduct));
     }
-    if (route === 'media' && method === 'GET') {
+    if (route === 'media' && ['GET', 'HEAD'].includes(method)) {
       const key = seg.slice(1).join('/');
       if (env.MEDIA) {
         const obj = await env.MEDIA.get(key);
-        if (obj) return new Response(obj.body, { headers: { 'content-type': obj.httpMetadata?.contentType || 'application/octet-stream', 'cache-control': 'public, max-age=31536000, immutable' } });
+        if (obj) return mediaResponse(request, await new Response(obj.body).arrayBuffer(), obj.httpMetadata?.contentType || 'application/octet-stream');
       }
       const row = await env.DB.prepare('SELECT type, data FROM media WHERE key = ?').bind(key).first();
       if (!row) return new Response('Not found', { status: 404 });
       const bin = Uint8Array.from(atob(row.data), (c) => c.charCodeAt(0));
-      return new Response(bin, { headers: { 'content-type': row.type, 'cache-control': 'public, max-age=31536000, immutable' } });
+      return mediaResponse(request, bin, row.type);
     }
     if (route === 'contact' && method === 'POST') {
       const b = await body(request);
@@ -204,20 +206,32 @@ export async function onRequest({ request, env, params }) {
       }
       if (sub === 'upload' && method === 'POST') {
         const type = (request.headers.get('content-type') || '').split(';')[0];
-        const ext = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif', 'image/avif': 'avif' }[type];
-        if (!ext) return err('Only JPG, PNG, WebP, GIF or AVIF images are allowed.');
-        const buf = await request.arrayBuffer();
-        const limit = env.MEDIA ? 12 * 1024 * 1024 : 1_500_000; // D1 rows are limited to 2MB
-        if (buf.byteLength > limit) return err(`Image is too large (${(buf.byteLength / 1048576).toFixed(1)}MB). Max ${env.MEDIA ? 12 : 1.5}MB.`, 413);
+        const ext = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/avif': 'avif' }[type];
+        if (!ext) return err('Only JPG, PNG, WebP or AVIF images are allowed.');
+        const buf = await readLimitedBody(request, MAX_UPLOAD_BYTES);
+        if (buf.byteLength > MAX_UPLOAD_BYTES) return err('Image is too large. Upload it through the image picker to compress it first.', 413);
         if (!buf.byteLength) return err('Empty file.');
+        if (!validMediaBytes(buf, type)) return err('This file is not a valid supported image.');
         const key = `${Date.now()}-${randomToken(4)}.${ext}`;
-        if (env.MEDIA) await env.MEDIA.put(key, buf, { httpMetadata: { contentType: type } });
-        else {
-          let bin = ''; const u8 = new Uint8Array(buf);
-          for (let i = 0; i < u8.length; i += 0x8000) bin += String.fromCharCode(...u8.subarray(i, i + 0x8000));
-          await env.DB.prepare('INSERT INTO media (key,type,data) VALUES (?,?,?)').bind(key, type, btoa(bin)).run();
-        }
+        await storeMedia(env, key, buf, type);
         return json({ url: `/api/media/${key}` });
+      }
+      if (sub === 'upload-video' && method === 'POST') {
+        const declared = Number(request.headers.get('content-length') || 0);
+        if (declared > MAX_UPLOAD_BYTES * 2 + 65536) return err('Video upload is too large.', 413);
+        const encoded = await readLimitedBody(request, MAX_UPLOAD_BYTES * 2 + 65536);
+        const form = await new Response(encoded, { headers: { 'content-type': request.headers.get('content-type') || '' } }).formData();
+        const video = form.get('video'), poster = form.get('poster');
+        if (!video || !poster || typeof video.arrayBuffer !== 'function' || typeof poster.arrayBuffer !== 'function') return err('A compressed video and its poster are required.');
+        if (!['video/mp4','video/webm'].includes(video.type) || !['image/webp', 'image/png'].includes(poster.type)) return err('Choose a supported compressed video.');
+        if (!video.size || !poster.size) return err('Empty video or poster.');
+        if (video.size > MAX_UPLOAD_BYTES || poster.size > MAX_UPLOAD_BYTES) return err('Compressed media is too large. Try a shorter video.', 413);
+        const base = `${Date.now()}-${randomToken(4)}`, ext = video.type === 'video/mp4' ? 'mp4' : 'webm';
+        const posterBytes = await poster.arrayBuffer(), videoBytes = await video.arrayBuffer();
+        if (!validMediaBytes(posterBytes, poster.type) || !validMediaBytes(videoBytes, video.type)) return err('The compressed media is not valid. Please upload the clip again.');
+        await storeMedia(env, `${base}.webp`, posterBytes, poster.type);
+        await storeMedia(env, `${base}.${ext}`, videoBytes, video.type);
+        return json({ url: `/api/media/${base}.${ext}`, poster: `/api/media/${base}.webp` });
       }
       if (sub === 'products') {
         if (method === 'GET') return json((await env.DB.prepare('SELECT * FROM products ORDER BY sort, id DESC').all()).results.map(parseProduct));
@@ -240,7 +254,7 @@ export async function onRequest({ request, env, params }) {
         }
       }
       if (sub === 'slides') {
-        if (method === 'GET') return json((await env.DB.prepare('SELECT * FROM slides ORDER BY sort,id').all()).results);
+        if (method === 'GET') return json((await env.DB.prepare('SELECT * FROM slides ORDER BY sort,id').all()).results.map((slide) => ({ ...slide, image: optimizedImage(slide.image) })));
         const b = await body(request);
         if (method === 'DELETE' && id) { await env.DB.prepare('DELETE FROM slides WHERE id=?').bind(id).run(); return json({ ok: true }); }
         if (method === 'POST') {
@@ -302,6 +316,7 @@ export async function onRequest({ request, env, params }) {
     }
     return err('Not found', 404);
   } catch (e) {
+    if (e.status === 413) return err(e.message, 413);
     console.error(e);
     return err('Server error: ' + (e.message || e), 500);
   }

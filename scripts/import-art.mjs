@@ -1,5 +1,5 @@
 // Usage: node scripts/import-art.mjs [sourceDir]
-// Converts the supplied PNGs to web JPEGs in public/art/cards, builds the gold logo, favicon and app icons,
+// Converts the supplied PNGs to web-optimised WebP files in public/art/cards, builds the gold logo, favicon and app icons,
 // and writes public/art/cards/manifest.json (used by make-seed.mjs). Titles/prices come from scripts/art-titles.json.
 import sharp from 'sharp';
 import fs from 'node:fs';
@@ -38,9 +38,9 @@ for (const f of files) {
   const t = titles[f] || titles[f.replace(/_/g, ' ')] || {};
   const code = f.replace(/\.png$/i, '').replace(/[_\s]+/g, ' ').trim();
   const title = t.title || `Greeting Card ${code}`;
-  const name = slug(title) + '.jpg';
-  await sharp(path.join(src, f)).flatten({ background: '#ffffff' }).resize({ width: 1400, withoutEnlargement: true }).jpeg({ quality: 82, mozjpeg: true }).toFile(path.join(out, name));
-  await sharp(path.join(src, f)).flatten({ background: '#ffffff' }).resize({ width: 480, withoutEnlargement: true }).jpeg({ quality: 78, mozjpeg: true }).toFile(path.join(out, 'thumb-' + name));
+  const name = slug(title) + '.webp';
+  await sharp(path.join(src, f)).flatten({ background: '#ffffff' }).resize({ width: 1400, withoutEnlargement: true }).webp({ quality: 82, effort: 6 }).toFile(path.join(out, name));
+  await sharp(path.join(src, f)).flatten({ background: '#ffffff' }).resize({ width: 480, withoutEnlargement: true }).webp({ quality: 76, effort: 6 }).toFile(path.join(out, 'thumb-' + name));
   manifest.push({ source: f, title, slug: slug(title), image: `/art/cards/${name}`, thumb: `/art/cards/thumb-${name}`, description: t.description || `Illustrated greeting card (${code}). A5, blank inside, with envelope.`, price_pence: t.price_pence || 450, category: t.category || 'Greeting Cards', featured: !!t.featured, status: t.status || 'published' });
 }
 fs.writeFileSync(path.join(out, 'manifest.json'), JSON.stringify(manifest, null, 1));

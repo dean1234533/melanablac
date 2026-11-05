@@ -6,6 +6,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { api } from "../api.js";
+import { optimizedImage } from "../shared/mediaPolicy.js";
 import { useSite, useSEO } from "./SiteContext.jsx";
 import { Arrow } from "./Layout.jsx";
 import Gallery, { Lightbox } from "./Gallery.jsx";
@@ -80,7 +81,7 @@ export function Home() {
   ).map((name) => {
     const candidates = [
       ...(collectionCovers[name] || []).map(
-        (slug) => "/art/cards/" + slug + ".jpg",
+        (slug) => "/art/cards/" + slug + ".webp",
       ),
       ...featured.filter((p) => p.category === name).map((p) => p.images?.[0]),
     ];
@@ -129,7 +130,7 @@ export function Home() {
             />
           ) : (
             <img
-              src="/video/welcome.jpg"
+              src="/video/welcome.webp"
               alt="A contemporary gallery of black and gold artwork"
             />
           )}
@@ -201,7 +202,7 @@ export function Home() {
             />
           ) : (
             <img
-              src="/video/why.jpg"
+              src="/video/why.webp"
               alt="Inside the MelanaBlac creative world"
               loading="lazy"
             />
@@ -588,7 +589,7 @@ export function Cart() {
       <h1 className="section-title">Your basket</h1>
       {cart.map((i) => (
         <div className="cart-row" key={i.id}>
-          <img src={i.image} alt="" />
+          <img src={optimizedImage(i.image)} alt="" />
           <div>
             <Link to={`/product/${i.slug}`}>{i.title}</Link>
             <p className="muted">{money(i.price_pence)}</p>
@@ -811,7 +812,7 @@ export function About() {
       </section>
       <section className="artist-editorial about-editorial">
         <div className="artist-media">
-          <img src="/video/why.jpg" alt="Art in the MelanaBlac gallery" />
+          <img src="/video/why.webp" alt="Art in the MelanaBlac gallery" />
         </div>
         <div className="artist-copy">
           <p className="eyebrow">COLOUR. CULTURE. COURAGE.</p>

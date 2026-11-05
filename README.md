@@ -16,7 +16,7 @@ React (Vite) storefront with a Cloudflare Pages Functions backend (D1 database, 
 ## Live deployment (dbs_workouts@yahoo.com Cloudflare account)
 - Site: https://melanablac.pages.dev  ·  Admin: https://melanablac.pages.dev/admin
 - D1 database `melanablac` (id in `wrangler.toml`), Pages project `melanablac`, VAPID push keys set as Pages secrets.
-- R2 is not enabled on the account, so uploaded images are stored in D1 (`media` table; the admin shrinks photos to <1.5MB first).
+- R2 is not enabled on the account, so uploaded images are stored in D1 (`media` table; the admin compresses photos to WebP below 1.4MB first).
   To use R2 instead: enable R2 in the dashboard, `npx wrangler r2 bucket create melanablac-media`, uncomment the binding in `wrangler.toml`, redeploy.
 - Redeploy after changes: `npm run deploy` (wrangler must be logged in as dbs_workouts@yahoo.com: `npx wrangler whoami`).
 - Reseeding the live DB wipes everything: `npm run seed && npm run db:remote` (only for a fresh start).
@@ -34,7 +34,7 @@ Set `SITE_URL` in `wrangler.toml` if you attach a custom domain. Only emails in 
 ### Videos
 Looping gallery clips live in `public/video/` (mp4 + matching poster `.jpg`): full-width hero gallery film with overlaid text and shop button, "why I create", "pause", and a scrolling "Gallery in Motion" strip.
 They play muted only while on screen. Playback buttons are hidden. Visitors who prefer reduced motion see the still poster instead. `functions/video/[[path]].js` serves them with HTTP Range support, which Safari/iOS needs.
-Change or hide any of them in Admin > Site text > Videos (paths or links; blank hides). New clips need to be added to `public/video/` and redeployed, because R2 is not enabled for uploads yet. Keep each file under 25MB.
+Change or hide any of them in Admin > Site text > Videos (paths or links; blank hides). Upload clips directly in Admin > Site text > Videos. They are compressed in the browser with a matching WebP poster before upload. Clips can be up to 30 seconds; each compressed file is capped at 1.4MB so it also works with D1 storage. Static clips added to `public/video/` are optimised before every build.
 
 ### Importing more artwork
 Put PNGs in a folder, add titles/categories to `scripts/art-titles.json`, run `node scripts/import-art.mjs <folder> && npm run seed`. Or just add pieces from the admin dashboard.
@@ -54,3 +54,13 @@ Sign-in and password recovery are rate limited. Sessions expire after eight hour
 Run `node --test tests/admin-auth.test.mjs` for the security regression checks. They use an isolated in-memory SQLite database and never touch production.
 
 The sign-in form accepts a username or the existing admin email. `ADMIN_USERNAME` (default `admin`) maps to the first address in `ADMIN_EMAIL`; both use the same stored password hash and rate-limit bucket. Passwords must be provisioned in the database, never added to source or configuration.
+
+## Media compression
+
+Every image uploaded through the admin is decoded, resized to a maximum 1800px edge, and re-encoded as WebP (with PNG fallback where the browser lacks WebP encoding). Transparency and aspect ratio are preserved. Compression failures stop the upload rather than sending an oversized original. GIF/APNG/animated WebP/AVIF files are rejected with guidance to upload a video instead of silently losing animation.
+
+Video uploads use Mediabunny with the browser's native WebCodecs encoder: up to 30 seconds, maximum 1280px edge, 24fps, a size budget below 1.4MB, and a WebP poster. MP4/H.264/AAC is preferred, with WebM fallback. Existing smaller compatible files may be retained rather than enlarged. Frame timestamps and audio are preserved during conversion; progress is shown in the editor. Soundtracks are retained; storefront playback remains muted. Both D1 and R2 uploads support byte-range playback for Safari and iOS.
+
+`npm run media:optimize` runs before builds. It generates compressed WebP copies for bundled JPEGs, losslessly optimises PNGs, and optimises bundled video for web delivery. JPEGs remain as backwards-compatible fallbacks. Served artwork and posters use the WebP versions. FFmpeg is required when adding or changing static videos; `sharp` handles images. The tracked `scripts/media-lock.json` prevents repeatedly encoding unchanged media. Use `MEDIA_BACKUP_DIR` and `MEDIA_REPORT_PATH` to save originals and an optimisation report outside the checkout.
+
+Run `npm run test:media` for media sizing, asset decoding, bounded uploads, storage and byte-range checks. Externally hosted URLs are controlled by their hosts; upload those files through the picker to apply this compression.

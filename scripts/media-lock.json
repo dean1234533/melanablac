@@ -1,0 +1,841 @@
+{
+  "admin/apple-touch-icon.png": {
+    "hash": "e5243eecfd05b5ae1b2047917794e52671f66e459968040187a4b618ac06c54c",
+    "output": "admin/apple-touch-icon.png",
+    "originalBytes": 6332,
+    "optimizedBytes": 3591
+  },
+  "admin/icon-192.png": {
+    "hash": "e782f5f392892c079c815f14f539b877d44221ee29a03f5ac8748f50d0afcc88",
+    "output": "admin/icon-192.png",
+    "originalBytes": 6931,
+    "optimizedBytes": 3833
+  },
+  "admin/icon-512.png": {
+    "hash": "b383b1326a0dbb0fc8a054c3a34e55099d5eca01e3083772a1f83b5661e7fe91",
+    "output": "admin/icon-512.png",
+    "originalBytes": 28693,
+    "optimizedBytes": 13935
+  },
+  "art/cards/18th-birthday-to-my-beautiful-daughter.jpg": {
+    "profile": 2,
+    "hash": "cbc40587c09cbccf0b8085b3fc6378ed7cc9cc8b3bc9a58e382b9cb1e7bec734",
+    "output": "art/cards/18th-birthday-to-my-beautiful-daughter.webp",
+    "originalBytes": 134939,
+    "optimizedBytes": 94904
+  },
+  "art/cards/18th-birthday-to-my-beautiful-sister.jpg": {
+    "profile": 2,
+    "hash": "492d5f42c277d15a1c5ed30b40ae1ab17b4e9f821a1b0bb01ccfd801db0bf498",
+    "output": "art/cards/18th-birthday-to-my-beautiful-sister.webp",
+    "originalBytes": 233818,
+    "optimizedBytes": 173774
+  },
+  "art/cards/60th-birthday-earthstrong.jpg": {
+    "profile": 2,
+    "hash": "ea4bacb01f208578a06fee34041d9952a0821279d65c4fe1f0d349213239cbe2",
+    "output": "art/cards/60th-birthday-earthstrong.webp",
+    "originalBytes": 293897,
+    "optimizedBytes": 235054
+  },
+  "art/cards/afro-portrait-on-teal-canvas.jpg": {
+    "profile": 2,
+    "hash": "648eae922fe66d0feb522c20d65a5be685a1dd53caadd13393b3edd4f8ed5f41",
+    "output": "art/cards/afro-portrait-on-teal-canvas.webp",
+    "originalBytes": 341823,
+    "optimizedBytes": 286124
+  },
+  "art/cards/becoming-her-coffee-in-colour.jpg": {
+    "profile": 2,
+    "hash": "6defd17fa9a3e39486ca80ae810e25e02b8200c429df6d2903e7ed3e8fd5b7e1",
+    "output": "art/cards/becoming-her-coffee-in-colour.webp",
+    "originalBytes": 497952,
+    "optimizedBytes": 360082
+  },
+  "art/cards/becoming-her-curls-and-gold.jpg": {
+    "profile": 2,
+    "hash": "9abf4558ec8b0bbdd66ae66ff9261cbcb62733257e6dc682d3bcd8a01fa72a79",
+    "output": "art/cards/becoming-her-curls-and-gold.webp",
+    "originalBytes": 475543,
+    "optimizedBytes": 337742
+  },
+  "art/cards/becoming-her-locs-and-gold.jpg": {
+    "profile": 2,
+    "hash": "422ebe2c423c1e8b72c1d7630a97ece908d0b785b6a5f77f3a7236df27d42f55",
+    "output": "art/cards/becoming-her-locs-and-gold.webp",
+    "originalBytes": 543578,
+    "optimizedBytes": 398572
+  },
+  "art/cards/birthday-girl-black-gold-tutu.jpg": {
+    "profile": 2,
+    "hash": "582d6f8ecc445afcc7711b370bb374c9b8ef3c0b257e06c420d325bee80395a1",
+    "output": "art/cards/birthday-girl-black-gold-tutu.webp",
+    "originalBytes": 372512,
+    "optimizedBytes": 292862
+  },
+  "art/cards/birthday-girl-gold-crown.jpg": {
+    "profile": 2,
+    "hash": "a0dc11154670dcbdc548b895697a5f551b9d6caefe5fbb2474dd4bffbd1b05e9",
+    "output": "art/cards/birthday-girl-gold-crown.webp",
+    "originalBytes": 274145,
+    "optimizedBytes": 203746
+  },
+  "art/cards/christmas-a-joyful-holiday-season.jpg": {
+    "profile": 2,
+    "hash": "8b1d81309dfee86e17a0a3c8179720a7e3a16cd9782b0c92d462103139514f0c",
+    "output": "art/cards/christmas-a-joyful-holiday-season.webp",
+    "originalBytes": 197189,
+    "optimizedBytes": 131326
+  },
+  "art/cards/christmas-a-season-of-grace.jpg": {
+    "profile": 2,
+    "hash": "c823ed2323d7da241708250eff96a102efcecd8dc36877d3ceb21820c5035ce7",
+    "output": "art/cards/christmas-a-season-of-grace.webp",
+    "originalBytes": 374889,
+    "optimizedBytes": 279952
+  },
+  "art/cards/christmas-family-joy-and-togetherness.jpg": {
+    "profile": 2,
+    "hash": "912db7ba99fd0a659e2eb9c09089ac0baaf8d9e499f331b5edbfb256115b7252",
+    "output": "art/cards/christmas-family-joy-and-togetherness.webp",
+    "originalBytes": 320408,
+    "optimizedBytes": 241240
+  },
+  "art/cards/christmas-family-snow-play.jpg": {
+    "profile": 2,
+    "hash": "383c91a7a637463dd6def1740800725c725e25813468485691413161c623aaf1",
+    "output": "art/cards/christmas-family-snow-play.webp",
+    "originalBytes": 267151,
+    "optimizedBytes": 188822
+  },
+  "art/cards/christmas-holiday-season-blessings.jpg": {
+    "profile": 2,
+    "hash": "4a36a3c75980a0a58b981e8ed915378dd186511f3f3b960b0cc5966f3b110234",
+    "output": "art/cards/christmas-holiday-season-blessings.webp",
+    "originalBytes": 446853,
+    "optimizedBytes": 358824
+  },
+  "art/cards/christmas-praise-our-king.jpg": {
+    "profile": 2,
+    "hash": "2c25d4c4f14903c5b2bfcf3292e35e8a36425b0e5c3ea10138f2a05d10e33173",
+    "output": "art/cards/christmas-praise-our-king.webp",
+    "originalBytes": 199426,
+    "optimizedBytes": 140822
+  },
+  "art/cards/earthstrong-beaded-portrait.jpg": {
+    "profile": 2,
+    "hash": "77eae35bd06eb300e7e96791137e382a392699bc9514e95623a44e83c4e375d5",
+    "output": "art/cards/earthstrong-beaded-portrait.webp",
+    "originalBytes": 366214,
+    "optimizedBytes": 294812
+  },
+  "art/cards/earthstrong-fearfully-and-wonderfully-made.jpg": {
+    "profile": 2,
+    "hash": "73979d237a775fe561e6214ec506c7655b4448b782c715dfb74ac9b2fb4cbbd9",
+    "output": "art/cards/earthstrong-fearfully-and-wonderfully-made.webp",
+    "originalBytes": 256698,
+    "optimizedBytes": 198066
+  },
+  "art/cards/happy-16th-birthday-black-gold.jpg": {
+    "profile": 2,
+    "hash": "50244eecf954f3d9134cd929a6e6fce7229ea5a4f0a8c488570198e33b4a59c1",
+    "output": "art/cards/happy-16th-birthday-black-gold.webp",
+    "originalBytes": 206432,
+    "optimizedBytes": 155174
+  },
+  "art/cards/happy-18th-birthday-pink-gold.jpg": {
+    "profile": 2,
+    "hash": "c4d0af670ea4f43df943e5e8cf73537f838bbd121a0e53770c98dc0096b0d6bb",
+    "output": "art/cards/happy-18th-birthday-pink-gold.webp",
+    "originalBytes": 233721,
+    "optimizedBytes": 176998
+  },
+  "art/cards/happy-21st-birthday-black-gold.jpg": {
+    "profile": 2,
+    "hash": "ca9440a05d92c4b10608f2592826705fd957af530f1c25b629a2f0bab7b4db15",
+    "output": "art/cards/happy-21st-birthday-black-gold.webp",
+    "originalBytes": 236958,
+    "optimizedBytes": 179106
+  },
+  "art/cards/happy-21st-birthday-tune-in.jpg": {
+    "profile": 2,
+    "hash": "c2df85fb21a55e94d4e2ade7cfea8d2124347d8b469aab255f9b359d40eaaed6",
+    "output": "art/cards/happy-21st-birthday-tune-in.webp",
+    "originalBytes": 508699,
+    "optimizedBytes": 430264
+  },
+  "art/cards/happy-30th-birthday-silver-headwrap.jpg": {
+    "profile": 2,
+    "hash": "2b96a96e150a9aa07ea2cfefb7ac9062c106d25521ee0a4875180b57d408d754",
+    "output": "art/cards/happy-30th-birthday-silver-headwrap.webp",
+    "originalBytes": 451405,
+    "optimizedBytes": 362270
+  },
+  "art/cards/happy-birthday-amazing-woman-cartoon-style.jpg": {
+    "profile": 2,
+    "hash": "c9e7ff3a27fa092f4f704f28e4d51d5d37c37e2ac45a18119b1de2ad135c7504",
+    "output": "art/cards/happy-birthday-amazing-woman-cartoon-style.webp",
+    "originalBytes": 390995,
+    "optimizedBytes": 275170
+  },
+  "art/cards/happy-birthday-boy-on-gift-boxes.jpg": {
+    "profile": 2,
+    "hash": "c4d75cdb55dcb90fb6320d475fbaac744b2ad65ae939ef5518ec08a6ba6ed980",
+    "output": "art/cards/happy-birthday-boy-on-gift-boxes.webp",
+    "originalBytes": 291281,
+    "optimizedBytes": 209278
+  },
+  "art/cards/happy-birthday-boy-with-gold-gifts.jpg": {
+    "profile": 2,
+    "hash": "88745ca5aa69fc31baa1388a042d0406272d2e942830f02a3b79b99f8e190257",
+    "output": "art/cards/happy-birthday-boy-with-gold-gifts.webp",
+    "originalBytes": 326148,
+    "optimizedBytes": 241932
+  },
+  "art/cards/happy-birthday-gentleman-in-cream.jpg": {
+    "profile": 2,
+    "hash": "b8651dbef21c33ff0fa9f4a6b0af13c3632bf23b5dc9335808a77a74168b6e6f",
+    "output": "art/cards/happy-birthday-gentleman-in-cream.webp",
+    "originalBytes": 270460,
+    "optimizedBytes": 190912
+  },
+  "art/cards/happy-birthday-grandma-family-kisses.jpg": {
+    "profile": 2,
+    "hash": "19a47b69c4ffda660baf69dfd3a2d44ca107f4d8a1f2c59c165eeb50e14bfd58",
+    "output": "art/cards/happy-birthday-grandma-family-kisses.webp",
+    "originalBytes": 437099,
+    "optimizedBytes": 336394
+  },
+  "art/cards/happy-birthday-grandma-lilac-florals.jpg": {
+    "profile": 2,
+    "hash": "d1489e60cd4b24313d4ab807bc4306ae0d0ece476466bbc5f863b2d8e64edef5",
+    "output": "art/cards/happy-birthday-grandma-lilac-florals.webp",
+    "originalBytes": 369475,
+    "optimizedBytes": 262568
+  },
+  "art/cards/happy-birthday-mama-family-kisses.jpg": {
+    "profile": 2,
+    "hash": "3df5f6b64b41aea2c226b11f7ec46ff1f2c5267bad9604b9b96854305f2d356a",
+    "output": "art/cards/happy-birthday-mama-family-kisses.webp",
+    "originalBytes": 410020,
+    "optimizedBytes": 312348
+  },
+  "art/cards/happy-birthday-mother-blue-blush.jpg": {
+    "profile": 2,
+    "hash": "257079bbd2353ba87bb0efbcfad257df40540bd9b31004bd94c3bee6036ec795",
+    "output": "art/cards/happy-birthday-mother-blue-blush.webp",
+    "originalBytes": 443810,
+    "optimizedBytes": 328370
+  },
+  "art/cards/happy-birthday-sister-blue-gold.jpg": {
+    "profile": 2,
+    "hash": "24a528f72824c9a310906d83d415f8d149d6ebb3f450b1545f36f1dc4d82b3ee",
+    "output": "art/cards/happy-birthday-sister-blue-gold.webp",
+    "originalBytes": 437763,
+    "optimizedBytes": 321398
+  },
+  "art/cards/happy-birthday-to-a-wonderful-daughter.jpg": {
+    "profile": 2,
+    "hash": "59001293ac69eec06d24d8cd482a4d942332371f3868311c6dafa555fbfa9ee4",
+    "output": "art/cards/happy-birthday-to-a-wonderful-daughter.webp",
+    "originalBytes": 440198,
+    "optimizedBytes": 341344
+  },
+  "art/cards/happy-birthday-to-an-amazing-son.jpg": {
+    "profile": 2,
+    "hash": "9ac57f15b73aeb3c905fc8c0f50ac56bef64ca9d5b9467dd189c4c69b6d0d924",
+    "output": "art/cards/happy-birthday-to-an-amazing-son.webp",
+    "originalBytes": 423395,
+    "optimizedBytes": 331064
+  },
+  "art/cards/happy-birthday-to-an-amazing-woman.jpg": {
+    "profile": 2,
+    "hash": "f4d9d5eb5669e1cc9408baac5f9bf653383ca4a27599a9a6d5f40d5ba2f9703b",
+    "output": "art/cards/happy-birthday-to-an-amazing-woman.webp",
+    "originalBytes": 405360,
+    "optimizedBytes": 291706
+  },
+  "art/cards/happy-birthday-to-my-king.jpg": {
+    "profile": 2,
+    "hash": "0765c5157f0527fa464f049140cc9bdc85d9700207a9a319d333ac9d4676a507",
+    "output": "art/cards/happy-birthday-to-my-king.webp",
+    "originalBytes": 282819,
+    "optimizedBytes": 206078
+  },
+  "art/cards/happy-holidays-from-our-home-to-yours.jpg": {
+    "profile": 2,
+    "hash": "58ba41846498a17b62abef2fb8b5ddc87915616b1989e47079ce4596202fcd4b",
+    "output": "art/cards/happy-holidays-from-our-home-to-yours.webp",
+    "originalBytes": 446518,
+    "optimizedBytes": 355342
+  },
+  "art/cards/merry-christmas-carols-in-the-snow.jpg": {
+    "profile": 2,
+    "hash": "3934c8ef0b65f140ade2a71e73f6edd963e397cbce57d5a016779d96beb7fb5d",
+    "output": "art/cards/merry-christmas-carols-in-the-snow.webp",
+    "originalBytes": 249101,
+    "optimizedBytes": 179732
+  },
+  "art/cards/merry-christmas-family-dinner.jpg": {
+    "profile": 2,
+    "hash": "a904fd0045eed3ef950c35069f27ef190117e798ae9117c5675dff0bb75fd850",
+    "output": "art/cards/merry-christmas-family-dinner.webp",
+    "originalBytes": 282767,
+    "optimizedBytes": 192796
+  },
+  "art/cards/merry-christmas-walk-under-the-star.jpg": {
+    "profile": 2,
+    "hash": "add9907171337d7fd9996f61dabdf0b15ce99a92fd8e25d152e3d167f6e923f0",
+    "output": "art/cards/merry-christmas-walk-under-the-star.webp",
+    "originalBytes": 334281,
+    "optimizedBytes": 247240
+  },
+  "art/cards/merry-christmas-winter-family-walk.jpg": {
+    "profile": 2,
+    "hash": "63dd0969028c31bd6091e197a465c20604b0638c9da700c71cf5f320e5e89966",
+    "output": "art/cards/merry-christmas-winter-family-walk.webp",
+    "originalBytes": 294171,
+    "optimizedBytes": 218166
+  },
+  "art/cards/mother-s-day-icon-of-grace.jpg": {
+    "profile": 2,
+    "hash": "b126142414275c1e41c2fb9deb8eef5d26574d64a31bb7131707b5f7cb437cf1",
+    "output": "art/cards/mother-s-day-icon-of-grace.webp",
+    "originalBytes": 181938,
+    "optimizedBytes": 132418
+  },
+  "art/cards/mother-s-day-the-original-queen.jpg": {
+    "profile": 2,
+    "hash": "f3b880d0be0b7a26948fd68cbcc2f774136e0ba06dbf310f050b0126c0237b7a",
+    "output": "art/cards/mother-s-day-the-original-queen.webp",
+    "originalBytes": 384736,
+    "optimizedBytes": 337332
+  },
+  "art/cards/nativity-born-in-the-stable-light.jpg": {
+    "profile": 2,
+    "hash": "d6a9955a52985e7deb84d388122dc1bd78043367632200cffb1777ddc21fde2e",
+    "output": "art/cards/nativity-born-in-the-stable-light.webp",
+    "originalBytes": 424269,
+    "optimizedBytes": 366654
+  },
+  "art/cards/nativity-emmanuel.jpg": {
+    "profile": 2,
+    "hash": "614aa474dfd74b904b938410e129a1085d669b3bae2f32fb87863fb6898e38ab",
+    "output": "art/cards/nativity-emmanuel.webp",
+    "originalBytes": 318240,
+    "optimizedBytes": 253432
+  },
+  "art/cards/nativity-holy-family-by-starlight.jpg": {
+    "profile": 2,
+    "hash": "f37ba0aea7aa02fe0a06fe9f77eaf60ada2ba6c86c05354cde00d2e346144bc4",
+    "output": "art/cards/nativity-holy-family-by-starlight.webp",
+    "originalBytes": 308907,
+    "optimizedBytes": 241440
+  },
+  "art/cards/nativity-mary-watches-over-the-manger.jpg": {
+    "profile": 2,
+    "hash": "89556c9c813940d1fae4d31e694386339609578278a4cdadada311850d519700",
+    "output": "art/cards/nativity-mary-watches-over-the-manger.webp",
+    "originalBytes": 373164,
+    "optimizedBytes": 325590
+  },
+  "art/cards/nativity-mother-and-child-in-silver-blue.jpg": {
+    "profile": 2,
+    "hash": "bda851b260c689a5a3137cf0ce155016fda70e9a3f7ce3127b9d0a4821eacbf5",
+    "output": "art/cards/nativity-mother-and-child-in-silver-blue.webp",
+    "originalBytes": 400960,
+    "optimizedBytes": 367812
+  },
+  "art/cards/nativity-mother-and-child-in-starlight.jpg": {
+    "profile": 2,
+    "hash": "74c66b0d1c0f462b7be8b1f8a739ffe6cfd28e412fb7e515765f1022b6bc218b",
+    "output": "art/cards/nativity-mother-and-child-in-starlight.webp",
+    "originalBytes": 393106,
+    "optimizedBytes": 320420
+  },
+  "art/cards/nativity-shepherd-and-star.jpg": {
+    "profile": 2,
+    "hash": "1f9e5a061243f3905b9cb007116eada794373c4c14a649f94880f0dc6c94b8a7",
+    "output": "art/cards/nativity-shepherd-and-star.webp",
+    "originalBytes": 454410,
+    "optimizedBytes": 410968
+  },
+  "art/cards/thumb-18th-birthday-to-my-beautiful-daughter.jpg": {
+    "profile": 2,
+    "hash": "feda080039458e2b9db63903a14ae50a60ab6b4af38b4387856d96b3b7665fc7",
+    "output": "art/cards/thumb-18th-birthday-to-my-beautiful-daughter.webp",
+    "originalBytes": 36179,
+    "optimizedBytes": 25936
+  },
+  "art/cards/thumb-18th-birthday-to-my-beautiful-sister.jpg": {
+    "profile": 2,
+    "hash": "4a90d20a540c0611d0ef0dfa58af2f64709133d2cdf49ad9106baff7125b317f",
+    "output": "art/cards/thumb-18th-birthday-to-my-beautiful-sister.webp",
+    "originalBytes": 38612,
+    "optimizedBytes": 28260
+  },
+  "art/cards/thumb-60th-birthday-earthstrong.jpg": {
+    "profile": 2,
+    "hash": "d97fbd1aa4cac738e8e3082a10134e818e5102ba357fbb429066a31e9b4292e6",
+    "output": "art/cards/thumb-60th-birthday-earthstrong.webp",
+    "originalBytes": 41918,
+    "optimizedBytes": 32320
+  },
+  "art/cards/thumb-afro-portrait-on-teal-canvas.jpg": {
+    "profile": 2,
+    "hash": "86ac2e8af9d3b8e45b13890d75622826d1a1e0207b8696cb32f1e6318effc11b",
+    "output": "art/cards/thumb-afro-portrait-on-teal-canvas.webp",
+    "originalBytes": 47244,
+    "optimizedBytes": 40560
+  },
+  "art/cards/thumb-becoming-her-coffee-in-colour.jpg": {
+    "profile": 2,
+    "hash": "8ce2992665840fc45e8965c01ae90952f35ecac90cfa844942fa1ef943a72efa",
+    "output": "art/cards/thumb-becoming-her-coffee-in-colour.webp",
+    "originalBytes": 77026,
+    "optimizedBytes": 59072
+  },
+  "art/cards/thumb-becoming-her-curls-and-gold.jpg": {
+    "profile": 2,
+    "hash": "55a984ae6e0d9cf9ebf3ab4cd78db25e5c3bbb92970603e08bd7b134bfcd6824",
+    "output": "art/cards/thumb-becoming-her-curls-and-gold.webp",
+    "originalBytes": 74506,
+    "optimizedBytes": 56558
+  },
+  "art/cards/thumb-becoming-her-locs-and-gold.jpg": {
+    "profile": 2,
+    "hash": "d8a9de99bd783eb2135c40ff8ac4c2dba1f950ef3da8fcdffe9ff0171cffb16a",
+    "output": "art/cards/thumb-becoming-her-locs-and-gold.webp",
+    "originalBytes": 84149,
+    "optimizedBytes": 67446
+  },
+  "art/cards/thumb-birthday-girl-black-gold-tutu.jpg": {
+    "profile": 2,
+    "hash": "3704fb4f27899d25f20d5b7ffe75f98cdefaf8bec37de0a37c72eacf2efbf0ac",
+    "output": "art/cards/thumb-birthday-girl-black-gold-tutu.webp",
+    "originalBytes": 53750,
+    "optimizedBytes": 42160
+  },
+  "art/cards/thumb-birthday-girl-gold-crown.jpg": {
+    "profile": 2,
+    "hash": "276612d40b2064bb5d04c2cfe1dff1d8d38bf9802a11e1ab138ec8e6ddd6be12",
+    "output": "art/cards/thumb-birthday-girl-gold-crown.webp",
+    "originalBytes": 40335,
+    "optimizedBytes": 29244
+  },
+  "art/cards/thumb-christmas-a-joyful-holiday-season.jpg": {
+    "profile": 2,
+    "hash": "bf6cebb33508a4dd88fd067d049780faf093b75fec7d3e2bd56db7529d3dac1e",
+    "output": "art/cards/thumb-christmas-a-joyful-holiday-season.webp",
+    "originalBytes": 38330,
+    "optimizedBytes": 25040
+  },
+  "art/cards/thumb-christmas-a-season-of-grace.jpg": {
+    "profile": 2,
+    "hash": "d7d293c5dc458ff4176880eed881a0111f606e299c6bd4c40f6d7039b945db27",
+    "output": "art/cards/thumb-christmas-a-season-of-grace.webp",
+    "originalBytes": 54635,
+    "optimizedBytes": 41326
+  },
+  "art/cards/thumb-christmas-family-joy-and-togetherness.jpg": {
+    "profile": 2,
+    "hash": "825e9fc41842e07c2fc0186eac5a53525246decbe40090ebbc1979c34fceff19",
+    "output": "art/cards/thumb-christmas-family-joy-and-togetherness.webp",
+    "originalBytes": 49231,
+    "optimizedBytes": 39046
+  },
+  "art/cards/thumb-christmas-family-snow-play.jpg": {
+    "profile": 2,
+    "hash": "572ba23faf64173c5345244211c1f601867f9886ed34f57b478cbf8728bf8768",
+    "output": "art/cards/thumb-christmas-family-snow-play.webp",
+    "originalBytes": 46044,
+    "optimizedBytes": 32954
+  },
+  "art/cards/thumb-christmas-holiday-season-blessings.jpg": {
+    "profile": 2,
+    "hash": "a029e3c669e984d520ac26ea904b4e42fea4c9f922f5bd08bd039a7e785605ec",
+    "output": "art/cards/thumb-christmas-holiday-season-blessings.webp",
+    "originalBytes": 65667,
+    "optimizedBytes": 54320
+  },
+  "art/cards/thumb-christmas-praise-our-king.jpg": {
+    "profile": 2,
+    "hash": "490a5ff45f97dea011de072a99d317157ff432546950b930414f7feb4756b71b",
+    "output": "art/cards/thumb-christmas-praise-our-king.webp",
+    "originalBytes": 35175,
+    "optimizedBytes": 23942
+  },
+  "art/cards/thumb-earthstrong-beaded-portrait.jpg": {
+    "profile": 2,
+    "hash": "abc907bd21f2658a5ee253515be58499f6a4305c027d2562db05f7fef61fff2b",
+    "output": "art/cards/thumb-earthstrong-beaded-portrait.webp",
+    "originalBytes": 51210,
+    "optimizedBytes": 41988
+  },
+  "art/cards/thumb-earthstrong-fearfully-and-wonderfully-made.jpg": {
+    "profile": 2,
+    "hash": "a2855956f95b47c1b7f6ee1976eb24bb0abf16f9e829db38781f0d88d142673c",
+    "output": "art/cards/thumb-earthstrong-fearfully-and-wonderfully-made.webp",
+    "originalBytes": 39956,
+    "optimizedBytes": 30636
+  },
+  "art/cards/thumb-happy-16th-birthday-black-gold.jpg": {
+    "profile": 2,
+    "hash": "45473157825ba5eed7def7d8c73cd68711d31d65422cb76c2988a54322c827d1",
+    "output": "art/cards/thumb-happy-16th-birthday-black-gold.webp",
+    "originalBytes": 39231,
+    "optimizedBytes": 30262
+  },
+  "art/cards/thumb-happy-18th-birthday-pink-gold.jpg": {
+    "profile": 2,
+    "hash": "0953102bcc2578d50b61991c66d3f8b51ee3fbee6a97d673bfcb3c074418f6b9",
+    "output": "art/cards/thumb-happy-18th-birthday-pink-gold.webp",
+    "originalBytes": 41038,
+    "optimizedBytes": 31564
+  },
+  "art/cards/thumb-happy-21st-birthday-black-gold.jpg": {
+    "profile": 2,
+    "hash": "97260c1ff9f1af0455b47606719993e2af832e424adc6e03d390362a123ff0eb",
+    "output": "art/cards/thumb-happy-21st-birthday-black-gold.webp",
+    "originalBytes": 41609,
+    "optimizedBytes": 31762
+  },
+  "art/cards/thumb-happy-21st-birthday-tune-in.jpg": {
+    "profile": 2,
+    "hash": "4e6799a64bcafd7b950f13550d8be430033a357197ba3c6ed1075c04e2cbfbed",
+    "output": "art/cards/thumb-happy-21st-birthday-tune-in.webp",
+    "originalBytes": 64413,
+    "optimizedBytes": 54762
+  },
+  "art/cards/thumb-happy-30th-birthday-silver-headwrap.jpg": {
+    "profile": 2,
+    "hash": "e0a6eb7562d854d5f1526eadf2e0a5f2d2f70605538a15e47d4984822e472360",
+    "output": "art/cards/thumb-happy-30th-birthday-silver-headwrap.webp",
+    "originalBytes": 71674,
+    "optimizedBytes": 61800
+  },
+  "art/cards/thumb-happy-birthday-amazing-woman-cartoon-style.jpg": {
+    "profile": 2,
+    "hash": "5ca4ed75a2216bc280d042b0ede8bf1d907b6033f90451d300cee89a2fbd364b",
+    "output": "art/cards/thumb-happy-birthday-amazing-woman-cartoon-style.webp",
+    "originalBytes": 70883,
+    "optimizedBytes": 53920
+  },
+  "art/cards/thumb-happy-birthday-boy-on-gift-boxes.jpg": {
+    "profile": 2,
+    "hash": "c7641fcd6d3e39ecf33592657dda7204a12e44bff2f0904ecea03a5f71e57bc7",
+    "output": "art/cards/thumb-happy-birthday-boy-on-gift-boxes.webp",
+    "originalBytes": 50322,
+    "optimizedBytes": 38462
+  },
+  "art/cards/thumb-happy-birthday-boy-with-gold-gifts.jpg": {
+    "profile": 2,
+    "hash": "e7ae8759ee29b69eeec66d68789d955f7d1eefedbdeddc78e72268be3204c745",
+    "output": "art/cards/thumb-happy-birthday-boy-with-gold-gifts.webp",
+    "originalBytes": 49852,
+    "optimizedBytes": 37650
+  },
+  "art/cards/thumb-happy-birthday-gentleman-in-cream.jpg": {
+    "profile": 2,
+    "hash": "c006fc18966b1839c6e4c88da6ff213644be2b34b3bd1c33ff217f1bf68cf49e",
+    "output": "art/cards/thumb-happy-birthday-gentleman-in-cream.webp",
+    "originalBytes": 38466,
+    "optimizedBytes": 26392
+  },
+  "art/cards/thumb-happy-birthday-grandma-family-kisses.jpg": {
+    "profile": 2,
+    "hash": "24a4a60563b9312c0e6de754e32291ce9ad38cf12a8d79ed34e727f38265ba1e",
+    "output": "art/cards/thumb-happy-birthday-grandma-family-kisses.webp",
+    "originalBytes": 65181,
+    "optimizedBytes": 52640
+  },
+  "art/cards/thumb-happy-birthday-grandma-lilac-florals.jpg": {
+    "profile": 2,
+    "hash": "5c95f9b67643bb5cf1806e0c68e4f5f3b9356c56e0a1567a5ec304f1b835c439",
+    "output": "art/cards/thumb-happy-birthday-grandma-lilac-florals.webp",
+    "originalBytes": 59165,
+    "optimizedBytes": 43660
+  },
+  "art/cards/thumb-happy-birthday-mama-family-kisses.jpg": {
+    "profile": 2,
+    "hash": "6a33b24aeae837ac75f5c0f23699e95566fe9ab97467482b15bbd9d9187ef909",
+    "output": "art/cards/thumb-happy-birthday-mama-family-kisses.webp",
+    "originalBytes": 62871,
+    "optimizedBytes": 49470
+  },
+  "art/cards/thumb-happy-birthday-mother-blue-blush.jpg": {
+    "profile": 2,
+    "hash": "705c79fed4a15e0dd654a20c6bcd98a5165ba559ede3f5b6f5543a80437dbe2a",
+    "output": "art/cards/thumb-happy-birthday-mother-blue-blush.webp",
+    "originalBytes": 73002,
+    "optimizedBytes": 56494
+  },
+  "art/cards/thumb-happy-birthday-sister-blue-gold.jpg": {
+    "profile": 2,
+    "hash": "c0adfccf811f812a1e5ad7dd9198ef3bee36bfd1f08b860265cb8866a3345d8e",
+    "output": "art/cards/thumb-happy-birthday-sister-blue-gold.webp",
+    "originalBytes": 73582,
+    "optimizedBytes": 56680
+  },
+  "art/cards/thumb-happy-birthday-to-a-wonderful-daughter.jpg": {
+    "profile": 2,
+    "hash": "777c9cd0e5c287cf0c7849cdbdd238df0dd23620d688ff77eed2311ad9909a38",
+    "output": "art/cards/thumb-happy-birthday-to-a-wonderful-daughter.webp",
+    "originalBytes": 61020,
+    "optimizedBytes": 48056
+  },
+  "art/cards/thumb-happy-birthday-to-an-amazing-son.jpg": {
+    "profile": 2,
+    "hash": "4619b2e19e62e5cfe51cc78229bd468c18a9445d41806ac601540ec93a25310f",
+    "output": "art/cards/thumb-happy-birthday-to-an-amazing-son.webp",
+    "originalBytes": 58141,
+    "optimizedBytes": 45792
+  },
+  "art/cards/thumb-happy-birthday-to-an-amazing-woman.jpg": {
+    "profile": 2,
+    "hash": "ba352e3b76a16a0600a5e05b9f36947086eb8d14882475686ddd2699e86b18af",
+    "output": "art/cards/thumb-happy-birthday-to-an-amazing-woman.webp",
+    "originalBytes": 71240,
+    "optimizedBytes": 55904
+  },
+  "art/cards/thumb-happy-birthday-to-my-king.jpg": {
+    "profile": 2,
+    "hash": "0722f15c788e38443dc569b689d1aa98ef38d4baf1fa2c5cf2b60e8ec49ca1ad",
+    "output": "art/cards/thumb-happy-birthday-to-my-king.webp",
+    "originalBytes": 47265,
+    "optimizedBytes": 35280
+  },
+  "art/cards/thumb-happy-holidays-from-our-home-to-yours.jpg": {
+    "profile": 2,
+    "hash": "3487622a1315e9b9cbbe8c778bb8c3e0d653f1f80a3b93d7b0c919c6c9ae947a",
+    "output": "art/cards/thumb-happy-holidays-from-our-home-to-yours.webp",
+    "originalBytes": 62435,
+    "optimizedBytes": 51830
+  },
+  "art/cards/thumb-merry-christmas-carols-in-the-snow.jpg": {
+    "profile": 2,
+    "hash": "37632b8bba7c7807b57765ae410a302c3282b313854d97446d23678332bd346f",
+    "output": "art/cards/thumb-merry-christmas-carols-in-the-snow.webp",
+    "originalBytes": 41695,
+    "optimizedBytes": 28588
+  },
+  "art/cards/thumb-merry-christmas-family-dinner.jpg": {
+    "profile": 2,
+    "hash": "ce4eed2939ee9ab636b35b37b7f46284e867e5b478dbd16251808adf64736230",
+    "output": "art/cards/thumb-merry-christmas-family-dinner.webp",
+    "originalBytes": 47836,
+    "optimizedBytes": 33382
+  },
+  "art/cards/thumb-merry-christmas-walk-under-the-star.jpg": {
+    "profile": 2,
+    "hash": "ce3dcf6723050376092910b14c08aaaf513fd183fede58a99273bf74085d417e",
+    "output": "art/cards/thumb-merry-christmas-walk-under-the-star.webp",
+    "originalBytes": 50678,
+    "optimizedBytes": 36030
+  },
+  "art/cards/thumb-merry-christmas-winter-family-walk.jpg": {
+    "profile": 2,
+    "hash": "4c5869a786125f96fb66153db86d0f33d04133b04bf5ec2721543bc4ba205645",
+    "output": "art/cards/thumb-merry-christmas-winter-family-walk.webp",
+    "originalBytes": 46338,
+    "optimizedBytes": 32578
+  },
+  "art/cards/thumb-mother-s-day-icon-of-grace.jpg": {
+    "profile": 2,
+    "hash": "5d2ff721fd120dc8c20e6edd60082739a91815701d5a7c79e375c609a95a2f99",
+    "output": "art/cards/thumb-mother-s-day-icon-of-grace.webp",
+    "originalBytes": 32952,
+    "optimizedBytes": 23744
+  },
+  "art/cards/thumb-mother-s-day-the-original-queen.jpg": {
+    "profile": 2,
+    "hash": "1befe0f76c7435f9b9e5b9bdef8e0b18625b1874ff3675cb6856ad04b55ba6c4",
+    "output": "art/cards/thumb-mother-s-day-the-original-queen.webp",
+    "originalBytes": 48275,
+    "optimizedBytes": 39580
+  },
+  "art/cards/thumb-nativity-born-in-the-stable-light.jpg": {
+    "profile": 2,
+    "hash": "da3c6622946d8fc16409a03c9324a3f35a68e3fafbc15a19dc4ae74032c77b13",
+    "output": "art/cards/thumb-nativity-born-in-the-stable-light.webp",
+    "originalBytes": 55064,
+    "optimizedBytes": 47304
+  },
+  "art/cards/thumb-nativity-emmanuel.jpg": {
+    "profile": 2,
+    "hash": "a6fd144a863c0d6d6b03f37b453487f7ec17ff06deab4fff5634e9f8842abad5",
+    "output": "art/cards/thumb-nativity-emmanuel.webp",
+    "originalBytes": 44715,
+    "optimizedBytes": 35632
+  },
+  "art/cards/thumb-nativity-holy-family-by-starlight.jpg": {
+    "profile": 2,
+    "hash": "1ac6504a9d60fd4ecb46cb8278a125ab76a377e7258e8b2e31a8f00a5582baff",
+    "output": "art/cards/thumb-nativity-holy-family-by-starlight.webp",
+    "originalBytes": 38188,
+    "optimizedBytes": 28792
+  },
+  "art/cards/thumb-nativity-mary-watches-over-the-manger.jpg": {
+    "profile": 2,
+    "hash": "fa136d5481ebd014ba4923e35bc037797ae7a2be41a47cd8b9b2e67c08ba5129",
+    "output": "art/cards/thumb-nativity-mary-watches-over-the-manger.webp",
+    "originalBytes": 44691,
+    "optimizedBytes": 35240
+  },
+  "art/cards/thumb-nativity-mother-and-child-in-silver-blue.jpg": {
+    "profile": 2,
+    "hash": "3044556070d89e869e44cd77d6596b037b51e92241ff2ae4d85f2f01dc33dfe0",
+    "output": "art/cards/thumb-nativity-mother-and-child-in-silver-blue.webp",
+    "originalBytes": 49818,
+    "optimizedBytes": 43544
+  },
+  "art/cards/thumb-nativity-mother-and-child-in-starlight.jpg": {
+    "profile": 2,
+    "hash": "5b6fd970ef0edff75ab65cdd8657dee19899c6872e68e894ec8989fa971a2b8b",
+    "output": "art/cards/thumb-nativity-mother-and-child-in-starlight.webp",
+    "originalBytes": 53796,
+    "optimizedBytes": 42786
+  },
+  "art/cards/thumb-nativity-shepherd-and-star.jpg": {
+    "profile": 2,
+    "hash": "18914980efd181ebe0a2c9be8a70e98abb94f126f7a1171fb76aba5eb6bc5fb1",
+    "output": "art/cards/thumb-nativity-shepherd-and-star.webp",
+    "originalBytes": 58252,
+    "optimizedBytes": 50888
+  },
+  "favicon.png": {
+    "hash": "4d6066a28225858fa68aa48a52d8d897cf8aa230d553e183d233bb0d304becc1",
+    "output": "favicon.png",
+    "originalBytes": 1521,
+    "optimizedBytes": 1297
+  },
+  "logo-dark.png": {
+    "hash": "d28b99d060c44cb4e718ad9813709109250853ebcb590cb8f7fff934516286c2",
+    "output": "logo-dark.png",
+    "originalBytes": 64710,
+    "optimizedBytes": 45177
+  },
+  "logo.png": {
+    "hash": "64ff789eb1d6da7f4b0c353e69677003804daeaae78b1046948026c94022680e",
+    "output": "logo.png",
+    "originalBytes": 64749,
+    "optimizedBytes": 45177
+  },
+  "video/flowers.jpg": {
+    "profile": 2,
+    "hash": "44689938b3d95a731bee4f736e104456da1f182f4ea840833b4eb99474296be0",
+    "output": "video/flowers.webp",
+    "originalBytes": 102689,
+    "optimizedBytes": 68550
+  },
+  "video/flowers.mp4": {
+    "hash": "c192a9579bc84cff997add2326a6ace9bb6aa96255fa18d01f82f82dc73b232a",
+    "output": "video/flowers.mp4",
+    "originalBytes": 386367,
+    "optimizedBytes": 277122
+  },
+  "video/gallery-frame.jpg": {
+    "profile": 2,
+    "hash": "f86ee141ffe6f0d8fd574da824f6cc5e6c14ccf585965bfb1e3461f962934a35",
+    "output": "video/gallery-frame.webp",
+    "originalBytes": 52179,
+    "optimizedBytes": 32184
+  },
+  "video/gallery-frame.mp4": {
+    "hash": "4f6628839b92f42959042cbffb52aa5a603ebefe42ae908b4546ad3225223833",
+    "output": "video/gallery-frame.mp4",
+    "originalBytes": 250670,
+    "optimizedBytes": 186559
+  },
+  "video/hall.jpg": {
+    "profile": 2,
+    "hash": "6252c72e7ef1945c67041bcc14bb98cc1a0b30de1e7b8d5bba5834817c496c3d",
+    "output": "video/hall.webp",
+    "originalBytes": 55839,
+    "optimizedBytes": 40516
+  },
+  "video/hall.mp4": {
+    "hash": "f5e12435a1490d4c60e4a61c48ff28d95976c41e444c150d8d1ab3a945a8b9df",
+    "output": "video/hall.mp4",
+    "originalBytes": 701639,
+    "optimizedBytes": 556762
+  },
+  "video/hero.jpg": {
+    "profile": 2,
+    "hash": "f609c15174b376b6d833bb4d51a67e681f320ea092647ac733e083b5fe2a5f74",
+    "output": "video/hero.webp",
+    "originalBytes": 47505,
+    "optimizedBytes": 29388
+  },
+  "video/hero.mp4": {
+    "hash": "8bb6a2daa6d514157ecc24e025fa51d31516ab9726cc8135f47fe009b958c4ab",
+    "output": "video/hero.mp4",
+    "originalBytes": 931540,
+    "optimizedBytes": 306386
+  },
+  "video/pause.jpg": {
+    "profile": 2,
+    "hash": "1aea550c027e845361948e09224d47b8d236c82fdd06e4283bebdd7945d4a702",
+    "output": "video/pause.webp",
+    "originalBytes": 84247,
+    "optimizedBytes": 68430
+  },
+  "video/pause.mp4": {
+    "hash": "404e45985c4117b951e646dbbaa18f3b74da62d872cf0abee5ef0b8675f98dab",
+    "output": "video/pause.mp4",
+    "originalBytes": 604858,
+    "optimizedBytes": 442950
+  },
+  "video/portrait.jpg": {
+    "profile": 2,
+    "hash": "aa825a1bc881d9d7d241a9085d34b7b4e116e2edcae0c13260c6bbbcc2a3fea4",
+    "output": "video/portrait.webp",
+    "originalBytes": 124049,
+    "optimizedBytes": 113646
+  },
+  "video/portrait.mp4": {
+    "hash": "5ae068609572e0a6eb9babe1ccaed609ca71db0caf40ac51f362afb3f2179fbc",
+    "output": "video/portrait.mp4",
+    "originalBytes": 2375649,
+    "optimizedBytes": 1572641
+  },
+  "video/spotlight.jpg": {
+    "profile": 2,
+    "hash": "8ce024d2144ea411f21de748f850a8f86858525b72e491e8f57408eb9ee8fa1c",
+    "output": "video/spotlight.webp",
+    "originalBytes": 24349,
+    "optimizedBytes": 15360
+  },
+  "video/spotlight.mp4": {
+    "hash": "49ecb73b216b89f167d30d525d0068f8592ce4f88ed6a8095055fa705621d0b7",
+    "output": "video/spotlight.mp4",
+    "originalBytes": 285353,
+    "optimizedBytes": 263959
+  },
+  "video/welcome.jpg": {
+    "profile": 2,
+    "hash": "eb8ff5c29c64266ac864632fb120931a1d218e530625b7f320045c45c549a3c2",
+    "output": "video/welcome.webp",
+    "originalBytes": 41408,
+    "optimizedBytes": 25964
+  },
+  "video/welcome.mp4": {
+    "hash": "26a1b55b3d599aec620f14aa6ec459f880f816830cdf7bdce81b2b91fafa974f",
+    "output": "video/welcome.mp4",
+    "originalBytes": 499992,
+    "optimizedBytes": 420219
+  },
+  "video/why.jpg": {
+    "profile": 2,
+    "hash": "320bdd7fb9f6d92f7d0ea68cc903a28f9e15ec0e75eeb09fc630a73f1b57ff75",
+    "output": "video/why.webp",
+    "originalBytes": 137631,
+    "optimizedBytes": 126170
+  },
+  "video/why.mp4": {
+    "hash": "fa2812ec41deb67b4fb192b9df3e3f6a6dd7913228045e7f4b166a754e9aa131",
+    "output": "video/why.mp4",
+    "originalBytes": 458599,
+    "optimizedBytes": 328130
+  }
+}

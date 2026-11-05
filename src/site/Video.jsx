@@ -1,3 +1,4 @@
+import { videoPoster } from "../shared/mediaPolicy.js";
 import React, { useEffect, useRef, useState } from "react";
 
 export default function Video({
@@ -13,9 +14,7 @@ export default function Video({
     () =>
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches || false,
   );
-  const pst =
-    poster ||
-    (src && /\.mp4$/i.test(src) ? src.replace(/\.mp4$/i, ".jpg") : undefined);
+  const pst = poster || videoPoster(src);
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => {

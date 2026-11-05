@@ -50,7 +50,7 @@ globalThis.HTMLRewriter = class {
 const ASSETS = { fetch: async (req) => staticRes(new URL(req.url).pathname) };
 const env = { ASSETS, DB, ...(process.env.NO_R2 ? {} : { MEDIA }), DEV_MODE: '1', ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'dbs_workouts@yahoo.com', VAPID_PUBLIC_KEY: fs.readFileSync(path.join(root, '.dev-vapid-public'), 'utf8').trim(), VAPID_PRIVATE_JWK: fs.readFileSync(path.join(root, '.dev-vapid-private'), 'utf8').trim().replace(/^'|'$/g, ''), ...(process.env.DEV_ENV ? JSON.parse(process.env.DEV_ENV) : {}) };
 
-const mime = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.ico': 'image/x-icon' };
+const mime = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.avif': 'image/avif', '.mp4': 'video/mp4', '.webm': 'video/webm', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.ico': 'image/x-icon' };
 const dist = path.join(root, 'dist');
 const staticRes = (p) => {
   let f = path.join(dist, path.normalize(p).replace(/^(\.\.[/\\])+/, ''));

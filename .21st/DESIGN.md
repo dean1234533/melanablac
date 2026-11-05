@@ -19,3 +19,5 @@ Buttons use text labels without arrow icons; arrows may remain on editorial text
 The private Studio uses the original signature logo, warm paper, sage navigation and restrained dark-green actions. Dashboard figures come from the authenticated APIs; no fabricated trends or charts. Sign-in has a dedicated branded panel, password visibility control and recovery. Mobile navigation must close on Escape and route changes. Keep admin CSS scoped to the workspace.
 
 Three quick clicks on the storefront header logo open admin sign-in. A single click remains the homepage link. The shortcut is navigation only; server-side password protection is required.
+
+Serve compressed WebP artwork and posters, preserve logo transparency, and retain the original artwork proportions. Admin image and video pickers compress uploads automatically. Video conversion must retain frame timing and soundtracks; video processing code is loaded only when uploading a film.

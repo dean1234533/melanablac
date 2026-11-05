@@ -1,3 +1,4 @@
+import { optimizedImage } from '../src/shared/mediaPolicy.js';
 import { getContent, esc, siteUrl, getAdmin } from './lib/util.js';
 
 // Injects per-page SEO tags (editable in the admin dashboard) into the HTML for crawlers and link previews.
@@ -31,7 +32,7 @@ export async function onRequest({ request, env, next }) {
   if (m && env.DB) {
     const r = await env.DB.prepare("SELECT * FROM products WHERE slug=? AND status='published'").bind(m[1]).first();
     if (r) {
-      const imgs = JSON.parse(r.images || '[]');
+      const imgs = JSON.parse(r.images || '[]').map(optimizedImage);
       title = r.seo_title || `${r.title} | ${c['site.name']}`;
       desc = r.seo_description || r.description.slice(0, 155);
       image = imgs[0] || image; type_ = 'product';
@@ -39,7 +40,7 @@ export async function onRequest({ request, env, next }) {
     }
   }
   if (isAdmin) { title = 'MelanaBlac Admin'; desc = 'Manage your art shop.'; }
-  const abs = (i) => (i && i.startsWith('/') ? origin + i : i);
+  const abs = (i) => { const image = optimizedImage(i); return image && image.startsWith('/') ? origin + image : image; };
   const head = `<meta name="description" content="${esc(desc)}"><link rel="canonical" href="${origin}${p}">` +
     (isAdmin ? '<meta name="robots" content="noindex,nofollow">' : `<meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:type" content="${type_}"><meta property="og:url" content="${origin}${p}">${image ? `<meta property="og:image" content="${esc(abs(image))}">` : ''}<meta name="twitter:card" content="summary_large_image">`) + extra;
   return new HTMLRewriter()
