@@ -3,7 +3,7 @@
 React (Vite) storefront with a Cloudflare Pages Functions backend (D1 database, R2 images). No Firebase needed.
 
 - **Storefront**: editorial gallery homepage, curated cards, category collections, masonry gallery with accessible lightbox, shop with categories, product pages with image slides, basket, checkout, contact form.
-- **Admin PWA** at `/admin`: add/edit/delete artwork (multi-image upload), manage home slides, edit all site text, SEO titles/descriptions per page and per artwork, orders, messages, push notifications, password change.
+- **Admin PWA** at `/admin`: add/edit/delete artwork (multi-image upload), manage homepage films and edit all site text, SEO titles/descriptions per page and per artwork, orders, messages, push notifications, password change.
 - Install-the-app pop-up (Android/desktop install prompt + iOS Add-to-Home-Screen steps).
 - Forgot password emails a reset link via **Resend**.
 - Per-page SEO tags (and Product JSON-LD) are injected server-side from the dashboard values, plus `/sitemap.xml` and `/robots.txt`.

@@ -116,7 +116,6 @@ function AdminIcon({ name = "grid" }) {
   const paths = {
     grid: "M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z",
     image: "M3 3h18v18H3z M3 17l6-6 4 4 3-3 5 5 M8 7h.01",
-    slides: "M4 4h16v16H4z M1 7v10 M23 7v10",
     text: "M4 5h16 M12 5v15 M8 20h8",
     search: "M16 16l5 5 M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0",
     bag: "M5 7h14l1 14H4z M8 7V6a4 4 0 0 1 8 0v1",
@@ -412,7 +411,6 @@ function Shell({ me, onLogout }) {
   const links = [
     ["", "Overview", "grid"],
     ["products", "Artwork", "image"],
-    ["slides", "Slides", "slides"],
     ["content", "Site text", "text"],
     ["seo", "SEO", "search"],
     ["orders", "Orders", "bag"],
@@ -513,7 +511,7 @@ function Shell({ me, onLogout }) {
             <Route path="products" element={<Products />} />
             <Route path="products/new" element={<ProductEditor />} />
             <Route path="products/:id" element={<ProductEditor />} />
-            <Route path="slides" element={<Slides />} />
+            <Route path="slides" element={<Navigate to="/admin/" replace />} />
             <Route
               path="content"
               element={
@@ -1126,118 +1124,6 @@ function ProductEditor() {
         <Link to="/admin/products">Cancel</Link>
       </div>
     </form>
-  );
-}
-
-function Slides() {
-  const [list, setList] = useState(null);
-  const [err, setErr] = useState("");
-  const load = () =>
-    api("admin/slides")
-      .then(setList)
-      .catch((e) => setErr(e.message));
-  useEffect(() => {
-    load();
-  }, []);
-  const add = async (e) => {
-    const f = e.target.files[0];
-    e.target.value = "";
-    if (!f) return;
-    try {
-      const { url } = await uploadImage(f);
-      await api("admin/slides", {
-        method: "POST",
-        body: {
-          image: url,
-          title: "",
-          subtitle: "",
-          link: "/shop",
-          sort: list?.length || 0,
-        },
-      });
-      load();
-    } catch (x) {
-      setErr(x.message);
-    }
-  };
-  const upd = (s, patch) =>
-    setList(list.map((x) => (x.id === s.id ? { ...x, ...patch } : x)));
-  const save = async (s) => {
-    try {
-      await api("admin/slides/" + s.id, { method: "PUT", body: s });
-      setErr("");
-      load();
-    } catch (x) {
-      setErr(x.message);
-    }
-  };
-  const del = async (s) => {
-    if (confirm("Delete this slide?")) {
-      await api("admin/slides/" + s.id, { method: "DELETE" });
-      load();
-    }
-  };
-  return (
-    <>
-      <div className="row">
-        <h1>Home slides</h1>
-        <label className="btn gold file">
-          + Add slide
-          <input type="file" hidden accept="image/*" onChange={add} />
-        </label>
-      </div>
-      <Flash msg={err} kind="err" />
-      {!list ? (
-        <p className="muted">Loading…</p>
-      ) : (
-        list.map((s) => (
-          <div className="slide-edit" key={s.id}>
-            <img src={s.image} alt="" />
-            <div className="form">
-              <label>
-                Title
-                <input
-                  value={s.title}
-                  onChange={(e) => upd(s, { title: e.target.value })}
-                />
-              </label>
-              <label>
-                Subtitle
-                <input
-                  value={s.subtitle}
-                  onChange={(e) => upd(s, { subtitle: e.target.value })}
-                />
-              </label>
-              <div className="two">
-                <label>
-                  Link (e.g. /shop)
-                  <input
-                    value={s.link}
-                    onChange={(e) => upd(s, { link: e.target.value })}
-                  />
-                </label>
-                <label>
-                  Order
-                  <input
-                    type="number"
-                    value={s.sort}
-                    onChange={(e) => upd(s, { sort: e.target.value })}
-                  />
-                </label>
-              </div>
-              <div className="row">
-                <button className="btn small gold" onClick={() => save(s)}>
-                  Save
-                </button>
-                <button className="btn small danger" onClick={() => del(s)}>
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        ))
-      )}
-    </>
   );
 }
 

@@ -33,3 +33,5 @@ The enquiries page opens with a wide, uncropped gallery film and overlaid headin
 Keep the artwork editor in plain language with grouped details, images and availability. Show one customer description; collapse optional search overrides and display order, explaining automatic title/description fallbacks.
 
 Boxed action buttons across storefront and Studio use black borders and consistent sweep, lift, shadow, focus and press effects. Preserve gold filter borders and red destructive text. Disabled/busy actions stay still; reduced motion disables the sweep and lift.
+
+The old homepage slideshow is unused. Do not expose a Slides editor in Studio; redirect its old admin URL to Overview. Current films are managed under Site text → Videos.
