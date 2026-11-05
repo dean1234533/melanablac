@@ -62,7 +62,7 @@
     "Preserve the original signature logo using public/logo-dark.png on ivory, in both header and footer.",
     "On mobile, show the complete hero film with contain sizing and overlay its heading; keep description and button below. Retain the full text overlay on desktop.",
     "Product cards and collection boxes use black backgrounds with gold borders and readable light text, retaining white page backgrounds.",
-    "Enquiries use the original gallery-frame film in a black and gold panel beside the white form; stack on mobile with uncropped video."
+    "Enquiries open with an uncropped gallery film and overlaid heading, followed by a short introduction beside the white form, stacked on mobile."
   ],
   "evidence": [
     {

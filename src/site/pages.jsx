@@ -859,75 +859,71 @@ export function Contact() {
   };
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
   return (
-    <section className="section contact-editorial">
-      <header className="contact-intro">
-        <p className="eyebrow">ENQUIRIES & COMMISSIONS</p>
-        <h1 className="section-title">{t("contact.title")}</h1>
-        <p className="lead">{t("contact.body")}</p>
-      </header>
-      <div className="contact-layout">
-        <figure className="contact-film">
-          <Video
-            src="/video/gallery-frame.mp4"
-            lazy={false}
-            label="Framed MelanaBlac artwork inside the gallery"
-          />
-          <figcaption>
-            <p className="eyebrow">A LITTLE ART. A LASTING CONNECTION.</p>
-            <h2>Something meaningful<br /><em>starts here.</em></h2>
-            <p>From a first idea to a piece that feels like you, let’s start a conversation.</p>
-            <div className="contact-topics">
-              <span>Commissions</span>
-              <span>Collaborations</span>
-              <span>Enquiries</span>
-            </div>
-          </figcaption>
-        </figure>
-        <div className="contact-form-panel">
-          {state.done ? (
-            <p className="center ok" role="status">
-              Thank you. Your message has been sent.
-            </p>
-          ) : (
-            <form className="form" onSubmit={submit}>
-              <label>
-                Name
-                <input required value={f.name} onChange={set("name")} />
-              </label>
-              <label>
-                Email
+    <>
+      <section className="contact-hero" aria-labelledby="contact-title">
+        <Video
+          src="/video/gallery-frame.mp4"
+          lazy={false}
+          label="Framed MelanaBlac artwork inside the gallery"
+        />
+        <header className="contact-hero-copy">
+          <p className="eyebrow">ENQUIRIES & COMMISSIONS</p>
+          <h1 id="contact-title">{t("contact.title")}</h1>
+        </header>
+      </section>
+      <section className="section contact-editorial">
+        <div className="contact-layout">
+          <div className="contact-intro">
+            <span className="gold-rule" aria-hidden="true" />
+            <h2>Let’s talk.</h2>
+            <p className="lead">{t("contact.body")}</p>
+          </div>
+          <div className="contact-form-panel">
+            {state.done ? (
+              <p className="center ok" role="status">
+                Thank you. Your message has been sent.
+              </p>
+            ) : (
+              <form className="form" onSubmit={submit}>
+                <label>
+                  Name
+                  <input required value={f.name} onChange={set("name")} />
+                </label>
+                <label>
+                  Email
+                  <input
+                    required
+                    type="email"
+                    value={f.email}
+                    onChange={set("email")}
+                  />
+                </label>
+                <label>
+                  Message
+                  <textarea required rows="6" value={f.body} onChange={set("body")} />
+                </label>
                 <input
-                  required
-                  type="email"
-                  value={f.email}
-                  onChange={set("email")}
+                  className="hp"
+                  tabIndex="-1"
+                  autoComplete="off"
+                  aria-hidden="true"
+                  value={f.website}
+                  onChange={set("website")}
                 />
-              </label>
-              <label>
-                Message
-                <textarea required rows="6" value={f.body} onChange={set("body")} />
-              </label>
-              <input
-                className="hp"
-                tabIndex="-1"
-                autoComplete="off"
-                aria-hidden="true"
-                value={f.website}
-                onChange={set("website")}
-              />
-              {state.error && (
-                <p className="err" role="alert">
-                  {state.error}
-                </p>
-              )}
-              <button className="btn gold" disabled={state.busy}>
-                {state.busy ? "Sending…" : "Send message"}
-              </button>
-            </form>
-          )}
+                {state.error && (
+                  <p className="err" role="alert">
+                    {state.error}
+                  </p>
+                )}
+                <button className="btn gold" disabled={state.busy}>
+                  {state.busy ? "Sending…" : "Send message"}
+                </button>
+              </form>
+            )}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 

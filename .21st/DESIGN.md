@@ -28,4 +28,4 @@ On mobile the hero video uses its complete frame, contain fitting, and a viewpor
 
 Product cards and collection boxes use black backgrounds, fine brand-gold borders, light titles and gold details; keep the surrounding white layout.
 
-The enquiries page pairs an existing compressed gallery film in a black, gold-bordered editorial panel with a white form. Stack the film above the form on phones and preserve the whole video frame.
+The enquiries page opens with a wide, uncropped gallery film and overlaid heading, followed by an open white enquiry area. Keep its short introduction beside the form on desktop and above it on phones. Avoid promotional copy panels.
