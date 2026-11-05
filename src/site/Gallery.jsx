@@ -53,14 +53,14 @@ export function Lightbox({ items, start, onClose }) {
       </button>
       {n > 1 && (
         <button
-          className="arrow prev"
+          className="media-nav prev"
           onClick={(e) => {
             e.stopPropagation();
             go(-1);
           }}
           aria-label="Previous"
         >
-          ‹
+          Previous
         </button>
       )}
       <figure onClick={(e) => e.stopPropagation()}>
@@ -80,14 +80,14 @@ export function Lightbox({ items, start, onClose }) {
       </figure>
       {n > 1 && (
         <button
-          className="arrow next"
+          className="media-nav next"
           onClick={(e) => {
             e.stopPropagation();
             go(1);
           }}
           aria-label="Next"
         >
-          ›
+          Next
         </button>
       )}
     </div>

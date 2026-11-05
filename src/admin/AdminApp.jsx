@@ -929,7 +929,7 @@ function ImageUploader({ images, onChange }) {
                 onClick={() => move(i, -1)}
                 aria-label="Move earlier"
               >
-                ←
+                Earlier
               </button>
               <button
                 type="button"
@@ -937,7 +937,7 @@ function ImageUploader({ images, onChange }) {
                 onClick={() => move(i, 1)}
                 aria-label="Move later"
               >
-                →
+                Later
               </button>
               <button
                 type="button"
@@ -1038,7 +1038,7 @@ function ProductEditor() {
     <form className="form wide" onSubmit={save}>
       <div className="row">
         <h1>{id ? "Edit artwork" : "Add artwork"}</h1>
-        <Link to="/admin/products">← Back</Link>
+        <Link to="/admin/products">Back</Link>
       </div>
       <label>
         Title

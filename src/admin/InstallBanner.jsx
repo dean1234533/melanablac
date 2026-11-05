@@ -15,9 +15,9 @@ export function InstallSteps({ onInstall }) {
   return (
     <div className="steps">
       {deferred && <button className="btn gold" onClick={onInstall}>Install app now</button>}
-      {p === 'ios' && <ol><li>Open this page in <b>Safari</b>.</li><li>Tap the <b>Share</b> button (square with an arrow).</li><li>Scroll and tap <b>Add to Home Screen</b>, then <b>Add</b>.</li><li>Open <b>MB Admin</b> from your Home Screen. Notifications work from there.</li></ol>}
+      {p === 'ios' && <ol><li>Open this page in <b>Safari</b>.</li><li>Tap the <b>Share</b> button.</li><li>Scroll and tap <b>Add to Home Screen</b>, then <b>Add</b>.</li><li>Open <b>MB Admin</b> from your Home Screen. Notifications work from there.</li></ol>}
       {p === 'android' && <ol><li>Tap <b>Install app now</b> above, or open the Chrome menu (⋮).</li><li>Choose <b>Install app</b> / <b>Add to Home screen</b>.</li><li>Open <b>MB Admin</b> from your home screen.</li></ol>}
-      {p === 'desktop' && <ol><li>In Chrome or Edge, click the <b>install icon</b> in the address bar, or the menu → <b>Install MelanaBlac Admin</b>.</li><li>The app opens in its own window and can be pinned to your dock or taskbar.</li></ol>}
+      {p === 'desktop' && <ol><li>In Chrome or Edge, click the <b>install icon</b> in the address bar, or open the menu and choose <b>Install MelanaBlac Admin</b>.</li><li>The app opens in its own window and can be pinned to your dock or taskbar.</li></ol>}
     </div>
   );
 }

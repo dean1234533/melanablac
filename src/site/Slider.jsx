@@ -25,8 +25,8 @@ export default function Slider({ slides }) {
         </div>
       ))}
       {n > 1 && <>
-        <button className="arrow prev" onClick={() => go(-1)} aria-label="Previous slide">‹</button>
-        <button className="arrow next" onClick={() => go(1)} aria-label="Next slide">›</button>
+        <button className="media-nav prev" onClick={() => go(-1)} aria-label="Previous slide">Previous</button>
+        <button className="media-nav next" onClick={() => go(1)} aria-label="Next slide">Next</button>
         <div className="dots">{slides.map((s, k) => <button key={s.id} className={k === i ? 'on' : ''} onClick={() => setI(k)} aria-label={`Slide ${k + 1}`} />)}</div>
       </>}
     </section>

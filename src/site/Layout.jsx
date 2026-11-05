@@ -9,9 +9,6 @@ import {
 import { useSite } from "./SiteContext.jsx";
 import "./storefront.css";
 
-export function Arrow() {
-  return <span aria-hidden="true">↗</span>;
-}
 function BrandLogo() {
   return (
     <img
@@ -67,7 +64,7 @@ export default function Layout() {
       <div className="announcement">
         Art with a story. Cards with meaning.{" "}
         <span>
-          Discover the MelanaBlac collection <span aria-hidden="true">↗</span>
+          Discover the MelanaBlac collection
         </span>
       </div>
       <header className="nav">
@@ -134,7 +131,7 @@ export default function Layout() {
               <em>something meaningful.</em>
             </h2>
             <Link className="text-link" to="/shop">
-              Explore the collection <Arrow />
+              Explore the collection
             </Link>
           </div>
           <div className="footer-navigation">
@@ -148,7 +145,7 @@ export default function Layout() {
             <div>
               <p className="eyebrow">Connect</p>
               <Link to="/contact">
-                Enquiries & commissions <Arrow />
+                Enquiries & commissions
               </Link>
               {t("site.instagram") && (
                 <a
@@ -156,7 +153,7 @@ export default function Layout() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Instagram <Arrow />
+                  Instagram
                 </a>
               )}
               <p>{t("site.footer")}</p>

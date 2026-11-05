@@ -8,7 +8,6 @@ import {
 import { api } from "../api.js";
 import { optimizedImage } from "../shared/mediaPolicy.js";
 import { useSite, useSEO } from "./SiteContext.jsx";
-import { Arrow } from "./Layout.jsx";
 import Gallery, { Lightbox } from "./Gallery.jsx";
 import Video from "./Video.jsx";
 
@@ -166,7 +165,7 @@ export function Home() {
               and the people who mean everything.
             </p>
             <Link to="/shop" className="text-link">
-              View the collection <Arrow />
+              View the collection
             </Link>
           </div>
         </div>
@@ -174,7 +173,7 @@ export function Home() {
           <div className="collection-error" role="alert">
             <p>We couldn’t load the collection. Please try again shortly.</p>
             <Link to="/shop" className="text-link">
-              Try the collection <Arrow />
+              Try the collection
             </Link>
           </div>
         ) : loaded ? (
@@ -222,7 +221,7 @@ export function Home() {
             <p>{t("home.whyBody")}</p>
           </div>
           <Link to="/about" className="text-link">
-            Meet the artist <Arrow />
+            Meet the artist
           </Link>
         </div>
       </section>
@@ -237,7 +236,7 @@ export function Home() {
             </h2>
           </div>
           <Link to="/shop" className="text-link">
-            Shop all cards <Arrow />
+            Shop all cards
           </Link>
         </div>
         <div className="collection-tiles">
@@ -262,7 +261,7 @@ export function Home() {
                 <span className="tile-number">0{i + 1}</span>
               </div>
               <h3>
-                {category} <Arrow />
+                {category}
               </h3>
             </Link>
           ))}
@@ -324,7 +323,7 @@ export function Home() {
         {feels && (
           <p role="status" className="feeling-response">
             Art that makes you feel {feels.toLowerCase()} belongs in your world.{" "}
-            <Link to="/shop">Find your piece ↗</Link>
+            <Link to="/shop">Find your piece</Link>
           </p>
         )}
       </section>
@@ -425,9 +424,6 @@ function ProductCard({ p }) {
     <article className="card">
       <Link to={`/product/${p.slug}`} className="card-img">
         <img src={p.images[0]} alt={p.title} loading="lazy" />
-        <span className="card-explore" aria-hidden="true">
-          ↗
-        </span>
         {p.stock <= 0 && <span className="sold">Sold out</span>}
       </Link>
       <div className="card-body">
@@ -824,7 +820,7 @@ export function About() {
               <p key={i}>{l}</p>
             ))}
           <Link className="text-link" to="/shop">
-            Explore the collection <Arrow />
+            Explore the collection
           </Link>
         </div>
       </section>

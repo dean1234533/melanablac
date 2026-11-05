@@ -1202,3 +1202,6 @@
   background: #e9ecdf;
   border-radius: 5px;
 }
+
+.admin-workspace .img-tile>div { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; }
+.admin-workspace .img-tile .link { font-size:9px; min-height:32px; min-width:40px; }
