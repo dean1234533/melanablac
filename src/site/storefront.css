@@ -196,7 +196,7 @@
   isolation: isolate;
   background: var(--gold);
   color: #121212;
-  border-color: var(--gold);
+  border-color: #fff;
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 .storefront .hero-copy .btn.primary::before {
@@ -210,7 +210,7 @@
 }
 .storefront .hero-copy .btn.primary:focus-visible {
   background: #e3c45a;
-  border-color: var(--gold);
+  border-color: #fff;
   box-shadow: 0 8px 24px #d4af3733;
   transform: translateY(-3px);
   outline-color: var(--gold);
@@ -221,7 +221,7 @@
 @media (hover: hover) and (pointer: fine) {
   .storefront .hero-copy .btn.primary:hover:not(:disabled) {
     background: #e3c45a;
-    border-color: var(--gold);
+    border-color: #fff;
     box-shadow: 0 8px 24px #d4af3733;
     transform: translateY(-3px);
   }
