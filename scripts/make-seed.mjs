@@ -37,9 +37,9 @@ const q = (t) => `'${String(t).replace(/'/g, "''")}'`;
 let sql = ''; const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 if (real) {
   real.forEach((w, i) => {
-    sql += `INSERT INTO products (slug,title,description,price_pence,category,images,stock,featured,sort) VALUES (${q(w.slug)},${q(w.title)},${q(w.description)},${w.price_pence},${q(w.category)},${q(JSON.stringify([w.image]))},25,${i < 8 ? 1 : 0},${i});\n`;
+    sql += `INSERT INTO products (slug,title,description,price_pence,category,images,stock,status,featured,sort) VALUES (${q(w.slug)},${q(w.title)},${q(w.description)},${w.price_pence},${q(w.category)},${q(JSON.stringify([w.image]))},25,${q(w.status || 'published')},${w.featured ? 1 : 0},${i});\n`;
   });
-  real.slice(0, 5).forEach((w, i) => {
+  real.filter((w) => w.featured && w.status !== 'draft').slice(0, 6).forEach((w, i) => {
     sql += `INSERT INTO slides (image,title,subtitle,link,sort) VALUES (${q(w.image)},${q(w.title)},${q('Original illustrated greeting card')},${q('/product/' + w.slug)},${i});\n`;
   });
 } else {

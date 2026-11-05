@@ -30,7 +30,10 @@ if (logoFile) {
 
 // ---- artwork ----
 const manifest = [];
-const files = fs.readdirSync(src).filter((f) => /\.png$/i.test(f) && !f.startsWith('._') && f !== logoFile).sort();
+const present = new Set(fs.readdirSync(src));
+const order = Object.keys(titles).filter((f) => present.has(f));
+const extra = fs.readdirSync(src).filter((f) => /\.png$/i.test(f) && !f.startsWith('._') && f !== logoFile && !titles[f] && !/^ATTR2022_1_/.test(f)).sort();
+const files = [...order, ...extra];
 for (const f of files) {
   const t = titles[f] || titles[f.replace(/_/g, ' ')] || {};
   const code = f.replace(/\.png$/i, '').replace(/[_\s]+/g, ' ').trim();
@@ -38,7 +41,7 @@ for (const f of files) {
   const name = slug(title) + '.jpg';
   await sharp(path.join(src, f)).flatten({ background: '#ffffff' }).resize({ width: 1400, withoutEnlargement: true }).jpeg({ quality: 82, mozjpeg: true }).toFile(path.join(out, name));
   await sharp(path.join(src, f)).flatten({ background: '#ffffff' }).resize({ width: 480, withoutEnlargement: true }).jpeg({ quality: 78, mozjpeg: true }).toFile(path.join(out, 'thumb-' + name));
-  manifest.push({ source: f, title, slug: slug(title), image: `/art/cards/${name}`, thumb: `/art/cards/thumb-${name}`, description: t.description || `Illustrated greeting card (${code}). A5, blank inside, with envelope.`, price_pence: t.price_pence || 450, category: t.category || 'Greeting Cards' });
+  manifest.push({ source: f, title, slug: slug(title), image: `/art/cards/${name}`, thumb: `/art/cards/thumb-${name}`, description: t.description || `Illustrated greeting card (${code}). A5, blank inside, with envelope.`, price_pence: t.price_pence || 450, category: t.category || 'Greeting Cards', featured: !!t.featured, status: t.status || 'published' });
 }
 fs.writeFileSync(path.join(out, 'manifest.json'), JSON.stringify(manifest, null, 1));
 console.log('imported', manifest.length, 'artworks');

@@ -1,27 +1,346 @@
 {
- "18BD018.png": {
-  "title": "Happy 18th Birthday: Pink & Gold",
-  "description": "Illustrated 18th birthday greeting card: a woman in a braided high bun raises a glass of champagne beside gold and pink balloons and wrapped gifts. A5, blank inside, with envelope.",
-  "price_pence": 450
+ "21BD008.png": {
+  "title": "Happy 21st Birthday: Black & Gold",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": true,
+  "description": "Illustrated birthday card: a woman with long braids stands beside balloons, gifts and a birthday cake. A5, blank inside, with envelope."
  },
  "21BD004A.png": {
   "title": "Happy 16th Birthday: Black & Gold",
-  "description": "Illustrated 16th birthday greeting card in black and gold: a young woman holds a bunch of balloons beside wrapped gifts. A5, blank inside, with envelope.",
-  "price_pence": 450
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": true,
+  "description": "Illustrated birthday card: a young woman holds a bunch of black and gold balloons beside wrapped gifts. A5, blank inside, with envelope."
  },
- "21BD008.png": {
-  "title": "Happy 21st Birthday: Black & Gold",
-  "description": "Illustrated 21st birthday greeting card in black and gold: a woman with long braids stands beside balloons, gifts and a birthday cake. A5, blank inside, with envelope.",
-  "price_pence": 450
+ "18BD018.png": {
+  "title": "Happy 18th Birthday: Pink & Gold",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": true,
+  "description": "Illustrated birthday card: a woman in a braided high bun raises a glass of champagne beside gold and pink balloons and gifts. A5, blank inside, with envelope."
  },
  "21BD017.png": {
   "title": "18th Birthday: To My Beautiful Daughter",
-  "description": "Illustrated 18th birthday greeting card for a daughter: a woman in a pink off-the-shoulder top holds a glass of champagne beside pink and black gift boxes, flowers and balloons. A5, blank inside, with envelope.",
-  "price_pence": 450
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a woman in a pink off-the-shoulder top holds a glass of champagne beside pink and black gift boxes, flowers and balloons. A5, blank inside, with envelope."
  },
  "21BD017A_1_.png": {
   "title": "18th Birthday: To My Beautiful Sister",
-  "description": "Illustrated 18th birthday greeting card for a sister: a woman in a pink off-the-shoulder top holds a glass of champagne beside pink and black gift boxes, flowers and balloons. A5, blank inside, with envelope.",
-  "price_pence": 450
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a woman in a pink off-the-shoulder top holds a glass of champagne beside pink and black gift boxes, flowers and balloons. A5, blank inside, with envelope."
+ },
+ "HH2017A_2_1_.png": {
+  "title": "Happy 21st Birthday: Tune In",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a bold street-art style portrait of a woman in gold headphones with colourful paint splashes. A5, blank inside, with envelope."
+ },
+ "Daughter_2_.png": {
+  "title": "Happy 30th Birthday: Silver Headwrap",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a smiling woman in a silver headwrap and pearl jewellery on a sky-blue background. A5, blank inside, with envelope."
+ },
+ "Copy_of_AFC015B.png": {
+  "title": "60th Birthday: Earthstrong",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a graphic portrait of a woman in sunglasses and a patterned headwrap on a silver-grey card. A5, blank inside, with envelope."
+ },
+ "BBOOP006.png": {
+  "title": "Happy Birthday: To An Amazing Woman",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a woman relaxing at a desk with a birthday mug, candle and planner in a cosy room. A5, blank inside, with envelope."
+ },
+ "DAISY.png": {
+  "title": "Happy Birthday Grandma: Lilac Florals",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a silhouette of a woman in a headwrap among lilac and gold florals. A5, blank inside, with envelope."
+ },
+ "GRAN003.png": {
+  "title": "Happy Birthday Grandma: Family Kisses",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a grandmother in an emerald and gold headwrap is kissed by two children among flowers and gifts. A5, blank inside, with envelope."
+ },
+ "MUM011.png": {
+  "title": "Happy Birthday Mama: Family Kisses",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a mother in an emerald and gold headwrap is kissed by two children among flowers and gifts. A5, blank inside, with envelope."
+ },
+ "TWC011.png": {
+  "title": "Happy Birthday Mother: Blue & Blush",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": true,
+  "description": "Illustrated birthday card: three generations of women in profile with blue and blush florals and gold details. A5, blank inside, with envelope."
+ },
+ "TWC012.png": {
+  "title": "Happy Birthday Sister: Blue & Gold",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: three women in profile with blue florals and gold leaves. A5, blank inside, with envelope."
+ },
+ "NBCC040.png": {
+  "title": "Birthday Girl: Gold Crown",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a smiling girl with afro puffs and a gold crown sits at a birthday cake. A5, blank inside, with envelope."
+ },
+ "NBCC041.png": {
+  "title": "Birthday Girl: Black & Gold Tutu",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a smiling girl in a black and gold tutu dress among balloons, cake and gifts. A5, blank inside, with envelope."
+ },
+ "NBCC042.png": {
+  "title": "Happy Birthday: Boy with Gold Gifts",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a smiling boy in olive green sits among balloons, a cake and gold gift boxes. A5, blank inside, with envelope."
+ },
+ "NBCC043.png": {
+  "title": "Happy Birthday: Boy on Gift Boxes",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a boy in a cream shirt and olive trousers sits on gift boxes with balloons and bunting. A5, blank inside, with envelope."
+ },
+ "NBCC044.png": {
+  "title": "Happy Birthday: To an Amazing Son",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a father and son sit together on city steps with a basketball. A5, blank inside, with envelope."
+ },
+ "NBCC045.png": {
+  "title": "Happy Birthday: To a Wonderful Daughter",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a mother in an emerald and gold dress hugs her daughter in a pink tutu dress. A5, blank inside, with envelope."
+ },
+ "GENT012P.png": {
+  "title": "Happy Birthday: To My King",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a man in a colourful patterned coat holds a glass of champagne beside gold and blue gift boxes. A5, blank inside, with envelope."
+ },
+ "GENT014.png": {
+  "title": "Happy Birthday: Gentleman in Cream",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a smiling man in cream clothing sits in an armchair beside a birthday cake and champagne. A5, blank inside, with envelope."
+ },
+ "BBOOP005_2_.png": {
+  "title": "Happy Birthday: Amazing Woman (Cartoon Style)",
+  "category": "Birthday Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated birthday card: a cartoon-style woman at a desk with a birthday mug and planner. A5, blank inside, with envelope.",
+  "status": "draft"
+ },
+ "ATTR2023.png": {
+  "title": "Merry Christmas: Walk Under the Star",
+  "category": "Christmas Cards",
+  "price_pence": 450,
+  "featured": true,
+  "description": "Illustrated christmas card: a family walks through a snowy village beneath a bright star. A5, blank inside, with envelope."
+ },
+ "ATTR2024.png": {
+  "title": "Merry Christmas: Winter Family Walk",
+  "category": "Christmas Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated christmas card: a family in warm winter clothes walks through snow past a red cottage. A5, blank inside, with envelope."
+ },
+ "ATTR2013_2_.png": {
+  "title": "Merry Christmas: Carols in the Snow",
+  "category": "Christmas Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated christmas card: a family sings carols in a snowy landscape. A5, blank inside, with envelope."
+ },
+ "ATTR2013A.png": {
+  "title": "Christmas: A Joyful Holiday Season",
+  "category": "Christmas Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated christmas card: a family sings carols in a snowy landscape. A5, blank inside, with envelope."
+ },
+ "ATTR2011_2_.png": {
+  "title": "Christmas: Family Snow Play",
+  "category": "Christmas Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated christmas card: a family plays together in the snow by a Christmas tree. A5, blank inside, with envelope."
+ },
+ "ATTR2008_2_.png": {
+  "title": "Christmas: A Season of Grace",
+  "category": "Christmas Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated christmas card: a family looks up at a glowing golden sun in a snowy forest. A5, blank inside, with envelope."
+ },
+ "ATTR2015_2_.png": {
+  "title": "Christmas: Family, Joy and Togetherness",
+  "category": "Christmas Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated christmas card: children play in the snow beside a decorated Christmas tree. A5, blank inside, with envelope."
+ },
+ "ATTR2022.png": {
+  "title": "Christmas: Holiday Season Blessings",
+  "category": "Christmas Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated christmas card: a family kneels together in the snow under a starry night sky. A5, blank inside, with envelope."
+ },
+ "ATTR20021.png": {
+  "title": "Merry Christmas: Family Dinner",
+  "category": "Christmas Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated christmas card: a family gathers around a candlelit Christmas dinner table. A5, blank inside, with envelope."
+ },
+ "ATTR2017_2_.png": {
+  "title": "Happy Holidays: From Our Home to Yours",
+  "category": "Christmas Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated christmas card: a large family shares a festive table surrounded by Christmas decorations. A5, blank inside, with envelope."
+ },
+ "ATTR2012_1_.png": {
+  "title": "Christmas: Praise Our King",
+  "category": "Christmas Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated christmas card: a family lifts a child into the light of a glowing moon in the snow. A5, blank inside, with envelope."
+ },
+ "ATTR030_2_.png": {
+  "title": "Nativity: Mother and Child in Silver Blue",
+  "category": "Nativity Cards",
+  "price_pence": 450,
+  "featured": true,
+  "description": "Illustrated nativity card: a mother holds her newborn beneath a bright star on a deep blue starry background. A5, blank inside, with envelope."
+ },
+ "ATTR.NV1_2_.png": {
+  "title": "Nativity: Mother and Child in Starlight",
+  "category": "Nativity Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated nativity card: a painterly nativity: a mother and father hold their newborn under a glittering star. A5, blank inside, with envelope."
+ },
+ "ATTR002_4_.png": {
+  "title": "Nativity: Born in the Stable Light",
+  "category": "Nativity Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated nativity card: a glowing nativity scene in a stable beneath a radiant star. A5, blank inside, with envelope."
+ },
+ "ATTR007_2_.png": {
+  "title": "Nativity: Shepherd and Star",
+  "category": "Nativity Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated nativity card: a shepherd and mother kneel by the manger under a brilliant star. A5, blank inside, with envelope."
+ },
+ "ATTR014_4_1_.png": {
+  "title": "Nativity: Emmanuel",
+  "category": "Nativity Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated nativity card: a mother cradles her baby while a father looks on beneath a bright star. A5, blank inside, with envelope."
+ },
+ "ATTR016.png_2_1_.png": {
+  "title": "Nativity: Holy Family by Starlight",
+  "category": "Nativity Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated nativity card: a painterly holy family beside the manger beneath a bright star. A5, blank inside, with envelope."
+ },
+ "ATTR017_2_.png": {
+  "title": "Nativity: Mary Watches Over the Manger",
+  "category": "Nativity Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated nativity card: a mother in a hooded cloak watches over her baby asleep in the manger. A5, blank inside, with envelope."
+ },
+ "AFC011A.png": {
+  "title": "Mother's Day: Icon of Grace",
+  "category": "Mother's Day Cards",
+  "price_pence": 450,
+  "featured": true,
+  "description": "Illustrated mother's day card: a graphic portrait of a woman in sunglasses and a colourful headwrap on a blue-grey background. A5, blank inside, with envelope."
+ },
+ "AFC023.png.png": {
+  "title": "Mother's Day: The Original Queen",
+  "category": "Mother's Day Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated mother's day card: a woman in a striped gele headwrap, sunglasses and gold bangles on a navy background. A5, blank inside, with envelope."
+ },
+ "AFC016A.png": {
+  "title": "Earthstrong: Fearfully and Wonderfully Made",
+  "category": "Inspirational Cards",
+  "price_pence": 450,
+  "featured": true,
+  "description": "Illustrated inspirational card: a woman in a bold patterned headwrap, beaded necklace and sunglasses on a blue-grey background. A5, blank inside, with envelope."
+ },
+ "AFC025.png": {
+  "title": "Earthstrong: Beaded Portrait",
+  "category": "Inspirational Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated inspirational card: a woman in a striped headwrap and colourful beads against an abstract blue-green background. A5, blank inside, with envelope."
+ },
+ "AFC024.png": {
+  "title": "Afro Portrait on Teal Canvas",
+  "category": "Inspirational Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated inspirational card: a bold portrait of a woman with a sculptural afro and gold hoop earrings on a teal textured background. A5, blank inside, with envelope."
+ },
+ "BHER001.png": {
+  "title": "Becoming Her: Coffee in Colour",
+  "category": "Inspirational Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated inspirational card: a woman in a patterned headwrap relaxes with a cup of tea in a colourful wrap. A5, blank inside, with envelope."
+ },
+ "BHER002.png": {
+  "title": "Becoming Her: Locs and Gold",
+  "category": "Inspirational Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated inspirational card: a woman with locs and gold hoops enjoys a warm drink wrapped in a patterned blanket. A5, blank inside, with envelope."
+ },
+ "BHER003.png": {
+  "title": "Becoming Her: Curls and Gold",
+  "category": "Inspirational Cards",
+  "price_pence": 450,
+  "featured": false,
+  "description": "Illustrated inspirational card: a woman with curly hair and gold hoops enjoys a warm drink wrapped in a patterned blanket. A5, blank inside, with envelope."
  }
 }
