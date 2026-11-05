@@ -189,7 +189,7 @@ function Login({ onLogin }) {
   const nav = useNavigate();
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
-  const [f, setF] = useState({ email: "", password: "" });
+  const [f, setF] = useState({ username: "", password: "" });
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
   const submit = async (e) => {
@@ -213,13 +213,13 @@ function Login({ onLogin }) {
       <Flash msg={location.state?.message} />
       <form className="form" onSubmit={submit} aria-busy={busy}>
         <label>
-          Email
+          Username
           <input
-            type="email"
+            type="text"
             required
             autoComplete="username"
-            value={f.email}
-            onChange={(e) => setF({ ...f, email: e.target.value })}
+            value={f.username}
+            onChange={(e) => setF({ ...f, username: e.target.value })}
           />
         </label>
         <label>

@@ -52,3 +52,5 @@ Before deploying this version to an existing database, apply `migrations/0001_ad
 Sign-in and password recovery are rate limited. Sessions expire after eight hours; a password change or reset revokes all sessions and outstanding reset links. Admin API mutations require the same-origin custom request header. The dashboard refreshes authentication on focus and returns to sign-in when an API session expires. Reset emails still require the existing Resend configuration.
 
 Run `node --test tests/admin-auth.test.mjs` for the security regression checks. They use an isolated in-memory SQLite database and never touch production.
+
+The sign-in form accepts a username or the existing admin email. `ADMIN_USERNAME` (default `admin`) maps to the first address in `ADMIN_EMAIL`; both use the same stored password hash and rate-limit bucket. Passwords must be provisioned in the database, never added to source or configuration.

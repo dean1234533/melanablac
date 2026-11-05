@@ -341,3 +341,18 @@ test("security migration preserves catalogue and passwords while revoking old se
   assert.equal(f.sqlite.prepare("SELECT COUNT(*) n FROM sessions").get().n, 0);
   f.sqlite.close();
 });
+
+test('simple admin username authenticates the existing owner account', async () => {
+  const f=await fixture();
+  const response=await f.call('admin/login',{method:'POST',body:{username:'admin',password}});
+  assert.equal(response.status,200);
+  assert.equal((await response.json()).email,email);
+  assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM admins').get().n,1);
+  f.sqlite.close();
+});
+test('username alias and email share the same sign-in rate limit', async () => {
+  const f=await fixture();
+  for(let i=0;i<10;i++) assert.equal((await f.call('admin/login',{method:'POST',body:{username:i%2?'admin':email,password:'wrong'}})).status,401);
+  assert.equal((await f.call('admin/login',{method:'POST',body:{username:'admin',password}})).status,429);
+  f.sqlite.close();
+});

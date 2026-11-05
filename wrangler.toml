@@ -17,6 +17,7 @@ database_id = "d576d5a5-df26-4c11-a3e3-d99fb38d1a73"
 # bucket_name = "melanablac-media"
 
 [vars]
+ADMIN_USERNAME = "admin"
 ADMIN_EMAIL = "dbs_workouts@yahoo.com"
 SITE_URL = "https://melanablac.pages.dev"
 RESEND_FROM = "MelanaBlac <onboarding@resend.dev>"

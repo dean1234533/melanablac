@@ -122,13 +122,14 @@ export async function onRequest({ request, env, params }) {
     // ---------- admin auth (no session needed) ----------
     if (route === 'admin' && seg[1] === 'login' && method === 'POST') {
       const b = await body(request);
-      const email = clip(b.email, 200).toLowerCase().trim();
+      const username = clip(b.username ?? b.email, 200).toLowerCase().trim();
+      const email = username === (env.ADMIN_USERNAME || 'admin').toLowerCase() ? adminEmails(env)[0] || '' : username;
       const limited = await consumeAuthLimit(env, `login:email:${email}`, 10);
       if (limited) return limited;
       const a = await env.DB.prepare('SELECT * FROM admins WHERE email=?').bind(email).first();
       const password = String(b.password || '');
       const { hash } = await hashPassword(password.slice(0, 200), a?.salt || '0'.repeat(32));
-      if (!a?.password_hash || password.length > 200 || !safeEqual(hash, a.password_hash)) return err('Invalid email or password.', 401);
+      if (!a?.password_hash || password.length > 200 || !safeEqual(hash, a.password_hash)) return err('Invalid username or password.', 401);
       const token = randomToken();
       await env.DB.prepare('INSERT INTO sessions (token_hash, admin_id, expires) VALUES (?,?,?)').bind(await sha256(token), a.id, Date.now() + ADMIN_SESSION_SECONDS * 1000).run();
       return json({ ok: true, email: a.email }, 200, { 'set-cookie': sessionCookie(token, request) });
