@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { useSite } from "./SiteContext.jsx";
 import "./storefront.css";
 
@@ -7,12 +13,41 @@ export function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 function BrandLogo() {
-  return <img className="brand-logo" src="/logo-dark.png" alt="MelanaBlac" width="1000" height="226" />;
+  return (
+    <img
+      className="brand-logo"
+      src="/logo-dark.png"
+      alt="MelanaBlac"
+      width="1000"
+      height="226"
+    />
+  );
 }
 export default function Layout() {
   const { t, count } = useSite();
   const [open, setOpen] = useState(false);
   const loc = useLocation();
+  const navigate = useNavigate();
+  const logoClicks = useRef({ count: 0, last: 0 });
+  const openStudio = (event) => {
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    )
+      return;
+    const now = performance.now();
+    const clicks = logoClicks.current;
+    clicks.count = now - clicks.last <= 1200 ? clicks.count + 1 : 1;
+    clicks.last = now;
+    if (clicks.count === 3) {
+      event.preventDefault();
+      clicks.count = 0;
+      navigate("/admin/login");
+    }
+  };
   React.useEffect(() => {
     setOpen(false);
     window.scrollTo(0, 0);
@@ -36,7 +71,12 @@ export default function Layout() {
         </span>
       </div>
       <header className="nav">
-        <Link to="/" className="logo" aria-label="MelanaBlac home">
+        <Link
+          to="/"
+          className="logo"
+          aria-label="MelanaBlac home"
+          onClick={openStudio}
+        >
           <BrandLogo />
         </Link>
         <nav id="main-nav" className={open ? "open" : ""} aria-label="Main">

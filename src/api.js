@@ -7,7 +7,7 @@ export async function api(path, { method = 'GET', body, raw, headers = {} } = {}
   try { res = await fetch('/api/' + path, opts); } catch { throw new Error('Network error. Check your connection.'); }
   let data = null;
   try { data = await res.json(); } catch {}
-  if (!res.ok) { const e = new Error(data?.error || `Request failed (${res.status})`); e.status = res.status; throw e; }
+  if (!res.ok) { if (res.status === 401 && path.startsWith('admin/') && path !== 'admin/login') window.dispatchEvent(new Event('mb-admin-session-expired')); const e = new Error(data?.error || `Request failed (${res.status})`); e.status = res.status; throw e; }
   return data;
 }
 // Shrinks big photos in the browser (max 1800px, JPEG/WebP) so uploads are fast and fit storage limits.

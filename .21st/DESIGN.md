@@ -15,3 +15,7 @@ Hero copy and the shop button overlay the full-width gallery film. Use a dark sc
 Per user preference, videos have no visible play/pause controls. Continue muted playback while on screen and honour reduced motion.
 
 Buttons use text labels without arrow icons; arrows may remain on editorial text links and artwork navigation.
+
+The private Studio uses the original signature logo, warm paper, sage navigation and restrained dark-green actions. Dashboard figures come from the authenticated APIs; no fabricated trends or charts. Sign-in has a dedicated branded panel, password visibility control and recovery. Mobile navigation must close on Escape and route changes. Keep admin CSS scoped to the workspace.
+
+Three quick clicks on the storefront header logo open admin sign-in. A single click remains the homepage link. The shortcut is navigation only; server-side password protection is required.

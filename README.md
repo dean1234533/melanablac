@@ -40,5 +40,15 @@ Change or hide any of them in Admin > Site text > Videos (paths or links; blank 
 Put PNGs in a folder, add titles/categories to `scripts/art-titles.json`, run `node scripts/import-art.mjs <folder> && npm run seed`. Or just add pieces from the admin dashboard.
 
 ## Notes
-- Admin sign-in has no rate limiting yet. Consider a Cloudflare WAF rate-limit rule on `/api/admin/login`.
+- Admin sign-in uses persistent D1 rate limits by account and IP, eight-hour HttpOnly sessions, and server-side access checks. Admin pages are not cached or indexed. Changing a password revokes existing sessions.
 - Push payloads are empty; the service worker fetches the latest notification after the push arrives.
+
+## Private Studio redesign and security migration
+
+Three quick clicks on the storefront header logo open `/admin/login`; one click still opens the homepage. The shortcut only opens the sign-in screen and never bypasses authentication. The existing admin account and password are retained.
+
+Before deploying this version to an existing database, apply `migrations/0001_admin_auth.sql` with `wrangler d1 execute melanablac --remote --file=migrations/0001_admin_auth.sql`. It adds the rate-limit table and signs out existing sessions. **Do not run `schema.sql` against the live database**: it is a destructive fresh-install script. Catalogue, orders, messages and passwords are preserved by the migration.
+
+Sign-in and password recovery are rate limited. Sessions expire after eight hours; a password change or reset revokes all sessions and outstanding reset links. Admin API mutations require the same-origin custom request header. The dashboard refreshes authentication on focus and returns to sign-in when an API session expires. Reset emails still require the existing Resend configuration.
+
+Run `node --test tests/admin-auth.test.mjs` for the security regression checks. They use an isolated in-memory SQLite database and never touch production.

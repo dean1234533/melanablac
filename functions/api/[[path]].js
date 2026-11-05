@@ -1,4 +1,5 @@
-import { json, err, sha256, randomToken, hashPassword, safeEqual, getAdmin, sessionCookie, getContent, slugify, sendEmail, notifyAdmins, stripeCheckout, verifyStripeSig, siteUrl, esc } from '../lib/util.js';
+import { consumeAuthLimit, validAdminRequest } from '../lib/adminAuth.js';
+import { json, err, sha256, randomToken, hashPassword, safeEqual, getAdmin, sessionCookie, ADMIN_SESSION_SECONDS, getContent, slugify, sendEmail, notifyAdmins, stripeCheckout, verifyStripeSig, siteUrl, esc } from '../lib/util.js';
 import { CONTENT_FIELDS, formatPrice } from '../../src/shared/contentSchema.js';
 
 const isEmail = (e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e || '');
@@ -108,23 +109,36 @@ export async function onRequest({ request, env, params }) {
       return json({ received: true });
     }
 
+    if (route === 'admin' && method !== 'GET' && method !== 'HEAD' && !validAdminRequest(request)) {
+      return err('Invalid request origin.', 403);
+    }
+    if (route === 'admin' && ['login', 'forgot', 'reset'].includes(seg[1]) && method === 'POST') {
+      const ip = request.headers.get('cf-connecting-ip') || 'local';
+      const limited = await consumeAuthLimit(env, `${seg[1]}:ip:${ip}`, 20);
+      if (limited) return limited;
+      await env.DB.prepare('DELETE FROM auth_rate_limits WHERE expires < ?').bind(Date.now() - 864e5).run();
+    }
+
     // ---------- admin auth (no session needed) ----------
     if (route === 'admin' && seg[1] === 'login' && method === 'POST') {
       const b = await body(request);
       const email = clip(b.email, 200).toLowerCase().trim();
+      const limited = await consumeAuthLimit(env, `login:email:${email}`, 10);
+      if (limited) return limited;
       const a = await env.DB.prepare('SELECT * FROM admins WHERE email=?').bind(email).first();
-      await new Promise((r) => setTimeout(r, 300));
-      if (!a || !a.password_hash) return err('Invalid email or password.', 401);
-      const { hash } = await hashPassword(String(b.password || ''), a.salt);
-      if (!safeEqual(hash, a.password_hash)) return err('Invalid email or password.', 401);
+      const password = String(b.password || '');
+      const { hash } = await hashPassword(password.slice(0, 200), a?.salt || '0'.repeat(32));
+      if (!a?.password_hash || password.length > 200 || !safeEqual(hash, a.password_hash)) return err('Invalid email or password.', 401);
       const token = randomToken();
-      await env.DB.prepare('INSERT INTO sessions (token_hash, admin_id, expires) VALUES (?,?,?)').bind(await sha256(token), a.id, Date.now() + 14 * 864e5).run();
+      await env.DB.prepare('INSERT INTO sessions (token_hash, admin_id, expires) VALUES (?,?,?)').bind(await sha256(token), a.id, Date.now() + ADMIN_SESSION_SECONDS * 1000).run();
       return json({ ok: true, email: a.email }, 200, { 'set-cookie': sessionCookie(token, request) });
     }
     if (route === 'admin' && seg[1] === 'forgot' && method === 'POST') {
       const b = await body(request);
       const email = clip(b.email, 200).toLowerCase().trim();
       const generic = { ok: true, message: 'If that email belongs to an admin, a reset link has been sent.' };
+      const limited = await consumeAuthLimit(env, `forgot:email:${email}`, 4);
+      if (limited) return limited;
       if (!adminEmails(env).includes(email)) return json(generic);
       let a = await env.DB.prepare('SELECT * FROM admins WHERE email=?').bind(email).first();
       if (!a) { await env.DB.prepare('INSERT INTO admins (email) VALUES (?)').bind(email).run(); a = await env.DB.prepare('SELECT * FROM admins WHERE email=?').bind(email).first(); }
@@ -140,11 +154,12 @@ export async function onRequest({ request, env, params }) {
       const t = await env.DB.prepare('SELECT * FROM reset_tokens WHERE token_hash=? AND used=0 AND expires>?').bind(await sha256(String(b.token || '')), Date.now()).first();
       if (!t) return err('This reset link is invalid or has expired.', 400);
       const { hash, salt } = await hashPassword(b.password);
-      await env.DB.batch([
-        env.DB.prepare('UPDATE admins SET password_hash=?, salt=? WHERE id=?').bind(hash, salt, t.admin_id),
-        env.DB.prepare('UPDATE reset_tokens SET used=1 WHERE token_hash=?').bind(t.token_hash),
+      const resetResults = await env.DB.batch([
+        env.DB.prepare('UPDATE admins SET password_hash=?, salt=? WHERE id=? AND EXISTS (SELECT 1 FROM reset_tokens WHERE token_hash=? AND used=0 AND expires>?)').bind(hash, salt, t.admin_id, t.token_hash, Date.now()),
+        env.DB.prepare('UPDATE reset_tokens SET used=1 WHERE admin_id=?').bind(t.admin_id),
         env.DB.prepare('DELETE FROM sessions WHERE admin_id=?').bind(t.admin_id),
       ]);
+      if (!resetResults[0].meta.changes) return err('This reset link is invalid or has expired.', 400);
       return json({ ok: true });
     }
 
@@ -168,8 +183,12 @@ export async function onRequest({ request, env, params }) {
         if (!safeEqual(cur.hash, a.password_hash)) return err('Current password is incorrect.', 400);
         if (!validPassword(b.next)) return err('New password must be at least 10 characters.');
         const n = await hashPassword(b.next);
-        await env.DB.prepare('UPDATE admins SET password_hash=?, salt=? WHERE id=?').bind(n.hash, n.salt, admin.id).run();
-        return json({ ok: true });
+        await env.DB.batch([
+          env.DB.prepare('UPDATE admins SET password_hash=?, salt=? WHERE id=?').bind(n.hash, n.salt, admin.id),
+          env.DB.prepare('DELETE FROM sessions WHERE admin_id=?').bind(admin.id),
+          env.DB.prepare('UPDATE reset_tokens SET used=1 WHERE admin_id=?').bind(admin.id),
+        ]);
+        return json({ ok: true }, 200, { 'set-cookie': sessionCookie('', request, 0) });
       }
       if (sub === 'stats') {
         const q = async (s) => (await env.DB.prepare(s).first()).n;

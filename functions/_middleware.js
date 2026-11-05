@@ -1,15 +1,28 @@
-import { getContent, esc, siteUrl } from './lib/util.js';
+import { getContent, esc, siteUrl, getAdmin } from './lib/util.js';
 
 // Injects per-page SEO tags (editable in the admin dashboard) into the HTML for crawlers and link previews.
 export async function onRequest({ request, env, next }) {
   const url = new URL(request.url);
   const res = await next();
   const type = res.headers.get('content-type') || '';
-  if (request.method !== 'GET' || !type.includes('text/html')) return res;
+  if (!['GET', 'HEAD'].includes(request.method) || !type.includes('text/html')) return res;
   const p = url.pathname;
   if (p.startsWith('/api/')) return res;
   const origin = siteUrl(env, request);
-  const isAdmin = p.startsWith('/admin');
+  const isAdmin = p === '/admin' || p.startsWith('/admin/');
+  if (isAdmin) {
+    const publicPage = /^\/admin\/(login|forgot|reset)\/?$/.test(p);
+    if (!publicPage && !(await getAdmin(request, env))) {
+      return new Response(null, { status: 302, headers: { location: '/admin/login', 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' } });
+    }
+    const privateResponse = new Response(res.body, res);
+    privateResponse.headers.set('cache-control', 'private, no-store');
+    privateResponse.headers.set('x-robots-tag', 'noindex, nofollow');
+    return new HTMLRewriter()
+      .on('title', { element(e) { e.setInnerContent('MelanaBlac Studio'); } })
+      .on('head', { element(e) { e.append('<meta name="robots" content="noindex,nofollow">', { html: true }); } })
+      .transform(privateResponse);
+  }
   let c; try { c = await getContent(env); } catch { return res; }
   let title = c['seo.home.title'], desc = c['seo.home.description'], image = c['seo.home.image'], extra = '', type_ = 'website';
   const pageKey = { '/': 'home', '/shop': 'shop', '/about': 'about', '/contact': 'contact' }[p.replace(/\/$/, '') || '/'];

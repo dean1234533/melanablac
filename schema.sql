@@ -23,3 +23,6 @@ CREATE TABLE reset_tokens (token_hash TEXT PRIMARY KEY, admin_id INTEGER NOT NUL
 CREATE TABLE push_subs (endpoint TEXT PRIMARY KEY, p256dh TEXT, auth TEXT, admin_id INTEGER, created_at TEXT DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, body TEXT, url TEXT DEFAULT '/admin/', created_at TEXT DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE media (key TEXT PRIMARY KEY, type TEXT NOT NULL, data TEXT NOT NULL, created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+
+CREATE TABLE IF NOT EXISTS auth_rate_limits (key TEXT PRIMARY KEY, attempts INTEGER NOT NULL, expires INTEGER NOT NULL);
+CREATE INDEX IF NOT EXISTS auth_rate_limits_expires ON auth_rate_limits(expires);

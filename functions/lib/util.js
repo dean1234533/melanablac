@@ -26,14 +26,15 @@ export const parseCookies = (req) =>
 
 export async function getAdmin(req, env) {
   const tok = parseCookies(req).mb_session;
-  if (!tok) return null;
+  if (!tok || !/^[a-f0-9]{64}$/.test(tok)) return null;
   const row = await env.DB.prepare('SELECT a.id, a.email FROM sessions s JOIN admins a ON a.id = s.admin_id WHERE s.token_hash = ? AND s.expires > ?')
     .bind(await sha256(tok), Date.now()).first();
   return row || null;
 }
-export const sessionCookie = (token, req, maxAge = 60 * 60 * 24 * 14) => {
+export const ADMIN_SESSION_SECONDS = 60 * 60 * 8;
+export const sessionCookie = (token, req, maxAge = ADMIN_SESSION_SECONDS) => {
   const secure = new URL(req.url).protocol === 'https:' ? '; Secure' : '';
-  return `mb_session=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${secure}`;
+  return `mb_session=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${secure}`;
 };
 
 export async function getContent(env) {
