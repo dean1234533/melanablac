@@ -298,7 +298,6 @@
   object-fit: cover;
   object-position: 64% center;
 }
-.hero-art .video-toggle,
 .hero-art-caption {
   z-index: 2;
 }
@@ -647,26 +646,6 @@
   display: block;
   min-width: 0;
   background: #d5d3c9;
-}
-.media-player .video-toggle {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  z-index: 2;
-  background: #f6f3edeb;
-  color: #232621;
-  border: 1px solid #bbb8a8;
-  padding: 7px 11px;
-  min-width: 44px;
-  min-height: 36px;
-  font-size: 9px;
-  letter-spacing: 0.04em;
-}
-.hero-art .video-toggle {
-  bottom: 68px;
-}
-.artist-media .video-toggle {
-  bottom: 24px;
 }
 .storefront .pause-editorial {
   text-align: center;

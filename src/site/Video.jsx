@@ -6,22 +6,20 @@ export default function Video({
   className = "",
   label = "",
   lazy = true,
-  controls = false,
 }) {
   const ref = useRef(null);
   const [failed, setFailed] = useState(false);
-  const [paused, setPaused] = useState(
+  const [reducedMotion, setReducedMotion] = useState(
     () =>
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches || false,
   );
-  const [playing, setPlaying] = useState(false);
   const pst =
     poster ||
     (src && /\.mp4$/i.test(src) ? src.replace(/\.mp4$/i, ".jpg") : undefined);
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => {
-      if (media.matches) setPaused(true);
+      setReducedMotion(media.matches);
     };
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
@@ -29,7 +27,7 @@ export default function Video({
   useEffect(() => {
     const v = ref.current;
     if (!v || failed) return;
-    if (paused) {
+    if (reducedMotion) {
       v.pause();
       return;
     }
@@ -47,7 +45,7 @@ export default function Video({
     );
     io.observe(v);
     return () => io.disconnect();
-  }, [src, paused, failed]);
+  }, [src, reducedMotion, failed]);
   if (!src) return null;
   const media = failed ? (
     pst ? (
@@ -68,35 +66,12 @@ export default function Video({
       loop
       playsInline
       preload={lazy ? "none" : "metadata"}
-      autoPlay={!paused && !lazy}
+      autoPlay={!reducedMotion && !lazy}
       aria-label={label || undefined}
       aria-hidden={label ? undefined : true}
       disablePictureInPicture
-      onPlay={() => setPlaying(true)}
-      onPause={() => setPlaying(false)}
       onError={() => setFailed(true)}
     />
   );
-  if (!controls) return media;
-  return (
-    <div className="media-player">
-      {media}
-      {!failed && (
-        <button
-          type="button"
-          className="video-toggle"
-          aria-label={`${playing ? "Pause" : "Play"} ${label || "video"}`}
-          onClick={() => {
-            if (playing) setPaused(true);
-            else {
-              setPaused(false);
-              ref.current?.play().catch(() => {});
-            }
-          }}
-        >
-          {playing ? "Ⅱ Pause film" : "▷ Play film"}
-        </button>
-      )}
-    </div>
-  );
+  return <div className="media-player">{media}</div>;
 }

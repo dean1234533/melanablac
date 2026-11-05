@@ -125,7 +125,6 @@ export function Home() {
             <Video
               src={t("video.hero")}
               lazy={false}
-              controls
               label="Inside the MelanaBlac gallery"
             />
           ) : (
@@ -198,7 +197,6 @@ export function Home() {
           {t("video.why") ? (
             <Video
               src={t("video.why")}
-              controls
               label="Art and expression in the MelanaBlac studio"
             />
           ) : (
@@ -285,7 +283,7 @@ export function Home() {
           <div className="motion-grid">
             {motion.map((src, i) => (
               <div key={src}>
-                <Video src={src} controls label={"Gallery film " + (i + 1)} />
+                <Video src={src} label={"Gallery film " + (i + 1)} />
                 <p>
                   <span>0{i + 1}</span> A study in expression
                 </p>
@@ -300,7 +298,6 @@ export function Home() {
           <div className="pause-art">
             <Video
               src={t("video.pause")}
-              controls
               label="A moment to pause and reflect"
             />
           </div>
