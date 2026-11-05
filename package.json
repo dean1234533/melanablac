@@ -16,7 +16,8 @@
     "test:admin": "node --test tests/admin-auth.test.mjs",
     "media:optimize": "node scripts/optimize-media.mjs",
     "prebuild": "npm run media:optimize",
-    "test:media": "node --test tests/media.test.mjs"
+    "test:media": "node --test tests/media.test.mjs",
+    "test:pwa": "node --test tests/pwa.test.mjs"
   },
   "dependencies": {
     "mediabunny": "^1.65.2",

@@ -1371,3 +1371,96 @@
     display: none;
   }
 }
+
+.studio-install-link {
+  display: block;
+  margin-bottom: 16px;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.studio-install-banner {
+  position: fixed;
+  z-index: 70;
+  right: 22px;
+  bottom: 22px;
+  width: min(440px, calc(100% - 44px));
+  max-height: calc(100svh - 44px);
+  overflow-y: auto;
+  padding: 24px;
+  background: var(--bg2);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  box-shadow: 0 14px 50px #12121230;
+}
+.install-banner-heading {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 26px;
+  align-items: center;
+  gap: 12px;
+}
+.install-banner-heading img {
+  border-radius: 9px;
+}
+.install-banner-heading .admin-eyebrow {
+  font-size: 7px;
+  margin-bottom: 5px;
+}
+.admin-workspace .install-banner-heading h2 {
+  font-size: 19px;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+.install-dismiss {
+  font-size: 24px;
+  line-height: 1;
+  align-self: start;
+  width: 26px;
+  min-height: 32px;
+  color: var(--text);
+}
+.install-dismiss:focus-visible {
+  outline: 2px solid var(--gold2);
+}
+.studio-install-banner > p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin: 18px 0;
+}
+.admin-workspace .steps li {
+  font-size: 12px;
+  line-height: 1.8;
+  margin-block: 10px;
+}
+.install-banner-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+  margin-top: 18px;
+  padding-top: 18px;
+}
+.install-banner-actions a {
+  font-size: 10px;
+  text-underline-offset: 4px;
+}
+@media (max-width: 560px) {
+  .studio-install-banner {
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    width: calc(100% - 24px);
+    max-height: 75svh;
+    padding: 20px;
+  }
+  .install-banner-heading {
+    grid-template-columns: 36px minmax(0, 1fr) 26px;
+    gap: 9px;
+  }
+  .install-banner-heading img {
+    width: 36px;
+    height: 36px;
+  }
+}

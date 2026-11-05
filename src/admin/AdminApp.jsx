@@ -12,10 +12,11 @@ import {
 } from "react-router-dom";
 import { api, uploadImage, uploadVideo } from "../api.js";
 import { CONTENT_FIELDS, formatPrice } from "../shared/contentSchema.js";
-import { InstallSteps, _d } from "./InstallBanner.jsx";
+import InstallBanner, { InstallSteps, InstallLauncher } from "./InstallBanner.jsx";
 import "./admin.css";
 import {
   registerSW,
+  preparePush,
   enablePush,
   disablePush,
   currentSub,
@@ -460,6 +461,7 @@ function Shell({ me, onLogout }) {
             <br />
             <em>out in the world.</em>
           </p>
+          <InstallLauncher />
           <a href="/" target="_blank" rel="noopener noreferrer">
             <AdminIcon name="eye" /> View your gallery
           </a>
@@ -541,6 +543,7 @@ function Shell({ me, onLogout }) {
             <span>A little art. A lasting feeling.</span>
           </footer>
         </main>
+        <InstallBanner />
       </div>
     </div>
   );
@@ -1440,31 +1443,45 @@ function Messages() {
 function Settings() {
   const nav = useNavigate();
   const [sub, setSub] = useState(null);
+  const [pushSetup, setPushSetup] = useState(null);
+  const [pushBusy, setPushBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
   const [pw, setPw] = useState({ current: "", next: "" });
   const [pmsg, setPmsg] = useState("");
   const [perr, setPerr] = useState("");
   useEffect(() => {
-    currentSub().then(setSub);
+    let active = true;
+    currentSub().then((value) => { if (active) setSub(value); }).catch((e) => { if (active) setErr(e.message); });
+    if (pushSupported()) preparePush().then((value) => { if (active) setPushSetup(value); }).catch((e) => { if (active) setErr(e.message); });
+    return () => { active = false; };
   }, []);
   const on = async () => {
     setErr("");
     setMsg("");
+    setPushBusy(true);
     try {
-      setSub(await enablePush());
+      setSub(await enablePush(pushSetup));
       setMsg("Push notifications enabled on this device.");
     } catch (x) {
       setErr(x.message);
+    } finally {
+      setPushBusy(false);
     }
   };
   const off = async () => {
-    await disablePush();
-    setSub(null);
-    setMsg("Push notifications turned off for this device.");
+    setErr("");
+    setPushBusy(true);
+    try {
+      await disablePush();
+      setSub(null);
+      setMsg("Push notifications turned off for this device.");
+    } catch (e) { setErr(e.message); }
+    finally { setPushBusy(false); }
   };
   const test = async () => {
     setErr("");
+    setPushBusy(true);
     try {
       const r = await api("admin/push/test", { method: "POST" });
       setMsg(
@@ -1474,7 +1491,7 @@ function Settings() {
       );
     } catch (x) {
       setErr(x.message);
-    }
+    } finally { setPushBusy(false); }
   };
   const chg = async (e) => {
     e.preventDefault();
@@ -1489,12 +1506,6 @@ function Settings() {
       });
     } catch (x) {
       setPerr(x.message);
-    }
-  };
-  const install = async () => {
-    if (_d) {
-      await _d.prompt();
-      await _d.userChoice;
     }
   };
   return (
@@ -1513,27 +1524,27 @@ function Settings() {
         )}
         <div className="row">
           {sub ? (
-            <button className="btn" onClick={off}>
+            <button className="btn" onClick={off} disabled={pushBusy}>
               Turn off
             </button>
           ) : (
-            <button className="btn gold" onClick={on}>
-              Enable notifications
+            <button className="btn gold" onClick={on} disabled={pushBusy || !pushSetup}>
+              {pushBusy ? "Enabling…" : "Enable notifications"}
             </button>
           )}
-          <button className="btn" onClick={test}>
+          <button className="btn" onClick={test} disabled={pushBusy || !sub}>
             Send test
           </button>
         </div>
         <p className="muted small">
-          Status: {sub ? "on for this device" : "off"}
+          Status: {sub ? "on for this device" : !pushSupported() ? "install Studio or use a supported browser" : !pushSetup && !err ? "setting up…" : "off"}
         </p>
         <Flash msg={msg} />
         <Flash msg={err} kind="err" />
       </fieldset>
       <fieldset className="form wide">
         <legend>Install the app</legend>
-        <InstallSteps onInstall={install} />
+        <InstallSteps />
       </fieldset>
       <form className="form wide" onSubmit={chg}>
         <fieldset>

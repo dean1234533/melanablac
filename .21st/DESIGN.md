@@ -35,3 +35,5 @@ Keep the artwork editor in plain language with grouped details, images and avail
 Boxed action buttons across storefront and Studio use black borders and consistent sweep, lift, shadow, focus and press effects. Preserve gold filter borders and red destructive text. Disabled/busy actions stay still; reduced motion disables the sweep and lift.
 
 The old homepage slideshow is unused. Do not expose a Slides editor in Studio; redirect its old admin URL to Overview. Current films are managed under Site text → Videos.
+
+Signed-in Studio shows a dismissible, device-specific PWA install guide. Maybe later snoozes it for seven days; Install Studio app reopens it. Hide the guide inside the installed app. Keep native installation and notification permission prompts on user clicks.

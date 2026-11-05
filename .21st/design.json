@@ -64,7 +64,8 @@
     "Product cards and collection boxes use black backgrounds with gold borders and readable light text, retaining white page backgrounds.",
     "Enquiries open with an uncropped gallery film and overlaid heading, followed by a short introduction beside the white form, stacked on mobile.",
     "Artwork editor uses plain-language sections and one customer description; optional Google search overrides and display order are collapsed with automatic fallback guidance.",
-    "Use black borders and consistent hover/focus effects for boxed actions throughout the storefront and admin; preserve gold filter borders, destructive colour cues and reduced-motion/disabled states."
+    "Use black borders and consistent hover/focus effects for boxed actions throughout the storefront and admin; preserve gold filter borders, destructive colour cues and reduced-motion/disabled states.",
+    "Show a device-specific install banner in signed-in Studio, with seven-day snooze and a sidebar reopen control. Hide it after installation or in standalone mode; request notification permission only from the owner\u2019s explicit button click."
   ],
   "evidence": [
     {

@@ -64,3 +64,11 @@ Video uploads use Mediabunny with the browser's native WebCodecs encoder: up to 
 `npm run media:optimize` runs before builds. It generates compressed WebP copies for bundled JPEGs, losslessly optimises PNGs, and optimises bundled video for web delivery. JPEGs remain as backwards-compatible fallbacks. Served artwork and posters use the WebP versions. FFmpeg is required when adding or changing static videos; `sharp` handles images. The tracked `scripts/media-lock.json` prevents repeatedly encoding unchanged media. Use `MEDIA_BACKUP_DIR` and `MEDIA_REPORT_PATH` to save originals and an optimisation report outside the checkout.
 
 Run `npm run test:media` for media sizing, asset decoding, bounded uploads, storage and byte-range checks. Externally hosted URLs are controlled by their hosts; upload those files through the picker to apply this compression.
+
+## Install Studio and receive notifications
+
+After signing in, a floating install guide explains how to add Studio on the current device. Chrome/Edge offer a native install button when available; Safari on iPhone/iPad uses Share → Add to Home Screen, and Safari on Mac uses File → Add to Dock. The guide hides in standalone mode or after installation. “Maybe later” snoozes it for seven days, and “Install Studio app” in the sidebar reopens it. The guide is also available in Settings.
+
+Open the installed app, sign in, then use Settings → Enable notifications and allow the browser/device prompt. Permission is requested directly from that button click; notification setup is prepared beforehand. Notifications are opt-in per device, and Send test is available after subscribing. Production requires the existing VAPID Pages secrets and HTTPS. Local setup checks do not install the app or grant notification permission on behalf of the owner.
+
+Run `npm run test:pwa` to check service worker setup, permission timing, failed subscriptions, and turning notifications off without sending real push messages.
