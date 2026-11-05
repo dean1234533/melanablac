@@ -15,12 +15,14 @@ export function Home() {
   const motion = t('video.motionList').split('\n').map((x) => x.trim()).filter(Boolean);
   return (
     <>
-      {t('video.hero') && <section className="hero-video"><Video src={t('video.hero')} lazy={false} label="Melana Blac gallery" className="cover" /></section>}
-      <section className="hero-text">
-        <p className="kicker">{t('home.kicker')}</p>
-        <h1 className="script">{t('home.title')}</h1>
-        <p className="tagline">{t('home.tagline')}</p>
-        <Link to="/shop" className="btn gold">{t('home.cta')}</Link>
+      <section className={'hero-banner' + (t('video.hero') ? ' has-video' : '')}>
+        {t('video.hero') && <Video src={t('video.hero')} lazy={false} className="bg" />}
+        <div className="hero-overlay">
+          <p className="kicker">{t('home.kicker')}</p>
+          <h1 className="script">{t('home.title')}</h1>
+          <p className="tagline">{t('home.tagline')}</p>
+          <Link to="/shop" className="btn gold">{t('home.cta')}</Link>
+        </div>
       </section>
       <Slider slides={slides} />
       {error && <p className="center err">{error}</p>}
